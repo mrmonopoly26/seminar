@@ -1,0 +1,79 @@
+\makeatletter
+\def\input@path{{./download/jcgt-template/}}
+\makeatother
+\documentclass{download/jcgt-template/jcgt}
+\input{common/packages.tex}
+\input{common/commands.tex}
+\graphicspath{{./}, {../figs}, {./template/}, {./download/jcgt-template}} 
+
+\setciteauthor{A Long Title}
+\setcitetitle{A Long Title Without Linebreaks}
+\setheadtitle{Short Title}
+
+% Mark submissions with the date of submission using the following line:
+\submitted{\today}
+
+% Once an article is accepted accepted, switch to the following line and comment the preceding one. The editor will supply the argument values.
+\accepted{submitted}{accepted}{published}{Editor Name}{vol}{issue}{1}{1}{year}
+\seturl{http://jcgt.org/published/vol/issue/num/}
+
+\begin{document}
+
+\title{A Long Title}
+
+\author
+       {Bastian Kuth\\Coburg University of Applied Sciences and Arts
+        \and Max Oberberger\\AMD 
+        \and Quirin Meyer\\Coburg University of Applied Sciences and Arts
+       }
+
+\teaser{\input{./secs/A0teaser.tex}}
+
+\maketitle
+\thispagestyle{firstpagestyle}
+
+\begin{abstract}
+\small
+\input{./secs/A0abstract.tex}
+\end{abstract}
+
+
+\input{common/acronyms.tex}
+\input{secs/structure.tex}
+
+\bibliographystyle{download/jcgt-template/jcgt}
+\bibliography{common/bibliography}
+
+\section*{Author Contact Information}
+
+\hspace{-2mm}\begin{tabular}{p{0.33\textwidth}p{0.33\textwidth}p{0.33\textwidth}}
+Bastian Kuth \newline
+Hochschule Coburg \newline
+Friedrich-Streib-Str. 2 \newline
+D-96450 Coburg \newline
+Germany  \newline
+\href{mailto:bastian.kuth@hs-coburg.de}{bastian.kuth@hs-coburg.de}
+&
+Max Oberberger \newline
+Advanced Micro Devices\newline
+Einsteinring 22-28\newline
+D-85609 Aschheim, \newline
+Germany  \newline
+\href{mailto:max.oberberger@amd.com}{max.oberberger@amd.com}
+\href{http://www.amd.com}{http://www.amd.com}
+&
+Quirin Meyer \newline
+Hochschule Coburg \newline
+Friedrich-Streib-Str. 2 \newline
+D-96450 Coburg \newline
+Germany  \newline
+\href{mailto:quirin.meyer@hs-coburg.de}{quirin.meyer@hs-coburg.de}
+\href{http://www.hs-coburg.de}{http://www.hs-coburg.de}
+
+\end{tabular}
+
+\afterdoc
+
+\end{document}
+
+

@@ -1,0 +1,18 @@
+\makeatletter
+\def\input@path{{./template/}}
+\makeatother
+\documentclass[final,3p,twocolumn]{elsarticle}
+\journal{Computers \& Graphics}
+\input{common/packages.tex}
+\input{common/commands.tex}
+\graphicspath{{./}, {../figs}, {./template/}} 
+\begin{document}
+\input{common/acronyms.tex}
+\input{common/acronyms.tex}
+\begin{table*}[ht]
+    \begin{center}
+    \input{tabs/__BASE_NAME__.tex}
+    \end{center}
+    \caption{Caption}
+\end{table*}
+\end{document}

@@ -1,0 +1,15 @@
+\makeatletter
+\def\input@path{{./download/jcgt-template/}}
+\makeatother
+\documentclass{download/jcgt-template/jcgt}
+\input{common/packages.tex}
+\input{common/commands.tex}
+\graphicspath{{./}, {../figs}, {./figs}, {./template/}} 
+\begin{document}
+\begin{figure*}[ht]
+    \begin{center}
+    \includesvg{figs/__BASE_NAME__}
+    \end{center}
+    \caption{Caption}
+\end{figure*}
+\end{document}

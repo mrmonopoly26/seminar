@@ -1,0 +1,59 @@
+\makeatletter
+\def\input@path{{./template/}}
+\makeatother
+\documentclass[final,3p,twocolumn]{elsarticle}
+\journal{Computers \& Graphics}
+
+\input{common/packages.tex}
+\input{common/commands.tex}
+\graphicspath{{./}, {../figs}, {./template/}} 
+
+\begin{document}
+\begin{frontmatter}
+\title{A Long Title}
+\ifthenelse{\equal{\BlindSubmission}{1}}
+{
+       \author[secret]{Paper 1024}
+       \affiliation[secret]{organization={Blind Submission}}			       
+}
+{
+\author[hsc]{Bastian Kuth}
+\author[amd]{Max Oberberger}
+\author[hsc]{Quirin Meyer}
+
+\affiliation[hsc]{organization={Coburg University of Applied Sciences and Arts}}			
+\affiliation[amd]{organization={AMD, Germany}}
+}
+\begin{abstract}
+       \input{./secs/A0abstract.tex}
+\end{abstract}
+
+\let\oldcaption\caption
+\renewcommand{\caption}[1]{\\#1}
+\begin{graphicalabstract}       
+       \input{./secs/A0teaser.tex}
+\end{graphicalabstract}
+\let\caption\oldcaption
+
+
+\begin{highlights}
+       \item Research highlight 1
+       \item Research highlight 2
+       \end{highlights}
+       
+       %% Keywords
+\begin{keyword}
+geometry compression \sep mesh shaders \sep real-time rendering
+\end{keyword}
+       
+\end{frontmatter}
+
+\input{common/acronyms.tex}
+\input{secs/structure.tex}
+
+\bibliographystyle{elsarticle-harv}
+\bibliography{common/bibliography}
+
+\end{document}
+
+

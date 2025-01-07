@@ -1,0 +1,43 @@
+\makeatletter
+\def\input@path{{./template/}}
+\makeatother
+\documentclass[a4paper]{tufte-book}
+\input{common/packages.tex}
+\input{common/commands.tex}
+\input{common/acronyms.tex}
+\graphicspath{{./}, {../figs}, {./template/}} 
+
+\usepackage{titlesec} % For custom section formatting
+
+% Enable numbering for chapters and sections
+\setcounter{secnumdepth}{1} % Number chapters and sections
+\setcounter{tocdepth}{2}    % Include subsections in the TOC
+
+% Customize chapter numbering and appearance
+\renewcommand{\thechapter}{\arabic{chapter}}
+\renewcommand\chaptername{Chapter}
+\titleformat{\chapter}[display]
+  {\normalfont\huge\bfseries}{\chaptername~\thechapter}{20pt}{\Huge}
+
+\begin{document}
+\title{A Long Title}
+
+\ifthenelse{\equal{\BlindSubmission}{1}}
+{
+  \author{Paper 1024}  
+}
+{
+\author{Quirin Meyer}
+}
+\frontmatter
+\maketitle
+\tableofcontents
+\mainmatter
+\chapter{Hello}
+\input{secs/structure.tex}
+\chapter{Another Chapter}
+\chapter{Another Chapter}
+\backmatter
+\bibliographystyle{plain}
+\bibliography{common/bibliography}
+\end{document}

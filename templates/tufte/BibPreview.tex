@@ -1,0 +1,13 @@
+\makeatletter
+\def\input@path{{./template/}}
+\makeatother
+\documentclass[a4paper]{tufte-book}
+\input{common/packages.tex}
+\input{common/commands.tex}
+\input{common/acronyms.tex}
+\graphicspath{{./}, {../figs}, {./template/}} 
+\begin{document}
+\nocite{*}
+\bibliographystyle{plain}
+\bibliography{common/bibliography}
+\end{document}

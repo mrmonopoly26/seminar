@@ -1,0 +1,22 @@
+\makeatletter
+\def\input@path{{./download/egPublStyle-cgf/}}
+\makeatother
+\documentclass{download/egPublStyle-cgf/egpubl}
+\SpecialIssuePaper
+\CGFStandardLicense
+\usepackage[T1]{fontenc}
+\usepackage{dfadobe}  
+\usepackage{cite}\BibtexOrBiblatex
+\electronicVersion
+\PrintedOrElectronic
+\usepackage[pdftex]{graphicx} \pdfcompresslevel=9
+\usepackage{egweblnk} 
+\input{common/packages.tex}
+\input{common/commands.tex}
+\graphicspath{{./}, {../figs}, {./template/}} 
+\begin{document}
+\input{common/acronyms.tex}
+\nocite{*}
+\bibliographystyle{download/egPublStyle-cgf/eg-alpha-doi}
+\bibliography{common/bibliography}
+\end{document}

@@ -1,0 +1,15 @@
+\makeatletter
+\def\input@path{{./download/jcgt-template/}}
+\makeatother
+\documentclass{download/jcgt-template/jcgt}
+\input{common/packages.tex}
+\input{common/commands.tex}
+\graphicspath{{./}, {../figs}, {./figs}, {./template/}} 
+\begin{document}
+\begin{table*}[ht]
+    \begin{center}
+    \input{tabs/__BASE_NAME__.tex}
+    \end{center}
+    \caption{Caption}
+\end{table*}
+\end{document}

@@ -1,0 +1,27 @@
+\makeatletter
+\def\input@path{{./download/egPublStyle-cgf/}}
+\makeatother
+\documentclass{download/egPublStyle-cgf/egpubl}
+\SpecialIssuePaper
+\CGFStandardLicense
+\usepackage[T1]{fontenc}
+\usepackage{dfadobe}  
+\usepackage{cite}
+\BibtexOrBiblatex
+\electronicVersion
+\PrintedOrElectronic
+\usepackage[pdftex]{graphicx} \pdfcompresslevel=9
+\usepackage{egweblnk} 
+\input{common/packages.tex}
+\input{common/commands.tex}
+\begin{document}
+\input{common/acronyms.tex}
+\graphicspath{{./}, {../figs}, {./template/}} 
+\input{common/acronyms.tex}
+\begin{table*}[ht]
+    \begin{center}
+    \input{tabs/__BASE_NAME__.tex}
+    \end{center}
+    \caption{Caption}
+\end{table*}
+\end{document}
