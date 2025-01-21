@@ -1,0 +1,66 @@
+# Configure programs to use
+PDF_VIEWER 					:= evince
+
+# Configure main input files
+MAIN_FILE_TEX				:= main.tex
+BIBLIOGRAPHY				:= common/bibliography.bib
+
+# Configure output files
+OUTPUT_DIR					:= build
+OUTPUT_FILE					:= rtmd
+
+### Do not edit below this line
+OUTPUT_FILE_PDF				:= $(OUTPUT_DIR)/$(OUTPUT_FILE).pdf
+
+BIB_PREVIEW_NAME			:= BibPreview
+BIB_PREVIEW_NAME_PDF		:= $(OUTPUT_DIR)/$(BIB_PREVIEW_NAME).pdf
+BIB_PREVIEW_TEX				:= template/BibPreview.tex
+
+### Latex tools
+LATEX_COMPILER				:= pdflatex -shell-escape -halt-on-error -file-line-error -output-directory $(OUTPUT_DIR) 
+BIBTEX_COMPILER				:= bibtex
+
+### Folders
+TEMPLATE_FILES 				:= $(wildcard template/**)
+COMMON_FILES 				:= $(wildcard common/*.*)
+CONTENT_TEX					:= $(wildcard secs/*.tex)
+TABLES_TEX					:= $(wildcard tabs/*.tex)
+FIGURES_SVG 				:= $(wildcard figs/*.svg)
+IMAGES_PNG 					:= $(wildcard imgs/*.png)
+
+BUILD_DEP					:= Makefile $(TEMPLATE_FILES) $(COMMON_FILES) $(CONTENT_TEX) $(TABLES_TEX) $(FIGURES_SVG) $(IMAGES_PNG)
+
+
+### Build Rules. Do not edit below this line unless you know what to do.
+all: $(OUTPUT_FILE_PDF)
+
+clean:	
+	@rm -rf $(OUTPUT_DIR)		
+
+$(OUTPUT_FILE_PDF): $(BUILD_DEP)
+	@if [ -f "template/Makefile" ]; then \
+	    $(MAKE) -C "template"; \
+	fi
+	@mkdir -p $(OUTPUT_DIR)	
+	@$(LATEX_COMPILER) -jobname=$(OUTPUT_FILE) $(MAIN_FILE_TEX); touch $(OUTPUT_DIR)/$(MAINFILE_PDF)
+	-@$(BIBTEX_COMPILER) $(OUTPUT_DIR)/$(OUTPUT_FILE)
+	@$(LATEX_COMPILER) -jobname=$(OUTPUT_FILE) $(MAIN_FILE_TEX)
+	@$(LATEX_COMPILER) -jobname=$(OUTPUT_FILE) $(MAIN_FILE_TEX)
+	
+rebuild: clean $(OUTPUT_FILE_PDF)
+
+view: $(OUTPUT_FILE_PDF)	
+	@$(PDF_VIEWER) $(shell realpath $(OUTPUT_FILE_PDF)) &
+
+help:
+	@echo "Run \"make\" with one of the options:"
+	@echo "Option           Description"
+	@echo "----------------------------------------------------------------------------------"
+	@echo "all              Creates $(OUTPUT_FILE_PDF)."
+	@echo "clean            Removes all build-artifacts including the $(OUTPUT_DIR) directory."
+	@echo "view             Shows the $(OUTPUT_FILE_PDF) with $(PDF_VIEWER)."	
+	@echo "                 bibliography."
+	@echo "----------------------------------------------------------------------------------"
+	@echo ""
+
+.PHONY: all clean rebuild bibpreview view help package

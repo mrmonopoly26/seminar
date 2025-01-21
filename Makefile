@@ -1,5 +1,5 @@
 # Configure your paper
-TEMPLATE_PATH				:= templates/eg
+TEMPLATE_PATH				:= templates/acmart
 
 # Configure programs to use
 PDF_VIEWER 					:= evince
@@ -11,6 +11,8 @@ BIBLIOGRAPHY				:= common/bibliography.bib
 # Configure output files
 OUTPUT_DIR					:= build
 OUTPUT_FILE					:= Paper1024
+
+PACKAGE_DIR					:= $(OUTPUT_DIR)/package
 
 ### Do not edit below this line
 TEMPLATE_LINK				:= template
@@ -25,7 +27,7 @@ LATEX_COMPILER				:= pdflatex -shell-escape -halt-on-error -file-line-error -out
 BIBTEX_COMPILER				:= bibtex
 
 ### Folders
-TEMPLATE_FILES 				:= $(wildcard template/**)
+TEMPLATE_FILES 				:= $(wildcard $(TEMPLATE_PATH)/**)
 COMMON_FILES 				:= $(wildcard common/*.*)
 CONTENT_TEX					:= $(wildcard secs/*.tex)
 TABLES_TEX					:= $(wildcard tabs/*.tex)
@@ -44,6 +46,7 @@ all: $(OUTPUT_FILE_PDF)
 clean:	
 	@rm -rf $(OUTPUT_DIR)
 	@rm -f $(TEMPLATE_LINK)
+	@rm -rf $(PACKAGE_DIR)
 
 $(OUTPUT_FILE_PDF): $(TEMPLATE_LINK) $(BUILD_DEP) 
 	$(START_TIME)	
@@ -92,6 +95,25 @@ $(TEMPLATE_LINK): Makefile
 	@if [ -f "$(TEMPLATE_PATH)/Makefile" ]; then \
 	    $(MAKE) -C "$(TEMPLATE_PATH)"; \
 	fi
+
+package: 
+	@rm -rf $(PACKAGE_DIR)
+	@mkdir -p $(PACKAGE_DIR)
+	@mkdir -p $(PACKAGE_DIR)/template	
+	@mkdir -p $(PACKAGE_DIR)/figs
+	@mkdir -p $(PACKAGE_DIR)/imgs
+	@mkdir -p $(PACKAGE_DIR)/tabs
+	@cp -r $(TEMPLATE_PATH)/* $(PACKAGE_DIR)/template
+	@rm $(PACKAGE_DIR)/template/TabPreview.tex $(PACKAGE_DIR)/template/FigPreview.tex $(PACKAGE_DIR)/template/BibPreview.tex $(PACKAGE_DIR)/template/*.svg
+	@cp -r common/ $(PACKAGE_DIR)/.
+	@cp -r secs/ $(PACKAGE_DIR)/.
+	@find figs -type f \( -name "*.svg" -o -name "*.png" \) -exec cp --parents {} $(PACKAGE_DIR) \;
+	@find imgs -type f \( -name "*.png" \) -exec cp --parents {} $(PACKAGE_DIR) \;
+	@find tabs -type f \( -name "*.tex" \) -exec cp --parents {} $(PACKAGE_DIR) \;
+	@cp tools/Makefile.package  $(PACKAGE_DIR)/Makefile
+	@cp main.tex LICENSE $(PACKAGE_DIR)
+	@zip -r $(OUTPUT_DIR)/package.zip $(PACKAGE_DIR)
+
 	
 help:
 	@echo "Run \"make\" with one of the options:"
@@ -105,4 +127,4 @@ help:
 	@echo "----------------------------------------------------------------------------------"
 	@echo ""
 
-.PHONY: all clean rebuild bibpreview view help
+.PHONY: all clean rebuild bibpreview view help package
