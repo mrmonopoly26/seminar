@@ -325,6 +325,22 @@ Alternatively, you can copy fonts from Linux to a temporary Windows directory.
 Then, in Windows you install them, by right-clicking on the font in the Windows Explorer and selecting "Install" from the popup menu.
 For example, in my Linux installation, some fonts like Nimbus Roman are in  ```/usr/share/texmf/fonts/opentype/public/lm/```.
 
+## Packaging
+
+Publishers require tex sources of your document in a simple format. 
+To create that, call 
+
+```make package```
+
+and a folder ```build/package``` and a zip file ```build\package.zip``` with its contents will be created.
+Make sure that the paper can be built by executing the following commands:
+```
+cd build/package
+make view
+
+```
+
+
 # Style Guide
 
 ## Rules
@@ -424,4 +440,6 @@ While I maintain this template on a Windows machine, I anticipate that you can u
 - TODO Should we add a template for lecture notes?
 - TODO Should we add a template for grant applications?
 - TODO Refine Tufte Template
-
+- TODO Packacking for tempaltes with download parts does not work
+- TODO For packaging, run inkscape latex from command line
+- TODO Make a macro to include graphics and tables.
