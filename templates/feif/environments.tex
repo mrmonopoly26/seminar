@@ -103,25 +103,24 @@
 %    \include{Sektionen/Abstract}
 %  }{}
 
-% TODO: Table of Contents
-  %\newpage
-  %\tableofcontents
+ 
+  \newpage
+  \tableofcontents
 
-% TODO: List of Figures
- % \iftotalfigures
- %   \newpage
- %   \phantomsection
- %   \addcontentsline{toc}{section}{\listfigurename}
- %   \listoffigures
- % \fi
 
-% TODO: List of Tables
- % \iftotaltables
- %   \newpage
- %   \phantomsection
- %   \addcontentsline{toc}{section}{\listtablename}
- %   \listoftables
- % \fi
+  \iftotalfigures
+    \newpage
+    \phantomsection
+    \addcontentsline{toc}{section}{\listfigurename}
+    \listoffigures
+  \fi
+
+  \iftotaltables
+    \newpage
+    \phantomsection
+    \addcontentsline{toc}{section}{\listtablename}
+    \listoftables
+  \fi
 
 % TODO: List of Listings 
 %  \iftotallstlistings

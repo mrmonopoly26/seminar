@@ -440,10 +440,7 @@ While I maintain this template on a Windows machine, I anticipate that you can u
     - TODO: Enable Glossaries
     - TODO: Consider switching acronym package
     - TODO: Sperrvermerk
-    - TODO: Abstract
-    - TODO: Table of Contents
-    - TODO: List of Figures
-    - TODO: List of Tables
+    - TODO: Abstract            
     - TODO: List of Listings
     - TODO: Symbolverzeichnis
     - TODO: Abkürzungsverzeichnis
@@ -452,8 +449,7 @@ While I maintain this template on a Windows machine, I anticipate that you can u
     - TODO: Appendix
     - TODO: Tab Preview
     - TODO: Fig Preview
-    - TODO: Bib Preview
-    - TODO: Font Sample
+    - TODO: Bib Preview    
     - TODO: Font Sample
     - TODO: FEIFTemplate.svg
     - TODO: Consider \usepackage[hyphens,obeyspaces,spaces]{url} instead of hyperref
