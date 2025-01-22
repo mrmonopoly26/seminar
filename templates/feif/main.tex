@@ -1,0 +1,34 @@
+\documentclass[a4paper,12pt]{article}
+\input{common/packages.tex}
+\input{common/commands.tex}
+\input{template/setup}
+
+\def\Titel{Vorlage für verschiedene Dokumente der HS Coburg}
+\def\Dozent{<DOZENT>}
+
+% Infos zum Autor
+\def\Autorenname{<NACHNAME, VORNAME>}
+\def\Geburtsdatum{<GEBURTSDATUM>}
+\def\Matrikelnummer{<MATRIKELNUMMER>}
+\def\Studiengang{<STUDIENGANG>}
+
+% Infos zum Unternehmen
+\def\Unternehmen{<FIRMENNAME>}
+\def\Abteilung{<ABTEILUNG>}
+\def\Strasse{<STRASSE>}
+\def\Ort{<ORT>}
+
+% Infos zum Betreuer
+\def\Betreuer{<BETREUER>}
+\def\Funktion{<FUNKTION BETREUER>}
+\def\Telefon{<TELEFONNUMMER BETREUER>}
+\def\Email{<BETREUER EMAIL>}
+
+% Daten
+\def\Beginn{<BEGINN>}
+\def\Ende{<ENDE>}
+\def\Abgabe{\today}
+
+\begin{HSCDocument}[preset=Praxisbericht]    
+    \input{secs/structure.tex}
+\end{HSCDocument}

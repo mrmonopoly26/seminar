@@ -1,5 +1,5 @@
 # Configure your paper
-TEMPLATE_PATH				:= templates/acmart
+TEMPLATE_PATH				:= templates/feif
 
 # Configure programs to use
 PDF_VIEWER 					:= evince
@@ -90,10 +90,10 @@ $(OUTPUT_DIR)/%.pdf: figs/%.svg	$(TEMPLATE_LINK)
 	$(END_TIME)
 
 $(TEMPLATE_LINK): Makefile
-	@mkdir -p $(OUTPUT_DIR)
+	@mkdir -p $(OUTPUT_DIR)	
 	@ln -sfn $(TEMPLATE_PATH) $(TEMPLATE_LINK)	
 	@if [ -f "$(TEMPLATE_PATH)/Makefile" ]; then \
-	    $(MAKE) -C "$(TEMPLATE_PATH)"; \
+		$(MAKE) -C "$(TEMPLATE_PATH)"; \
 	fi
 
 package: 

@@ -1,0 +1,227 @@
+% ===========================================================================
+%           Wrap document environment with HSCDocument environment
+% ===========================================================================
+
+\AddToHook{env/HSCDocument/before}{
+
+% TODO: Enable Glossaries
+  % Register different entries: glossary, nomenclature, acronyms
+  %\makeglossaries
+  %\include{Verzeichnisse/Worttrennungen}
+  %\include{Verzeichnisse/Abkuerzungsverzeichnis}
+  %\makenomenclature
+  %\include{Verzeichnisse/Symbolverzeichnis}
+  %\include{Verzeichnisse/Glossar}
+
+  \begin{document}
+}
+
+\AddToHook{env/HSCDocument/after}{
+  \end{document}
+}
+
+\makeatletter
+\define@key{HSCDocument@keys}{preset}{\def\DocumentType{#1}}
+\makeatother
+
+\newenvironment{HSCDocument}[1][]{
+
+  \makeatletter
+  \setkeys{HSCDocument@keys}{
+    preset=Custom,
+    #1
+  }
+  \makeatother
+
+  % Don't display "a as ä etc.
+  \shorthandoff{"}
+
+  % ===========================================================================
+  %                             Document header
+  % ===========================================================================  
+
+  \newgeometry{
+    left=2.5cm,
+    right=2.5cm,
+    top=2.5cm,
+    bottom=2.5cm
+  }
+
+  \begin{titlepage}
+    \ifthenelse{\equal{\DocumentType}{Praxisbericht}}
+      {\input{template/header_practice_report.tex}}
+      {
+        \ifthenelse{\equal{\DocumentType}{Bachelorarbeit}}
+          {\input{template/header}}
+          {
+            \ifthenelse{\equal{\DocumentType}{Masterarbeit}}
+              {\input{template/header}}
+              {
+                \IfFileExists{./CustomHeader.tex}{
+                  \input{CustomHeader}
+                }{
+                  ERROR: Please use one of the following values as parameter
+                  to the HSCdocument environment:\\
+                  "Praxisbericht", "Bachelorarbeit", "Masterarbeit"\\
+
+                  To create your own document header, just create a file
+                  "CustomHeader.tex" in the document root.
+                }
+              }
+          }
+      }
+  \end{titlepage}
+
+  \restoregeometry
+
+  % Header is considered the 1st page
+  \addtocounter{page}{1}
+
+  % Peripheral pages have to be numbered using roman numerals
+  \pagenumbering{Roman}
+  
+  % ===========================================================================
+  %                              Page Ordering
+  % ===========================================================================
+
+   
+% TODO: Sperrvermerk
+  % Optional notice to the reader ("Vermerk")
+%  \IfFileExists{./Sektionen/Vermerk.tex}{
+%    \newpage
+%    \thispagestyle{empty}
+%    \include{Sektionen/Vermerk}
+%  }{}
+
+  % TODO: Abstract
+%  \IfFileExists{./Sektionen/Abstract.tex}{
+%    \newpage
+%    \fancypagestyle{abstract}{
+%      \fancyhead[L]{Abstract}
+%    }
+%    \thispagestyle{abstract}
+%    \include{Sektionen/Abstract}
+%  }{}
+
+% TODO: Table of Contents
+  %\newpage
+  %\tableofcontents
+
+% TODO: List of Figures
+ % \iftotalfigures
+ %   \newpage
+ %   \phantomsection
+ %   \addcontentsline{toc}{section}{\listfigurename}
+ %   \listoffigures
+ % \fi
+
+% TODO: List of Tables
+ % \iftotaltables
+ %   \newpage
+ %   \phantomsection
+ %   \addcontentsline{toc}{section}{\listtablename}
+ %   \listoftables
+ % \fi
+
+% TODO: List of Listings 
+%  \iftotallstlistings
+%    \newpage
+%    \phantomsection
+%    \addcontentsline{toc}{section}{\lstlistlistingname}
+%    \lstlistoflistings
+%  \fi
+
+% TODO: Symbolverzeichnis
+  % Nomenclature ("Symbolverzeichnis")
+%  \iftotalcountnomens
+%    \newpage
+%    \phantomsection
+%    \addcontentsline{toc}{section}{\nomname}
+%    \printnomenclature[1in]
+%  \fi
+% TODO: Abkürzungsverzeichnis
+\input{common/acronyms.tex}  
+  % Acronyms
+%  \iftotalcountacronyms
+%    \newpage
+%    \setglossarystyle{super}
+%    \printglossary[type=\acronymtype]
+%  \fi
+
+  \newpage
+
+  % Save page counter, used for consecutive numbering of peripherals following main content
+  \newcounter{HSCPeripheralNumbering}
+  \setcounter{HSCPeripheralNumbering}{\value{page}}
+
+  % Set numbering of pages to arabic for main content
+  \pagenumbering{arabic}
+}
+{
+  % Reset numbering to use roman numerals for rest of peripheral files
+  \pagenumbering{Roman}
+  \setcounter{page}{\value{HSCPeripheralNumbering}}
+  
+
+  % Bibliography
+  % TODO: Fix if Bibliography
+  %\iftotalcountcitations
+    \newpage
+    \phantomsection
+    \addcontentsline{toc}{section}{\refname}
+    \bibliographystyle{alphadin}
+    \bibliography{common/bibliography}
+  %\fi
+
+% TODO: Gloassary
+  % Glossary
+  %\iftotalcountglossarys
+  %  \newpage
+  %  \setglossarystyle{altlist}
+  %  \printglossary
+  %\fi
+
+  % Appendix
+  %\IfFileExists{./Sektionen/Anhang.tex}{
+  %  \newpage
+  %  \appendix
+  %  \renewcommand{\thesection}{A\arabic{section}}
+  %  \include{Sektionen/Anhang}
+  %}{}
+
+  % Declaration of Honor
+  \newpage
+  \phantomsection
+  \addcontentsline{toc}{section}{\declarationname}
+  \lhead{\declarationname}
+  \input{template/declaration_of_honor}
+
+  % TODO list
+  \iftotalcounttodos
+    \phantomsection
+    \addcontentsline{toc}{section}{TODOs}
+    \thispagestyle{empty}
+    \listoftodos[TODOs]
+  \fi
+}
+
+% ===========================================================================
+%                   Simplified centered & colored tables
+% ===========================================================================
+
+\newenvironment{colortable}[1]{
+  \begin{center}
+    \begin{tabular}{#1}
+    \hline
+    \rowcolor{Gray}
+}
+{
+    \hline
+    \end{tabular}
+  \end{center}
+}
+
+\newcommand{\tablecontent}{
+  \hline
+  \rowcolor{White}
+}
