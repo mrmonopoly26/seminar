@@ -443,8 +443,7 @@ While I maintain this template on a Windows machine, I anticipate that you can u
     - TODO: Abstract            
     - TODO: List of Listings
     - TODO: Symbolverzeichnis
-    - TODO: Abkürzungsverzeichnis
-    - TODO: Fix if Bibliography
+    - TODO: Abkürzungsverzeichnis    
     - TODO: Gloassary
     - TODO: Appendix
     - TODO: Tab Preview
