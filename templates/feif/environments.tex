@@ -6,9 +6,10 @@
 
 % TODO: Enable Glossaries
   % Register different entries: glossary, nomenclature, acronyms
-  %\makeglossaries
+  \makeglossaries
   %\include{Verzeichnisse/Worttrennungen}
-  %\include{Verzeichnisse/Abkuerzungsverzeichnis}
+  \input{common/acronyms}
+  
   %\makenomenclature
   %\include{Verzeichnisse/Symbolverzeichnis}
   %\include{Verzeichnisse/Glossar}
@@ -135,12 +136,13 @@
 %    \printnomenclature[1in]
 %  \fi
 % TODO: Abkürzungsverzeichnis
-\input{common/acronyms.tex}  
+  %\input{common/acronyms.tex}  
   % Acronyms
-  \iftotalcountacronyms
+  %\iftotalcountacronyms
+    \newpage    
     \setglossarystyle{super}
     \printglossary[type=\acronymtype]
-  \fi
+  %\fi
 
   
 

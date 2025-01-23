@@ -55,6 +55,9 @@
 
 \frenchspacing                                                 % Insert one space after a sentence, not 2
 
+% Page break after every section
+\let\oldsection\section
+\renewcommand\section{\clearpage\oldsection}
 
 \newcommand*{\hscrefname}{Literaturverzeichnis}               % Bibliography
 
@@ -152,8 +155,6 @@
 \pretocmd{\acrshort}{\stepcounter{countacronym}}{}{}
 \pretocmd{\acrlong}{\stepcounter{countacronym}}{}{}
 \pretocmd{\acrfull}{\stepcounter{countacronym}}{}{}
-\newcommand*{\acr}[1]{\acrshort{#1}}
-\newcommand*{\Acr}[1]{\acrlong{#1}}
 
 % Custom nomenclature patches:
 %   - count usage of actual entries through \nomen (used for on-demand nomenclature)
