@@ -20,6 +20,8 @@
   \end{document}
 }
 
+\AddToHook{cmd/section/before}{\clearpage}
+
 \makeatletter
 \define@key{HSCDocument@keys}{preset}{\def\DocumentType{#1}}
 \makeatother
@@ -86,15 +88,12 @@
 
     
   % Optional notice to the reader ("Vermerk")
-  \IfFileExists{./secs/Z0vermerk.tex}{
-    \newpage
+  \IfFileExists{./secs/Z0vermerk.tex}{    
     \thispagestyle{empty}
     \input{secs/Z0vermerk}
   }{}
 
-  % TODO: Abstract
- \IfFileExists{./secs/A0abstract.tex}{
-    \newpage
+   \IfFileExists{./secs/A0abstract.tex}{    
     \fancypagestyle{abstract}{
       \fancyhead[L]{Zusammenfassung}
     }
@@ -105,19 +104,17 @@
   }{}
 
  
-  \newpage
+  
   \tableofcontents
 
 
-  \iftotalfigures
-    \newpage
+  \iftotalfigures    
     \phantomsection
     \addcontentsline{toc}{section}{\listfigurename}
     \listoffigures
   \fi
 
-  \iftotaltables
-    \newpage
+  \iftotaltables    
     \phantomsection
     \addcontentsline{toc}{section}{\listtablename}
     \listoftables
@@ -125,7 +122,6 @@
 
 % TODO: List of Listings 
 %  \iftotallstlistings
-%    \newpage
 %    \phantomsection
 %    \addcontentsline{toc}{section}{\lstlistlistingname}
 %    \lstlistoflistings
@@ -134,7 +130,6 @@
 % TODO: Symbolverzeichnis
   % Nomenclature ("Symbolverzeichnis")
 %  \iftotalcountnomens
-%    \newpage
 %    \phantomsection
 %    \addcontentsline{toc}{section}{\nomname}
 %    \printnomenclature[1in]
@@ -142,13 +137,12 @@
 % TODO: Abkürzungsverzeichnis
 \input{common/acronyms.tex}  
   % Acronyms
-%  \iftotalcountacronyms
-%    \newpage
-%    \setglossarystyle{super}
-%    \printglossary[type=\acronymtype]
-%  \fi
+  \iftotalcountacronyms
+    \setglossarystyle{super}
+    \printglossary[type=\acronymtype]
+  \fi
 
-  \newpage
+  
 
   % Save page counter, used for consecutive numbering of peripherals following main content
   \newcounter{HSCPeripheralNumbering}
@@ -164,8 +158,7 @@
   
 
   % Bibliography
-  \iftotalcountcitations
-    \newpage
+  \iftotalcountcitations    
     \phantomsection
     \renewcommand*{\refname}{\hscrefname}               % Bibliography
     \addcontentsline{toc}{section}{\refname}
@@ -179,20 +172,19 @@
 % TODO: Gloassary
   % Glossary
   %\iftotalcountglossarys
-  %  \newpage
+
   %  \setglossarystyle{altlist}
   %  \printglossary
   %\fi
 
   % Appendix
-  \IfFileExists{./secs/D0appendix.tex}{
-    \newpage
+  \IfFileExists{./secs/D0appendix.tex}{    
     \appendix
     \renewcommand{\thesection}{A\arabic{section}}
     \input{secs/D0appendix}
   }{}
 
-  % Declaration of Honor
+  % Declaration of Honor  
   \newpage
   \phantomsection
   \addcontentsline{toc}{section}{\declarationname}
