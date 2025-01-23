@@ -437,7 +437,6 @@ While I maintain this template on a Windows machine, I anticipate that you can u
 # Open Issues
 
 - TODO Improve Hochschule Coburg Template?    
-    - TODO: List of Listings
     - TODO: Symbolverzeichnis    
     - TODO: Glossary    
     - TODO: Tab Preview

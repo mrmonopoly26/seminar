@@ -103,11 +103,8 @@
     \thispagestyle{abstract}
     \input{./secs/A0abstract}
   }{}
-
- 
   
   \tableofcontents
-
 
   \iftotalfigures    
     \phantomsection
@@ -121,12 +118,12 @@
     \listoftables
   \fi
 
-% TODO: List of Listings 
-%  \iftotallstlistings
-%    \phantomsection
-%    \addcontentsline{toc}{section}{\lstlistlistingname}
-%    \lstlistoflistings
-%  \fi
+
+  \iftotallstlistings
+    \phantomsection
+    \addcontentsline{toc}{section}{\lstlistlistingname}
+    \lstlistoflistings
+  \fi
 
 % TODO: Symbolverzeichnis
   % Nomenclature ("Symbolverzeichnis")
@@ -135,7 +132,6 @@
 %    \addcontentsline{toc}{section}{\nomname}
 %    \printnomenclature[1in]
 %  \fi
-% TODO: Abkürzungsverzeichnis
 
   % Acronyms
   \newpage    
@@ -157,6 +153,13 @@
   \pagenumbering{Roman}
   \setcounter{page}{\value{HSCPeripheralNumbering}}
   
+  % Appendix
+  \IfFileExists{./secs/D0appendix.tex}{    
+    \appendix
+    \renewcommand{\thesection}{A\arabic{section}}
+    \input{secs/D0appendix}
+  }{}
+
 
   % Bibliography
   \iftotalcountcitations    
@@ -178,12 +181,6 @@
   %  \printglossary
   %\fi
 
-  % Appendix
-  \IfFileExists{./secs/D0appendix.tex}{    
-    \appendix
-    \renewcommand{\thesection}{A\arabic{section}}
-    \input{secs/D0appendix}
-  }{}
 
   % Declaration of Honor  
   \newpage
