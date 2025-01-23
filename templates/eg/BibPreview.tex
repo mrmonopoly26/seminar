@@ -14,9 +14,11 @@
 \usepackage{egweblnk} 
 \input{common/packages.tex}
 \input{common/commands.tex}
-\graphicspath{{./}, {../figs}, {./template/}} 
-\begin{document}
+\graphicspath{{./}, {../figs}, {./template/}
+\glsdisablehyper} 
+\makeglossaries
 \input{common/acronyms.tex}
+\begin{document}
 \nocite{*}
 \bibliographystyle{download/egPublStyle-cgf/eg-alpha-doi}
 \bibliography{common/bibliography}

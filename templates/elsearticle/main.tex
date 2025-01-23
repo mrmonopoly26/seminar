@@ -7,6 +7,9 @@
 \input{common/packages.tex}
 \input{common/commands.tex}
 \graphicspath{{./}, {../figs}, {./template/}} 
+\glsdisablehyper
+\makeglossaries
+\input{common/acronyms.tex}
 
 \begin{document}
 \begin{frontmatter}
@@ -44,11 +47,8 @@
        %% Keywords
 \begin{keyword}
 geometry compression \sep mesh shaders \sep real-time rendering
-\end{keyword}
-       
+\end{keyword}      
 \end{frontmatter}
-
-\input{common/acronyms.tex}
 \input{secs/structure.tex}
 
 \bibliographystyle{elsarticle-harv}
