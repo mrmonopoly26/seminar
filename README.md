@@ -438,20 +438,19 @@ While I maintain this template on a Windows machine, I anticipate that you can u
 
 - TODO Improve Hochschule Coburg Template?
     - TODO: Enable Glossaries
-    - TODO: Consider switching acronym package
-    - TODO: Sperrvermerk
-    - TODO: Abstract            
+    - TODO: Consider switching acronym package    
     - TODO: List of Listings
     - TODO: Symbolverzeichnis
     - TODO: Abkürzungsverzeichnis    
-    - TODO: Gloassary
-    - TODO: Appendix
+    - TODO: Glossary    
     - TODO: Tab Preview
     - TODO: Fig Preview
     - TODO: Bib Preview    
     - TODO: Font Sample
-    - TODO: FEIFTemplate.svg
-    - TODO: Consider \usepackage[hyphens,obeyspaces,spaces]{url} instead of hyperref
+    - TODO: Create FEIFTemplate.svg
+    - TODO: Consider \usepackage[hyphens,obeyspaces,spaces]{url} instead of hyperref.
+    - TODO: Make Template English.
+    - TODO: Bibliography fix.
 - TODO Should we add a template for lecture notes?
 - TODO Should we add a template for grant applications?
 - TODO Refine Tufte Template

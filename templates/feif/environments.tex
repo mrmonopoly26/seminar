@@ -84,24 +84,25 @@
   %                              Page Ordering
   % ===========================================================================
 
-   
-% TODO: Sperrvermerk
+    
   % Optional notice to the reader ("Vermerk")
-%  \IfFileExists{./Sektionen/Vermerk.tex}{
-%    \newpage
-%    \thispagestyle{empty}
-%    \include{Sektionen/Vermerk}
-%  }{}
+  \IfFileExists{./secs/Z0vermerk.tex}{
+    \newpage
+    \thispagestyle{empty}
+    \input{secs/Z0vermerk}
+  }{}
 
   % TODO: Abstract
-%  \IfFileExists{./Sektionen/Abstract.tex}{
-%    \newpage
-%    \fancypagestyle{abstract}{
-%      \fancyhead[L]{Abstract}
-%    }
-%    \thispagestyle{abstract}
-%    \include{Sektionen/Abstract}
-%  }{}
+ \IfFileExists{./secs/A0abstract.tex}{
+    \newpage
+    \fancypagestyle{abstract}{
+      \fancyhead[L]{Zusammenfassung}
+    }
+    \phantomsection
+    \section*{Zusammenfassung}
+    \thispagestyle{abstract}
+    \input{./secs/A0abstract}
+  }{}
 
  
   \newpage
@@ -181,12 +182,12 @@
   %\fi
 
   % Appendix
-  %\IfFileExists{./Sektionen/Anhang.tex}{
-  %  \newpage
-  %  \appendix
-  %  \renewcommand{\thesection}{A\arabic{section}}
-  %  \include{Sektionen/Anhang}
-  %}{}
+  \IfFileExists{./secs/D0appendix.tex}{
+    \newpage
+    \appendix
+    \renewcommand{\thesection}{A\arabic{section}}
+    \input{secs/D0appendix}
+  }{}
 
   % Declaration of Honor
   \newpage
