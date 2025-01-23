@@ -36,18 +36,37 @@ IMAGES_PNG 					:= $(wildcard imgs/*.png)
 
 BUILD_DEP					:= Makefile $(TEMPLATE_FILES) $(COMMON_FILES) $(CONTENT_TEX) $(TABLES_TEX) $(FIGURES_SVG) $(IMAGES_PNG)
 
+### Build Rules. Do not edit below this line unless you know what to do.
+
 ### Timing tools
 START_TIME					:= @date +%s%N > $@.time_txt
 END_TIME					:= @echo "Build time in seconds: "; echo "scale=3;$$(($$(($$(date +%s%N)-$$(cat $@.time_txt))))).0 * 0.000000001"| bc; rm $@.time_txt	
 
-### Build Rules. Do not edit below this line unless you know what to do.
+.PHONY: all clean rebuild bibpreview view help package
+
+# Make the main pdf.
 all: $(OUTPUT_FILE_PDF)
 
+help:
+	@echo "Run \"make\" with one of the options:"
+	@echo "Option           Description"
+	@echo "----------------------------------------------------------------------------------"
+	@echo "all              Creates $(OUTPUT_FILE_PDF)."
+	@echo "clean            Removes all build-artifacts including the $(OUTPUT_DIR) directory."
+	@echo "view             Shows the $(OUTPUT_FILE_PDF) with $(PDF_VIEWER)."
+	@echo "bibpreview       Creates $(BIB_PREVIEW_NAME_PDF) to preview all entries of the    "
+	@echo "                 bibliography."
+	@echo "----------------------------------------------------------------------------------"
+	@echo ""
+
+
+# Clean up all build artifacs
 clean:	
 	@rm -rf $(OUTPUT_DIR)
 	@rm -f $(TEMPLATE_LINK)
 	@rm -rf $(PACKAGE_DIR)
 
+# Build the document pdf.
 $(OUTPUT_FILE_PDF): $(TEMPLATE_LINK) $(BUILD_DEP) 
 	$(START_TIME)	
 	@$(LATEX_COMPILER) -jobname=$(OUTPUT_FILE) $(MAIN_FILE_TEX); touch $(OUTPUT_DIR)/$(MAINFILE_PDF)
@@ -56,46 +75,16 @@ $(OUTPUT_FILE_PDF): $(TEMPLATE_LINK) $(BUILD_DEP)
 	@$(LATEX_COMPILER) -jobname=$(OUTPUT_FILE) $(MAIN_FILE_TEX)
 	$(END_TIME)
 
+# Rebuild the document.
 rebuild: clean $(OUTPUT_FILE_PDF)
 
-bibpreview: $(BIB_PREVIEW_NAME_PDF) 
-
-$(BIB_PREVIEW_NAME_PDF): $(BIBLIOGRAPHY) $(TEMPLATE_LINK) 
-	$(START_TIME)	
-	@$(LATEX_COMPILER) $(BIB_PREVIEW_TEX); 
-	-@$(BIBTEX_COMPILER) $(OUTPUT_DIR)/$(BIB_PREVIEW_NAME)
-	@$(LATEX_COMPILER) $(BIB_PREVIEW_TEX); 
-	@$(LATEX_COMPILER) $(BIB_PREVIEW_TEX); 
-	$(END_TIME)
-
+# View the main document
 view: $(OUTPUT_FILE_PDF)	
 	@$(PDF_VIEWER) $(shell realpath $(OUTPUT_FILE_PDF)) &
 
-$(OUTPUT_DIR)/%.pdf: tabs/%.tex $(TEMPLATE_LINK) 
-	$(START_TIME)	
-	@touch $@
-	@$(LATEX_COMPILER) $(OUTPUT_DIR)/preview_tab.tex;  mv $(OUTPUT_DIR)/preview_tab.pdf $@;	
-	-@$(BIBTEX_COMPILER) $(OUTPUT_DIR)/preview_tab
-	@$(LATEX_COMPILER) $(OUTPUT_DIR)/preview_tab.tex
-	@$(LATEX_COMPILER) $(OUTPUT_DIR)/preview_tab.tex
-	$(END_TIME)
+bibpreview: $(BIB_PREVIEW_NAME_PDF) 
 
-$(OUTPUT_DIR)/%.pdf: figs/%.svg	$(TEMPLATE_LINK) 
-	$(START_TIME)	
-	@touch $@	
-	@$(LATEX_COMPILER) $(OUTPUT_DIR)/preview_fig.tex;  mv $(OUTPUT_DIR)/preview_fig.pdf $@;	
-	-@$(BIBTEX_COMPILER) $(OUTPUT_DIR)/preview_fig
-	@$(LATEX_COMPILER) $(OUTPUT_DIR)/preview_fig.tex
-	@$(LATEX_COMPILER) $(OUTPUT_DIR)/preview_fig.tex
-	$(END_TIME)
-
-$(TEMPLATE_LINK): Makefile
-	@mkdir -p $(OUTPUT_DIR)	
-	@ln -sfn $(TEMPLATE_PATH) $(TEMPLATE_LINK)	
-	@if [ -f "$(TEMPLATE_PATH)/Makefile" ]; then \
-		$(MAKE) -C "$(TEMPLATE_PATH)"; \
-	fi
-
+# Create a package to send to copy-editors.
 package: 
 	@rm -rf $(PACKAGE_DIR)
 	@mkdir -p $(PACKAGE_DIR)
@@ -114,17 +103,41 @@ package:
 	@cp main.tex LICENSE $(PACKAGE_DIR)
 	@zip -r $(OUTPUT_DIR)/package.zip $(PACKAGE_DIR)
 
-	
-help:
-	@echo "Run \"make\" with one of the options:"
-	@echo "Option           Description"
-	@echo "----------------------------------------------------------------------------------"
-	@echo "all              Creates $(OUTPUT_FILE_PDF)."
-	@echo "clean            Removes all build-artifacts including the $(OUTPUT_DIR) directory."
-	@echo "view             Shows the $(OUTPUT_FILE_PDF) with $(PDF_VIEWER)."
-	@echo "bibpreview       Creates $(BIB_PREVIEW_NAME_PDF) to preview all entries of the    "
-	@echo "                 bibliography."
-	@echo "----------------------------------------------------------------------------------"
-	@echo ""
+# Create the preview for bibliography. Triggered from the BibPreview.sh script.
+$(BIB_PREVIEW_NAME_PDF): $(BIBLIOGRAPHY) $(TEMPLATE_LINK) 
+	$(START_TIME)	
+	@$(LATEX_COMPILER) $(BIB_PREVIEW_TEX); 
+	-@$(BIBTEX_COMPILER) $(OUTPUT_DIR)/$(BIB_PREVIEW_NAME)
+	@$(LATEX_COMPILER) $(BIB_PREVIEW_TEX); 
+	@$(LATEX_COMPILER) $(BIB_PREVIEW_TEX); 
+	$(END_TIME)
 
-.PHONY: all clean rebuild bibpreview view help package
+# Create preview for tables. Triggered from the TabPreview.sh script.
+$(OUTPUT_DIR)/%.pdf: tabs/%.tex $(TEMPLATE_LINK) 
+	$(START_TIME)	
+	@touch $@
+	@$(LATEX_COMPILER) $(OUTPUT_DIR)/preview_tab.tex;  mv $(OUTPUT_DIR)/preview_tab.pdf $@;	
+	-@$(BIBTEX_COMPILER) $(OUTPUT_DIR)/preview_tab
+	@$(LATEX_COMPILER) $(OUTPUT_DIR)/preview_tab.tex
+	@$(LATEX_COMPILER) $(OUTPUT_DIR)/preview_tab.tex
+	$(END_TIME)
+
+# Create preview for figures. Triggered from the FigPreview.sh script.
+$(OUTPUT_DIR)/%.pdf: figs/%.svg	$(TEMPLATE_LINK) 
+	$(START_TIME)	
+	@touch $@	
+	@$(LATEX_COMPILER) $(OUTPUT_DIR)/preview_fig.tex;  mv $(OUTPUT_DIR)/preview_fig.pdf $@;	
+	-@$(BIBTEX_COMPILER) $(OUTPUT_DIR)/preview_fig
+	@$(LATEX_COMPILER) $(OUTPUT_DIR)/preview_fig.tex
+	@$(LATEX_COMPILER) $(OUTPUT_DIR)/preview_fig.tex
+	$(END_TIME)
+
+# Create template link. Execute Makefile
+$(TEMPLATE_LINK): Makefile
+	@mkdir -p $(OUTPUT_DIR)	
+	@ln -sfn $(TEMPLATE_PATH) $(TEMPLATE_LINK)	
+	@if [ -f "$(TEMPLATE_PATH)/Makefile" ]; then \
+		$(MAKE) -C "$(TEMPLATE_PATH)"; \
+	fi
+
+
