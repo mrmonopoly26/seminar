@@ -1,7 +1,11 @@
 \documentclass[a4paper,12pt]{article}
 \input{common/packages.tex}
 \input{common/commands.tex}
-\input{template/setup}
+\input{template/packages}
+\input{template/settings}
+% Preload custom user settings & packages
+\IfFileExists{./Custom.tex}{\input{Custom}}{}
+\input{template/environments}
 
 \def\Titel{Vorlage für verschiedene Dokumente der HS Coburg}
 \def\Dozent{<DOZENT>}
