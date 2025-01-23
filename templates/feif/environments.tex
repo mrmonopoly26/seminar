@@ -164,14 +164,17 @@
   
 
   % Bibliography
-  % TODO: Fix if Bibliography
-  %\iftotalcountcitations
+  \iftotalcountcitations
     \newpage
     \phantomsection
+    \renewcommand*{\refname}{\hscrefname}               % Bibliography
     \addcontentsline{toc}{section}{\refname}
-    \bibliographystyle{alphadin}
-    \bibliography{common/bibliography}
-  %\fi
+  \else
+    \renewcommand*{\refname}{}                                     % Bibliography
+  \fi    
+  \bibliographystyle{alphadin}
+  \bibliography{common/bibliography}
+  
 
 % TODO: Gloassary
   % Glossary
@@ -225,3 +228,4 @@
   \hline
   \rowcolor{White}
 }
+
