@@ -30,11 +30,12 @@ BIBTEX_COMPILER				:= bibtex
 TEMPLATE_FILES 				:= $(wildcard $(TEMPLATE_PATH)/**)
 COMMON_FILES 				:= $(wildcard common/*.*)
 CONTENT_TEX					:= $(wildcard secs/*.tex)
+LISTS_TEX					:= $(wildcard lists/*.tex)
 TABLES_TEX					:= $(wildcard tabs/*.tex)
 FIGURES_SVG 				:= $(wildcard figs/*.svg)
 IMAGES_PNG 					:= $(wildcard imgs/*.png)
 
-BUILD_DEP					:= Makefile $(TEMPLATE_FILES) $(COMMON_FILES) $(CONTENT_TEX) $(TABLES_TEX) $(FIGURES_SVG) $(IMAGES_PNG)
+BUILD_DEP					:= Makefile $(TEMPLATE_FILES) $(COMMON_FILES) $(CONTENT_TEX) $(TABLES_TEX) $(FIGURES_SVG) $(IMAGES_PNG) $(LISTS_TEX)
 
 ### Build Rules. Do not edit below this line unless you know what to do.
 
@@ -70,10 +71,11 @@ clean:
 $(OUTPUT_FILE_PDF): $(TEMPLATE_LINK) $(BUILD_DEP) 
 	$(START_TIME)	
 	@$(LATEX_COMPILER) -jobname=$(OUTPUT_FILE) $(MAIN_FILE_TEX); touch $(OUTPUT_DIR)/$(MAINFILE_PDF)
-	makeglossaries -d $(OUTPUT_DIR)  $(OUTPUT_FILE)	
 	@$(BIBTEX_COMPILER) $(OUTPUT_DIR)/$(OUTPUT_FILE)
-	@$(LATEX_COMPILER) -jobname=$(OUTPUT_FILE) $(MAIN_FILE_TEX)
-	@$(LATEX_COMPILER) -jobname=$(OUTPUT_FILE) $(MAIN_FILE_TEX)
+	makeglossaries -d $(OUTPUT_DIR)  $(OUTPUT_FILE)		
+	-cd build && makeindex $(OUTPUT_FILE).nlo -s nomencl.ist -o $(OUTPUT_FILE).nls
+	@$(LATEX_COMPILER) -jobname=$(OUTPUT_FILE) $(MAIN_FILE_TEX); touch $(OUTPUT_DIR)/$(MAINFILE_PDF)
+	@$(LATEX_COMPILER) -jobname=$(OUTPUT_FILE) $(MAIN_FILE_TEX)		
 	$(END_TIME)
 
 # Rebuild the document.

@@ -9,12 +9,9 @@
   \makeglossaries
   %\include{Verzeichnisse/Worttrennungen}
   \input{common/acronyms}
-  
-  %\makenomenclature
-  %\include{Verzeichnisse/Symbolverzeichnis}
-  %\include{Verzeichnisse/Glossar}
-
+  \IfFileExists{./lists/symbols.tex}{\makenomenclature\input{./lists/symbols.tex}}{}
   \begin{document}
+  %\include{Verzeichnisse/Glossar}
 }
 
 \AddToHook{env/HSCDocument/after}{
@@ -60,9 +57,11 @@
             \ifthenelse{\equal{\DocumentType}{Masterarbeit}}
               {\input{template/header}}
               {
-                \IfFileExists{./CustomHeader.tex}{
+                %\IfFileExists{./CustomHeader.tex}
+                %{
                   \input{CustomHeader}
-                }{
+                %}
+                {
                   ERROR: Please use one of the following values as parameter
                   to the HSCdocument environment:\\
                   "Praxisbericht", "Bachelorarbeit", "Masterarbeit"\\
@@ -124,14 +123,14 @@
     \addcontentsline{toc}{section}{\lstlistlistingname}
     \lstlistoflistings
   \fi
-
-% TODO: Symbolverzeichnis
-  % Nomenclature ("Symbolverzeichnis")
-%  \iftotalcountnomens
-%    \phantomsection
-%    \addcontentsline{toc}{section}{\nomname}
-%    \printnomenclature[1in]
-%  \fi
+  
+  \iftotalcountnomens
+    \clearpage
+    \phantomsection        
+    \addcontentsline{toc}{section}{\nomname}
+    \printnomenclature[2.5cm]
+  \fi
+  
 
   % Acronyms
   \newpage    
