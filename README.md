@@ -436,15 +436,15 @@ While I maintain this template on a Windows machine, I anticipate that you can u
 
 # Open Issues
 
-- TODO Improve Hochschule Coburg Template?        
-    - TODO: Glossary    
+- TODO Improve Hochschule Coburg Template?            
     - TODO: Tab Preview
     - TODO: Fig Preview
-    - TODO: Bib Preview    
+    - TODO: Bib Preview
     - TODO: Font Sample
+    - TODO: Create latex class and latex for FEIF    
     - TODO: Create FEIFTemplate.svg
     - TODO: Consider \usepackage[hyphens,obeyspaces,spaces]{url} instead of hyperref.
-    - TODO: Support both German and English.    
+    - TODO: Support both German and English.
 - TODO Should we add a template for lecture notes?
 - TODO Should we add a template for grant applications?
 - TODO Refine Tufte Template

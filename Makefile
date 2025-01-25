@@ -31,11 +31,12 @@ TEMPLATE_FILES 				:= $(wildcard $(TEMPLATE_PATH)/**)
 COMMON_FILES 				:= $(wildcard common/*.*)
 CONTENT_TEX					:= $(wildcard secs/*.tex)
 LISTS_TEX					:= $(wildcard lists/*.tex)
+CODES_TEX					:= $(wildcard codes/*.tex)
 TABLES_TEX					:= $(wildcard tabs/*.tex)
 FIGURES_SVG 				:= $(wildcard figs/*.svg)
 IMAGES_PNG 					:= $(wildcard imgs/*.png)
 
-BUILD_DEP					:= Makefile $(TEMPLATE_FILES) $(COMMON_FILES) $(CONTENT_TEX) $(TABLES_TEX) $(FIGURES_SVG) $(IMAGES_PNG) $(LISTS_TEX)
+BUILD_DEP					:= Makefile $(TEMPLATE_FILES) $(COMMON_FILES) $(CONTENT_TEX) $(TABLES_TEX) $(FIGURES_SVG) $(IMAGES_PNG) $(LISTS_TEX) $(CODES_TEX)
 
 ### Build Rules. Do not edit below this line unless you know what to do.
 
