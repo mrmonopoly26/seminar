@@ -8,10 +8,12 @@
   % Register different entries: glossary, nomenclature, acronyms
   \makeglossaries
   %\include{Verzeichnisse/Worttrennungen}
-  \input{lists/acronyms}
-  \IfFileExists{./lists/symbols.tex}{\makenomenclature\input{./lists/symbols.tex}}{}
+  \input{lists/acronyms}  
+  \makenomenclature
+  \IfFileExists{./lists/symbols.tex}{\input{./lists/symbols.tex}}{}
+  \IfFileExists{./lists/glossary.tex}{\input{lists/glossary.tex}}{}
+
   \begin{document}
-  %\include{Verzeichnisse/Glossar}
 }
 
 \AddToHook{env/HSCDocument/after}{
@@ -131,14 +133,11 @@
     \printnomenclature[2.5cm]
   \fi
   
-
   % Acronyms
   \newpage    
   \setglossarystyle{super}
   \printglossary[type=\acronymtype]
-
-
-  
+ 
 
   % Save page counter, used for consecutive numbering of peripherals following main content
   \newcounter{HSCPeripheralNumbering}
@@ -159,7 +158,6 @@
     \input{secs/D0appendix}
   }{}
 
-
   % Bibliography
   \iftotalcountcitations    
     \phantomsection
@@ -171,15 +169,11 @@
   \bibliographystyle{alphadin}
   \bibliography{common/bibliography}
   
-
-% TODO: Gloassary
   % Glossary
-  %\iftotalcountglossarys
-
-  %  \setglossarystyle{altlist}
-  %  \printglossary
-  %\fi
-
+  \iftotalcountglossarys
+    \setglossarystyle{altlist}
+    \printglossary
+  \fi
 
   % Declaration of Honor  
   \newpage
