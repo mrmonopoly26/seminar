@@ -23,7 +23,7 @@
 % Infos zum Betreuer
 \def\Betreuer{<BETREUER>}
 \def\Funktion{<FUNKTION BETREUER>}
-\def\Telefon{<TELEFONNUMMER BETREUER>}
+\def\Telefon{<TEL. BETREUER>}
 \def\Email{<BETREUER EMAIL>}
 
 % Daten
@@ -68,17 +68,14 @@ locale=DE,                   % Use German notation (comma instead of point delim
   fraction-function=\tfrac,    % Use amsmath's tfrac macro for unit fractions
 }
 
-
 \makeglossaries
 %\include{Verzeichnisse/Worttrennungen}
 \input{lists/acronyms}  
 \makenomenclature
-\IfFileExists{./lists/symbols.tex} {\input{lists/symbols.tex}}{}
-\IfFileExists{./lists/glossary.tex}{\input{lists/glossary.tex}}{}
+\IfFileExists{./lists/symbols.tex} {\input{./lists/symbols.tex}}{}
+\IfFileExists{./lists/glossary.tex}{\input{./lists/glossary.tex}}{}
 \begin{document}
-
 \maketitle
-
 \frontmatter
 % Optional notice to the reader ("Vermerk")
 \IfFileExists{./secs/Z0vermerk.tex}{    
@@ -109,11 +106,12 @@ locale=DE,                   % Use German notation (comma instead of point delim
     \appendix    
     \input{secs/D0appendix}
   }{}
+  
   % Bibliography
-
   \printfeifbibliography
   \bibliography{common/bibliography}
 
   \printfeifglossary  
+  
   \MakeDeclarationOfHonor
 \end{document}

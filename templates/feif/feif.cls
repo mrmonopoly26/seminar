@@ -207,13 +207,16 @@
             \vspace{1.5cm}
 
             \Large{Praxisbericht}
+            
             \vspace{1cm}
-
+            
             \huge{\Autorenname}
-            \vspace{1.5cm}
 
-            \begin{table}[H]
-            \begin{tabular}{|L{3cm}|L{11cm}|}
+            \vspace{1.0cm}
+            
+            \normalsize
+            
+            \begin{tblr}{colspec={|X[3]|X[11]|}}
             \hline
             Unternehmen & \Unternehmen        \\
                         & \Abteilung          \\
@@ -222,14 +225,12 @@
             \hline
             Zeitraum    & \Beginn \ bis \Ende \\
             \hline
-            \end{tabular}
-            \end{table}
+            \end{tblr}           
 
             \large{Abgabe des Berichts: \Abgabe}
-
-            \begin{table}[H]
-            \begin{tabular}{|L{3cm}|L{6cm}|L{5cm}|}
-                \multicolumn{3}{l}{Freigabe zur Vorlage des Praxisberichts an der HS Coburg:} \\
+            \normalsize            
+            \begin{flushleft}Freigabe zur Vorlage des Praxisberichts an der HS Coburg:\end{flushleft}%            
+            \begin{tblr}{|X[3]|X[6]|X[5]|}                
                 \hline
                 Betreuer & \Betreuer & \\
                 \hline
@@ -237,12 +238,11 @@
                 \hline
                 Telefon & \Telefon & \\
                 \cline{1-2}
-                Email & \Email & \\
+                E-Mail & \Email & \\
                 \hline
                 & & \textbf{\textit{Unterschrift Betreuer}}\\
                 \hline
-            \end{tabular}
-            \end{table}
+            \end{tblr}            
           }
           {
             \centering
@@ -300,19 +300,9 @@
     ]{template/_declaration_of_honor.pdf}
 }
 
-
 % -------------------------------------------------------------------
 %                    Custom counters & commands
 % -------------------------------------------------------------------
-
-% Custom acronym patches:
-%   - count usage (used for on-demand list of acronyms)
-%   - provide shorter aliases for commonly used macros
-\newcounter{countacronym}
-\DeclareTotalCounter{countacronym}
-\pretocmd{\acrshort}{\stepcounter{countacronym}}{}{}
-\pretocmd{\acrlong}{\stepcounter{countacronym}}{}{}
-\pretocmd{\acrfull}{\stepcounter{countacronym}}{}{}
 
 % Custom nomenclature patches:
 %   - count usage of actual entries through \nomen (used for on-demand nomenclature)
@@ -322,15 +312,6 @@
 \newcommand*{\nomen}[2]{\nomenclature{#1}{#2}\stepcounter{countnomen}}
 \newcommand{\nomunit}[1]{\renewcommand{\nomentryend}{\hspace*{\fill}#1}}
 \newcommand{\nomsi}[1]{\nomunit{$\left[\si{#1}\right]$}}
-
-% Custom glossary patches:
-%   - count usage (used for on-demand glossary)
-\newcounter{countglossary}
-\DeclareTotalCounter{countglossary}
-\pretocmd{\Gls}{\stepcounter{countglossary}}{}{}
-\pretocmd{\gls}{\stepcounter{countglossary}}{}{}
-\pretocmd{\Glspl}{\stepcounter{countglossary}}{}{}
-\pretocmd{\glspl}{\stepcounter{countglossary}}{}{}
 
 % Custom citation patches:
 %   - count usage (used for on-demand bibliography)
@@ -342,12 +323,14 @@
 % -------------------------------------------------------------------
 % Document Structure
 % -------------------------------------------------------------------
+% Frontmatter
 \newcommand\frontmatter
 {
 % Peripheral pages have to be numbered using roman numerals
 \pagenumbering{Roman}
 }
 
+% Mainmatter
 \newcommand\mainmatter
 {
   % Save page counter, used for consecutive numbering of peripherals following main content
@@ -358,6 +341,7 @@
   \pagenumbering{arabic}
 }
 
+% Backmatter
 \newcommand\backmatter
 {
   % Reset numbering to use roman numerals for rest of peripheral files
@@ -402,16 +386,17 @@
 \newcommand{\listofsymbols}
 {    
     \iftotalcountnomens
-    \phantomsection
-    \addcontentsline{toc}{section}{\nomname}
-    \printnomenclature[2.5cm]    
+        \phantomsection
+        \addcontentsline{toc}{section}{\nomname}
+        \printnomenclature[2.5cm]    
     \fi
 }
 
+% List of Acronyms
 \newcommand{\listofacronyms}
 {
     % List of Acronyms
-    \newpage    
+    \clearpage
     \setglossarystyle{super}
     \printglossary[type=\acronymtype]
 }
@@ -419,10 +404,9 @@
 % Glossary
 \newcommand{\printfeifglossary}
 {
-    \iftotalcountglossarys
-        \setglossarystyle{altlist}
-        \printglossary
-    \fi
+    \clearpage
+    \setglossarystyle{altlist}
+    \printglossary
 }
 
 % Appendix
@@ -433,6 +417,7 @@
     \renewcommand{\thesection}{A\arabic{section}}
 }
 
+% Bibliography
 \newcommand{\printfeifbibliography}
 {
     \iftotalcountcitations    
