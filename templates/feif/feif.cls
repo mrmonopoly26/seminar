@@ -297,9 +297,6 @@
     ]{template/_declaration_of_honor.pdf}
 }
 
-% -------------------------------------------------------------------
-%                    Custom counters & commands
-% -------------------------------------------------------------------
 \newtoggle{anySymbols}
 \pretocmd{\nomenclature}{\toggletrue{anySymbols}}{}{}
 
@@ -423,5 +420,16 @@
   }            
   
 }
+
+\renewenvironment{abstract}
+{
+  \fancypagestyle{abstract}{\fancyhead[L]{Zusammenfassung}}
+  \phantomsection
+  \section*{Zusammenfassung}
+  \thispagestyle{abstract}    
+}
+{}
+
+
 
 \endinput

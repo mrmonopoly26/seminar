@@ -50,41 +50,39 @@ locale=DE,                   % Use German notation (comma instead of point delim
 \begin{document}
 \maketitle
 \frontmatter
+
 % Optional notice to the reader ("Vermerk")
 \IfFileExists{./secs/Z0vermerk.tex}{    
   \thispagestyle{empty}
   \input{secs/Z0vermerk}
 }{}
 
-\IfFileExists{./secs/A0abstract.tex}{    
-  \fancypagestyle{abstract}{
-    \fancyhead[L]{Zusammenfassung}
-  }
-  \phantomsection
-  \section*{Zusammenfassung}
-  \thispagestyle{abstract}
-   \input{./secs/A0abstract}
-  }{}  
-  \tableofcontents  
-  \listoffigures
-  \listoftables
-  \lstlistoflistings
-  \listofsymbols
-  \listofacronyms  
-  \mainmatter
-  \input{secs/structure.tex}
-  \backmatter  
-  % Appendix
-  \IfFileExists{./secs/D0appendix.tex}{    
+\IfFileExists{./secs/A0abstract.tex}{
+    \begin{abstract}
+        \input{./secs/A0abstract}    
+    \end{abstract}
+}
+{}  
+
+\tableofcontents  
+\listoffigures
+\listoftables
+\lstlistoflistings
+\listofsymbols
+\listofacronyms  
+\mainmatter
+\input{secs/structure.tex}
+\backmatter  
+% Appendix
+\IfFileExists{./secs/D0appendix.tex}{    
     \appendix    
     \input{secs/D0appendix}
-  }{}
+}{}
   
-  % Bibliography
-  \printfeifbibliography
-  \bibliography{common/bibliography}
+\printfeifbibliography
+\bibliography{common/bibliography}
 
-  \printfeifglossary  
+\printfeifglossary  
   
-  \MakeDeclarationOfHonor
+\MakeDeclarationOfHonor
 \end{document}
