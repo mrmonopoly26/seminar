@@ -23,14 +23,15 @@
 \RequirePackage{microtype}
 \RequirePackage[onehalfspacing]{setspace}         % Set line spacing to be 1.5x the default
 \RequirePackage[titles]{tocloft}                  % More options to modify list of figures & tables
-\RequirePackage{amsmath}                          % Includes a plethora of mathematical packages 
 \RequirePackage[ddmmyyyy]{datetime}               % Reformat times from LaTeX commands like \today
 \RequirePackage{listings}
 \RequirePackage{pdfpages}                         % Include existing PDFs into the work
 \RequirePackage{ifthen}                           % Include existing PDFs into the work
-\RequirePackage{tocloft}
 \RequirePackage{nomencl}                          % Support for nomenclatures ("List of Symbols")
 \RequirePackage{etoolbox}                         % Easily patch commands
+\RequirePackage{amsmath}                          % Includes a plethora of mathematical packages 
+\RequirePackage{amssymb}                          % Source mathematical symbols like \sin
+\RequirePackage{amsthm}                           % Better theorems
 % Track the total count of different environments
 % Needs to be imported because LaTeX resets these counter on a chapter basis
 \RequirePackage[figure,table,lstlisting,xspace]{totalcount}
@@ -341,8 +342,6 @@
 % -------------------------------------------------------------------
 % Document Structure
 % -------------------------------------------------------------------
-
-
 \newcommand\frontmatter
 {
 % Peripheral pages have to be numbered using roman numerals
@@ -432,6 +431,18 @@
 {
     \oldappendix
     \renewcommand{\thesection}{A\arabic{section}}
+}
+
+\newcommand{\printfeifbibliography}
+{
+    \iftotalcountcitations    
+        \phantomsection
+        \renewcommand*{\refname}{\hscrefname}
+        \addcontentsline{toc}{section}{\refname}
+    \else
+        \renewcommand*{\refname}{}
+    \fi
+    \bibliographystyle{alphadin}
 }
 
 \endinput

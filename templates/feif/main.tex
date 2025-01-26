@@ -4,7 +4,6 @@
 \documentclass[praxis]{template/feif}
 \input{common/packages.tex}
 \input{common/commands.tex}
-\input{template/packages}
 
 \def\Titel{Vorlage für verschiedene Dokumente der HS Coburg}
 \def\Dozent{<DOZENT>}
@@ -64,7 +63,7 @@
 
 % Unit-related setup for siunitx
 \sisetup{
-  locale=DE,                   % Use German notation (comma instead of point delimiter for floats)
+locale=DE,                   % Use German notation (comma instead of point delimiter for floats)
   per-mode=fraction,           % Switch display to use \frac instead of x^{-1}
   fraction-function=\tfrac,    % Use amsmath's tfrac macro for unit fractions
 }
@@ -111,15 +110,10 @@
     \input{secs/D0appendix}
   }{}
   % Bibliography
-  \iftotalcountcitations    
-    \phantomsection
-    \renewcommand*{\refname}{\hscrefname}
-    \addcontentsline{toc}{section}{\refname}
-  \else
-    \renewcommand*{\refname}{}
-  \fi
-  \bibliographystyle{alphadin}
-  \bibliography{common/bibliography}    
-  \printfeifglossary
+
+  \printfeifbibliography
+  \bibliography{common/bibliography}
+
+  \printfeifglossary  
   \MakeDeclarationOfHonor
 \end{document}
