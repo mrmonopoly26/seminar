@@ -1,22 +1,26 @@
+\def\fileversion{1.0}
+\def\filedate{2025/01/26}
+\def\docdate {2025/01/26}
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{feif}[2025/01/26 FEIF Document Class]
-
+\ProvidesClass{feif}[\filedate \space FEIF Document Class v\fileversion]
 
 \LoadClass[a4paper, 12pt]{article}
-\RequirePackage{geometry}                       % Change text bounds on a per-page basis
-\RequirePackage{fancyhdr}                       % Allow easy customization of headers and footers
+\RequirePackage{geometry}
+\RequirePackage{fancyhdr}
 \RequirePackage{caption}
+\RequirePackage{float}
 
 % -------------------------------------------------------------------
 % Document Structure Settings
 % -------------------------------------------------------------------
 % Only allow nesting 3 layers (down to subsubsections)
-\setcounter{secnumdepth}{3}                             
+\setcounter{secnumdepth}{3}
 
 % -------------------------------------------------------------------
 % Visual Settings
 % -------------------------------------------------------------------
-% Align captions to the left (cut-off or "rag" right part of the caption line.)
+% Align captions to the left (cut-off or "rag" right part of the 
+% caption line.).
 % This should also hold for single-line captions, which would otherwise be 
 % centered.
 \captionsetup{justification=raggedright, singlelinecheck=false}
@@ -46,17 +50,18 @@
 
 % Don't indent start of paragraph
 \setlength{\parindent}{0cm}
-% Lines are separated by 6pt
+% Lines are separated by 6pt (0.2116666666666667cm)
 \setlength{\parskip}{6pt}                               
 
 \setlength{\headheight}{1.25cm}
 \setlength{\footskip}{1cm}
 \setlength{\headsep}{1cm}
 
+% Automatically generate a box around figure environments
+\floatstyle{boxed}
+\restylefloat{figure}
 
 % -------------------------------------------------------------------
 % Usability Settting
 % -------------------------------------------------------------------
-
-
 \endinput
