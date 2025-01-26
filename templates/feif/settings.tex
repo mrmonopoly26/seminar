@@ -1,10 +1,3 @@
-% Disable single lines at the start of a paragraph (Schusterjungen)
-\clubpenalty=10000
-
-% Disable single lines at the end of a paragraph (Hurenkinder)
-\widowpenalty=10000
-\displaywidowpenalty=10000
-
 % Fixed size table columns
 \newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
 \newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
@@ -12,9 +5,6 @@
 
 \renewcommand{\arraystretch}{1.2}                       % Distance between lines in tables
 
-\captionsetup{justification=raggedright}                % Align captions to the left
-
-\setcounter{secnumdepth}{3}                             % Only allow nesting 3 layers (down to subsubsections)
 
 % Unit-related setup for siunitx
 \sisetup{
@@ -26,28 +16,12 @@
 % -------------------------------------------------------------------
 %                     Usability & visual changes
 % -------------------------------------------------------------------
-
-
-
 % Automatically generate a box around figure environments
 \floatstyle{boxed}
 \restylefloat{figure}
 
-
-
 % Set toc sections to be clickable
-\hypersetup{
-  colorlinks,
-  citecolor=black,
-  filecolor=black,
-  linkcolor=black
-}
-
-
-
-% Page break after every section
-\let\oldsection\section
-\renewcommand\section{\clearpage\oldsection}
+\hypersetup{colorlinks, citecolor=black, filecolor=black, linkcolor=black}
 
 \newcommand*{\hscrefname}{Literaturverzeichnis}               % Bibliography
 
@@ -61,7 +35,7 @@
   \renewcommand*{\lstlistingname}{Code}                        % Code    should be displayed as "Code x"  
   \renewcommand*{\lstlistlistingname}{Codebeispielverzeichnis} % List of listings
   \renewcommand*{\nomname}{Symbolverzeichnis}                  % Nomenclature
-    \renewcommand*{\acronymname}{Abkürzungsverzeichnis}        % List of acronyms
+  \renewcommand*{\acronymname}{Abkürzungsverzeichnis}          % List of acronyms
   \renewcommand*{\refname}{\hscrefname}                        % Bibliography  
   \providecommand{\declarationname}{}
   \renewcommand*{\declarationname}{Ehrenwörtliche Erklärung}   % Declaration of honor
@@ -123,12 +97,6 @@
 \addtolength{\cftlistingsnumwidth}{1cm}
 \setlength{\cftlistingsindent}{0cm}
 
-\setlength{\parindent}{0cm}                             % Don't indent start of paragraph
-\setlength{\parskip}{6pt}                               % Lines are separated by 6pt
-
-\setlength{\headheight}{1.25cm}
-\setlength{\footskip}{1cm}
-\setlength{\headsep}{1cm}
 
 % -------------------------------------------------------------------
 %                    Custom counters & commands
