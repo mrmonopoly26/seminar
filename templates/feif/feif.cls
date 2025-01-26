@@ -25,6 +25,8 @@
 \RequirePackage{amsmath}                          % Includes a plethora of mathematical packages 
 \RequirePackage[ddmmyyyy]{datetime}               % Reformat times from LaTeX commands like \today
 \RequirePackage{listings}
+\RequirePackage{pdfpages}                         % Include existing PDFs into the work
+\RequirePackage{ifthen}                           % Include existing PDFs into the work
 
 
 % -------------------------------------------------------------------
@@ -183,7 +185,57 @@
     \newgeometry{left=2.5cm, right=2.5cm, top=2.5cm, bottom=2.5cm}    
     \begin{titlepage}
         \ifthenelse{\equal{\praxisbericht}{true}}
-          {\input{template/header_practice_report.tex}}
+          {
+            \centering
+            \includesvg[width=.8\textwidth]{template/logo_hscoburg_de_rot}
+
+            \begin{Large}
+            Hochschule für angewandte Wissenschaften Coburg\\
+            Fakultät Elektrotechnik und Informatik\par
+            \end{Large}
+            \vspace{1.5cm}
+
+            \Large{Studiengang: \Studiengang}
+            \vspace{1.5cm}
+
+            \Large{Praxisbericht}
+            \vspace{1cm}
+
+            \huge{\Autorenname}
+            \vspace{1.5cm}
+
+            \begin{table}[H]
+            \begin{tabular}{|L{3cm}|L{11cm}|}
+            \hline
+            Unternehmen & \Unternehmen        \\
+                        & \Abteilung          \\
+                        & \Strasse            \\
+                        & \Ort                \\
+            \hline
+            Zeitraum    & \Beginn \ bis \Ende \\
+            \hline
+            \end{tabular}
+            \end{table}
+
+            \large{Abgabe des Berichts: \Abgabe}
+
+            \begin{table}[H]
+            \begin{tabular}{|L{3cm}|L{6cm}|L{5cm}|}
+                \multicolumn{3}{l}{Freigabe zur Vorlage des Praxisberichts an der HS Coburg:} \\
+                \hline
+                Betreuer & \Betreuer & \\
+                \hline
+                Funktion & \Funktion & \textbf{\textit{Ort, Datum}}\\
+                \hline
+                Telefon & \Telefon & \\
+                \cline{1-2}
+                Email & \Email & \\
+                \hline
+                & & \textbf{\textit{Unterschrift Betreuer}}\\
+                \hline
+            \end{tabular}
+            \end{table}
+          }
           {
             \centering
             \includesvg[width=.8\textwidth]{template/logo_hscoburg_de_rot}%
