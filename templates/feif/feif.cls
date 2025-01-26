@@ -300,23 +300,15 @@
 % -------------------------------------------------------------------
 %                    Custom counters & commands
 % -------------------------------------------------------------------
+\newtoggle{anySymbols}
+\pretocmd{\nomenclature}{\toggletrue{anySymbols}}{}{}
 
-% Custom nomenclature patches:
-%   - count usage of actual entries through \nomen (used for on-demand nomenclature)
-%   - provide cleaner writing interface with pre-made abstractions
-\newcounter{countnomen}
-\DeclareTotalCounter{countnomen}
+\newtoggle{anyCitations}
+\pretocmd{\cite}{\toggletrue{anyCitations}}{}{}
+
 \newcommand*{\nomen}[2]{\nomenclature{#1}{#2}\stepcounter{countnomen}}
 \newcommand{\nomunit}[1]{\renewcommand{\nomentryend}{\hspace*{\fill}#1}}
 \newcommand{\nomsi}[1]{\nomunit{$\left[\si{#1}\right]$}}
-
-% Custom citation patches:
-%   - count usage (used for on-demand bibliography)
-\newcounter{countcitation}
-\DeclareTotalCounter{countcitation}
-\pretocmd{\cite}{\stepcounter{countcitation}}{}{}
-
-
 % -------------------------------------------------------------------
 % Document Structure
 % -------------------------------------------------------------------
@@ -383,12 +375,13 @@
 % List of Symbols
 \newcommand{\listofsymbols}
 {    
-    \iftotalcountnomens
-      \clearpage
-      \phantomsection
-      \addcontentsline{toc}{section}{\nomname}
-      \printnomenclature[2.5cm]
-    \fi
+  \iftoggle{anySymbols}{
+    \clearpage
+    \phantomsection
+    \addcontentsline{toc}{section}{\nomname}
+    \printnomenclature[2.5cm]
+  }
+  {}
 }
 
 % List of Acronyms
@@ -420,14 +413,15 @@
 % Bibliography
 \newcommand{\printfeifbibliography}
 {
-    \iftotalcountcitations    
+  \iftoggle{anyCitations}{
         \phantomsection
         \renewcommand*{\refname}{\hscrefname}
         \addcontentsline{toc}{section}{\refname}
-    \else
-        \renewcommand*{\refname}{}
-    \fi
-    \bibliographystyle{alphadin}
+        \bibliographystyle{alphadin}
+  }{
+    \renewcommand*{\refname}{}
+  }            
+  
 }
 
 \endinput

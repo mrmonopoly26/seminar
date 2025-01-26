@@ -72,9 +72,9 @@ clean:
 $(OUTPUT_FILE_PDF): $(TEMPLATE_LINK) $(BUILD_DEP) 
 	$(START_TIME)	
 	@$(LATEX_COMPILER) -jobname=$(OUTPUT_FILE) $(MAIN_FILE_TEX); touch $(OUTPUT_DIR)/$(MAINFILE_PDF)
-	@$(BIBTEX_COMPILER) $(OUTPUT_DIR)/$(OUTPUT_FILE)
-	makeglossaries -d $(OUTPUT_DIR)  $(OUTPUT_FILE)		
-	-cd build && makeindex $(OUTPUT_FILE).nlo -s nomencl.ist -o $(OUTPUT_FILE).nls
+	-@$(BIBTEX_COMPILER) $(OUTPUT_DIR)/$(OUTPUT_FILE)
+	-@makeglossaries -d $(OUTPUT_DIR)  $(OUTPUT_FILE)		
+	-@cd build && makeindex $(OUTPUT_FILE).nlo -s nomencl.ist -o $(OUTPUT_FILE).nls
 	@$(LATEX_COMPILER) -jobname=$(OUTPUT_FILE) $(MAIN_FILE_TEX); touch $(OUTPUT_DIR)/$(MAINFILE_PDF)
 	@$(LATEX_COMPILER) -jobname=$(OUTPUT_FILE) $(MAIN_FILE_TEX)		
 	$(END_TIME)
