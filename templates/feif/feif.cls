@@ -35,7 +35,6 @@
 % Set toc sections to be clickable
 \hypersetup{colorlinks, citecolor=black, filecolor=black, linkcolor=black}
 
-
 % -------------------------------------------------------------------
 % Visual Settings
 % -------------------------------------------------------------------
@@ -76,6 +75,11 @@
 \setlength{\headheight}{1.25cm}
 \setlength{\footskip}{1cm}
 \setlength{\headsep}{1cm}
+
+% Don't display "a as ä etc.
+\shorthandoff{"}
+
+
 
 % -------------------------------------------------------------------
 % Names
@@ -166,6 +170,17 @@
 \newcommand{\mathref}[1]{\hyperref[#1]{Gleichung~\getrefnumber{#1}}}
 \newcommand{\secref} [1]{\autoref{#1}}
 
-
+% -------------------------------------------------------------------
+% Commands
+% -------------------------------------------------------------------
+\newcommand\makedeclarationofhonor
+{
+  % Declaration of Honor  
+  \newpage
+  \phantomsection
+  \addcontentsline{toc}{section}{\declarationname}
+  \lhead{\declarationname}
+  \input{template/declaration_of_honor}
+}
 
 \endinput

@@ -3,8 +3,6 @@
 % ===========================================================================
 
 \AddToHook{env/HSCDocument/before}{
-
-% TODO: Enable Glossaries
   % Register different entries: glossary, nomenclature, acronyms
   \makeglossaries
   %\include{Verzeichnisse/Worttrennungen}
@@ -29,14 +27,8 @@
 \newenvironment{HSCDocument}[1][]{
 
   \makeatletter
-  \setkeys{HSCDocument@keys}{
-    preset=Custom,
-    #1
-  }
+  \setkeys{HSCDocument@keys}{preset=Custom,#1}
   \makeatother
-
-  % Don't display "a as ä etc.
-  \shorthandoff{"}
 
   % ===========================================================================
   %                             Document header
@@ -177,12 +169,7 @@
     \printglossary
   \fi
 
-  % Declaration of Honor  
-  \newpage
-  \phantomsection
-  \addcontentsline{toc}{section}{\declarationname}
-  \lhead{\declarationname}
-  \input{template/declaration_of_honor}
+  \makedeclarationofhonor
 
   % TODO list
   \iftotalcounttodos
