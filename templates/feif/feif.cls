@@ -180,7 +180,19 @@
   \phantomsection
   \addcontentsline{toc}{section}{\declarationname}
   \lhead{\declarationname}
-  \input{template/declaration_of_honor}
+  \thispagestyle{empty}
+
+    \includepdf[
+    pages=-,
+    pagecommand={},
+    picturecommand*={
+        \put(75,714){\large \Autorenname}
+        \put(75,683){\large \Geburtsdatum}
+        \put(75,652){\large \Studiengang}
+        \put(75,622){\large \Matrikelnummer}
+        \put(75,81.5){\large \Ort, den \today}
+    }
+    ]{template/_declaration_of_honor.pdf}
 }
 
 \endinput
