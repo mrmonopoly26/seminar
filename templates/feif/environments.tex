@@ -20,58 +20,17 @@
 
 \AddToHook{cmd/section/before}{\clearpage}
 
-\makeatletter
-\define@key{HSCDocument@keys}{preset}{\def\DocumentType{#1}}
-\makeatother
 
-\newenvironment{HSCDocument}[1][]{
 
-  \makeatletter
-  \setkeys{HSCDocument@keys}{preset=Custom,#1}
-  \makeatother
+\newenvironment{HSCDocument}{
+
+
 
   % ===========================================================================
   %                             Document header
   % ===========================================================================  
 
-  \newgeometry{
-    left=2.5cm,
-    right=2.5cm,
-    top=2.5cm,
-    bottom=2.5cm
-  }
-
-  \begin{titlepage}
-    \ifthenelse{\equal{\DocumentType}{Praxisbericht}}
-      {\input{template/header_practice_report.tex}}
-      {
-        \ifthenelse{\equal{\DocumentType}{Bachelorarbeit}}
-          {\input{template/header}}
-          {
-            \ifthenelse{\equal{\DocumentType}{Masterarbeit}}
-              {\input{template/header}}
-              {
-                %\IfFileExists{./CustomHeader.tex}
-                %{
-                  \input{CustomHeader}
-                %}
-                {
-                  ERROR: Please use one of the following values as parameter
-                  to the HSCdocument environment:\\
-                  "Praxisbericht", "Bachelorarbeit", "Masterarbeit"\\
-
-                  To create your own document header, just create a file
-                  "CustomHeader.tex" in the document root.
-                }
-              }
-          }
-      }
-  \end{titlepage}
-
-  \restoregeometry
-
-  % Header is considered the 1st page
-  \addtocounter{page}{1}
+  \maketitle
 
   % Peripheral pages have to be numbered using roman numerals
   \pagenumbering{Roman}

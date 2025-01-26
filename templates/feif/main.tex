@@ -1,7 +1,7 @@
 \makeatletter
 \def\input@path{{./template/}}
 \makeatother
-\documentclass{template/feif}
+\documentclass[praxis]{template/feif}
 \input{common/packages.tex}
 \input{common/commands.tex}
 \input{template/packages}
@@ -36,6 +36,8 @@
 \def\Ende{<ENDE>}
 \def\Abgabe{\today}
 
-\begin{HSCDocument}[preset=Praxisbericht]    
+\def\ThesisType{<MASTERARBEIT>}
+
+\begin{HSCDocument}
     \input{secs/structure.tex}
 \end{HSCDocument}

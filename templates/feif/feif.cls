@@ -4,6 +4,10 @@
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesClass{feif}[\filedate \space FEIF Document Class v\fileversion]
 
+\newcommand{\praxisbericht}{false}
+\DeclareOption{praxis}{\renewcommand{\praxisbericht}[0]{true}}
+\ProcessOptions\relax
+
 \LoadClass[a4paper, 12pt]{article}
 \RequirePackage[ngerman]{babel, translator}       % German LaTeX-intern descriptors (Abbildungen, ...)
 \RequirePackage[T1]{fontenc}
@@ -173,9 +177,50 @@
 % -------------------------------------------------------------------
 % Commands
 % -------------------------------------------------------------------
+
+\renewcommand\maketitle
+{    
+    \newgeometry{left=2.5cm, right=2.5cm, top=2.5cm, bottom=2.5cm}    
+    \begin{titlepage}
+        \ifthenelse{\equal{\praxisbericht}{true}}
+          {\input{template/header_practice_report.tex}}
+          {
+            \centering
+            \includesvg[width=.8\textwidth]{template/logo_hscoburg_de_rot}%
+            
+            \begin{Large}
+                Hochschule für angewandte Wissenschaften Coburg\\
+                Fakultät Elektrotechnik und Informatik\par
+            \end{Large}
+            \vspace{1.5cm}
+
+            \Large{Studiengang: \Studiengang}
+            \vspace{1.5cm}
+
+            \Large{\ThesisType}
+            \vspace{1cm}
+
+            \Huge{\Titel}
+            \vspace{2cm}
+
+            \huge{\Autorenname}
+            \vspace{2cm}
+
+            \Large{Abgabe der Arbeit: \Abgabe}
+
+            \Large{Betreut durch:}
+
+            \Large{\Dozent, Hochschule Coburg}
+          }
+    \end{titlepage}    
+    \restoregeometry    
+    % Title page is considered the 1st page
+    \addtocounter{page}{1}
+}
+
+% Declaration Of Honor
 \newcommand\makedeclarationofhonor
-{
-  % Declaration of Honor  
+{  
   \newpage
   \phantomsection
   \addcontentsline{toc}{section}{\declarationname}
