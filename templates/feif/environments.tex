@@ -107,36 +107,38 @@
   
   \tableofcontents
 
+  % List of Figures
   \iftotalfigures    
     \phantomsection
     \addcontentsline{toc}{section}{\listfigurename}
     \listoffigures
   \fi
 
+  % List of Tables
   \iftotaltables    
     \phantomsection
     \addcontentsline{toc}{section}{\listtablename}
     \listoftables
   \fi
 
-
+  % List of Codes
   \iftotallstlistings
     \phantomsection
     \addcontentsline{toc}{section}{\lstlistlistingname}
     \lstlistoflistings
   \fi
   
-  \iftotalcountnomens
-    \clearpage
-    \phantomsection        
+  % List of Symbols
+  \iftotalcountnomens    
+    \phantomsection
     \addcontentsline{toc}{section}{\nomname}
     \printnomenclature[2.5cm]
   \fi
   
-  % Acronyms
-  \newpage    
-  \setglossarystyle{super}
-  \printglossary[type=\acronymtype]
+  % List of Acronyms
+    \newpage    
+    \setglossarystyle{super}
+    \printglossary[type=\acronymtype]
  
 
   % Save page counter, used for consecutive numbering of peripherals following main content
