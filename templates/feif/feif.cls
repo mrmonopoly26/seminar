@@ -5,16 +5,31 @@
 \ProvidesClass{feif}[\filedate \space FEIF Document Class v\fileversion]
 
 \LoadClass[a4paper, 12pt]{article}
+\RequirePackage[T1]{fontenc}
+\RequirePackage[utf8]{inputenc}
+\RequirePackage{mathptmx}
+\RequirePackage{courier}
 \RequirePackage{geometry}
 \RequirePackage{fancyhdr}
 \RequirePackage{caption}
 \RequirePackage{float}
+\RequirePackage{hyperref}
+\RequirePackage{microtype}
+\RequirePackage[onehalfspacing]{setspace}         % Set line spacing to be 1.5x the default
+\RequirePackage[titles]{tocloft}                  % More options to modify list of figures & tables
 
 % -------------------------------------------------------------------
 % Document Structure Settings
 % -------------------------------------------------------------------
 % Only allow nesting 3 layers (down to subsubsections)
 \setcounter{secnumdepth}{3}
+
+% -------------------------------------------------------------------
+% Usability Settting
+% -------------------------------------------------------------------
+% Set toc sections to be clickable
+\hypersetup{colorlinks, citecolor=black, filecolor=black, linkcolor=black}
+
 
 % -------------------------------------------------------------------
 % Visual Settings
@@ -61,7 +76,7 @@
 \floatstyle{boxed}
 \restylefloat{figure}
 
-% -------------------------------------------------------------------
-% Usability Settting
-% -------------------------------------------------------------------
+
+
+
 \endinput
