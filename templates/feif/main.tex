@@ -5,9 +5,6 @@
 \input{common/packages.tex}
 \input{common/commands.tex}
 \input{template/packages}
-\input{template/settings}
-% Preload custom user settings & packages
-\IfFileExists{./Custom.tex}{\input{Custom}}{}
 
 \def\Titel{Vorlage für verschiedene Dokumente der HS Coburg}
 \def\Dozent{<DOZENT>}
@@ -58,6 +55,21 @@
   \rowcolor{White}
 }
 
+% Fixed size table columns
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
+\newcolumntype{R}[1]{>{\raggedleft\arraybackslash}p{#1}}
+
+\renewcommand{\arraystretch}{1.2}                       % Distance between lines in tables
+
+% Unit-related setup for siunitx
+\sisetup{
+  locale=DE,                   % Use German notation (comma instead of point delimiter for floats)
+  per-mode=fraction,           % Switch display to use \frac instead of x^{-1}
+  fraction-function=\tfrac,    % Use amsmath's tfrac macro for unit fractions
+}
+
+
 \makeglossaries
 %\include{Verzeichnisse/Worttrennungen}
 \input{lists/acronyms}  
@@ -69,11 +81,6 @@
 \maketitle
 
 \frontmatter
-  
-% ===========================================================================
-%                              Page Ordering
-% ===========================================================================
- 
 % Optional notice to the reader ("Vermerk")
 \IfFileExists{./secs/Z0vermerk.tex}{    
   \thispagestyle{empty}
@@ -88,28 +95,21 @@
   \section*{Zusammenfassung}
   \thispagestyle{abstract}
    \input{./secs/A0abstract}
-  }{}
-  
-  \tableofcontents
-  
+  }{}  
+  \tableofcontents  
   \listoffigures
   \listoftables
   \lstlistoflistings
   \listofsymbols
-  \listofacronyms
-  
+  \listofacronyms  
   \mainmatter
-
   \input{secs/structure.tex}
-
-  \backmatter
-  
+  \backmatter  
   % Appendix
   \IfFileExists{./secs/D0appendix.tex}{    
     \appendix    
     \input{secs/D0appendix}
   }{}
-
   % Bibliography
   \iftotalcountcitations    
     \phantomsection
@@ -119,17 +119,7 @@
     \renewcommand*{\refname}{}
   \fi
   \bibliographystyle{alphadin}
-  \bibliography{common/bibliography}
-    
+  \bibliography{common/bibliography}    
   \printfeifglossary
-
   \MakeDeclarationOfHonor
-
-  % TODO list
-  \iftotalcounttodos
-    \phantomsection
-    \addcontentsline{toc}{section}{TODOs}
-    \thispagestyle{empty}
-    \listoftodos[TODOs]
-  \fi    
 \end{document}
