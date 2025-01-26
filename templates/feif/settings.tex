@@ -5,51 +5,12 @@
 
 \renewcommand{\arraystretch}{1.2}                       % Distance between lines in tables
 
-
 % Unit-related setup for siunitx
 \sisetup{
   locale=DE,                   % Use German notation (comma instead of point delimiter for floats)
   per-mode=fraction,           % Switch display to use \frac instead of x^{-1}
   fraction-function=\tfrac,    % Use amsmath's tfrac macro for unit fractions
 }
-
-
-% -------------------------------------------------------------------
-%                    Custom counters & commands
-% -------------------------------------------------------------------
-
-% Custom acronym patches:
-%   - count usage (used for on-demand list of acronyms)
-%   - provide shorter aliases for commonly used macros
-\newcounter{countacronym}
-\DeclareTotalCounter{countacronym}
-\pretocmd{\acrshort}{\stepcounter{countacronym}}{}{}
-\pretocmd{\acrlong}{\stepcounter{countacronym}}{}{}
-\pretocmd{\acrfull}{\stepcounter{countacronym}}{}{}
-
-% Custom nomenclature patches:
-%   - count usage of actual entries through \nomen (used for on-demand nomenclature)
-%   - provide cleaner writing interface with pre-made abstractions
-\newcounter{countnomen}
-\DeclareTotalCounter{countnomen}
-\newcommand*{\nomen}[2]{\nomenclature{#1}{#2}\stepcounter{countnomen}}
-\newcommand{\nomunit}[1]{\renewcommand{\nomentryend}{\hspace*{\fill}#1}}
-\newcommand{\nomsi}[1]{\nomunit{$\left[\si{#1}\right]$}}
-
-% Custom glossary patches:
-%   - count usage (used for on-demand glossary)
-\newcounter{countglossary}
-\DeclareTotalCounter{countglossary}
-\pretocmd{\Gls}{\stepcounter{countglossary}}{}{}
-\pretocmd{\gls}{\stepcounter{countglossary}}{}{}
-\pretocmd{\Glspl}{\stepcounter{countglossary}}{}{}
-\pretocmd{\glspl}{\stepcounter{countglossary}}{}{}
-
-% Custom citation patches:
-%   - count usage (used for on-demand bibliography)
-\newcounter{countcitation}
-\DeclareTotalCounter{countcitation}
-\pretocmd{\cite}{\stepcounter{countcitation}}{}{}
 
 % TODO annotations
 \newcounter{counttodo}

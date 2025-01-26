@@ -28,6 +28,12 @@
 \RequirePackage{listings}
 \RequirePackage{pdfpages}                         % Include existing PDFs into the work
 \RequirePackage{ifthen}                           % Include existing PDFs into the work
+\RequirePackage{tocloft}
+\RequirePackage{nomencl}                          % Support for nomenclatures ("List of Symbols")
+\RequirePackage{etoolbox}                         % Easily patch commands
+% Track the total count of different environments
+% Needs to be imported because LaTeX resets these counter on a chapter basis
+\RequirePackage[figure,table,lstlisting,xspace]{totalcount}
 
 
 % -------------------------------------------------------------------
@@ -88,9 +94,6 @@
 
 % Don't display "a as ä etc.
 \shorthandoff{"}
-
-
-
 
 % -------------------------------------------------------------------
 % Names
@@ -296,6 +299,50 @@
     ]{template/_declaration_of_honor.pdf}
 }
 
+
+% -------------------------------------------------------------------
+%                    Custom counters & commands
+% -------------------------------------------------------------------
+
+% Custom acronym patches:
+%   - count usage (used for on-demand list of acronyms)
+%   - provide shorter aliases for commonly used macros
+\newcounter{countacronym}
+\DeclareTotalCounter{countacronym}
+\pretocmd{\acrshort}{\stepcounter{countacronym}}{}{}
+\pretocmd{\acrlong}{\stepcounter{countacronym}}{}{}
+\pretocmd{\acrfull}{\stepcounter{countacronym}}{}{}
+
+% Custom nomenclature patches:
+%   - count usage of actual entries through \nomen (used for on-demand nomenclature)
+%   - provide cleaner writing interface with pre-made abstractions
+\newcounter{countnomen}
+\DeclareTotalCounter{countnomen}
+\newcommand*{\nomen}[2]{\nomenclature{#1}{#2}\stepcounter{countnomen}}
+\newcommand{\nomunit}[1]{\renewcommand{\nomentryend}{\hspace*{\fill}#1}}
+\newcommand{\nomsi}[1]{\nomunit{$\left[\si{#1}\right]$}}
+
+% Custom glossary patches:
+%   - count usage (used for on-demand glossary)
+\newcounter{countglossary}
+\DeclareTotalCounter{countglossary}
+\pretocmd{\Gls}{\stepcounter{countglossary}}{}{}
+\pretocmd{\gls}{\stepcounter{countglossary}}{}{}
+\pretocmd{\Glspl}{\stepcounter{countglossary}}{}{}
+\pretocmd{\glspl}{\stepcounter{countglossary}}{}{}
+
+% Custom citation patches:
+%   - count usage (used for on-demand bibliography)
+\newcounter{countcitation}
+\DeclareTotalCounter{countcitation}
+\pretocmd{\cite}{\stepcounter{countcitation}}{}{}
+
+
+% -------------------------------------------------------------------
+% Document Structure
+% -------------------------------------------------------------------
+
+
 \newcommand\frontmatter
 {
 % Peripheral pages have to be numbered using roman numerals
@@ -314,10 +361,77 @@
 
 \newcommand\backmatter
 {
-      % Reset numbering to use roman numerals for rest of peripheral files
+  % Reset numbering to use roman numerals for rest of peripheral files
   \pagenumbering{Roman}
   \setcounter{page}{\value{HSCPeripheralNumbering}}
+}
 
+% List of Figures
+\let\oldlistoffigures\listoffigures
+\renewcommand{\listoffigures}
+{
+    \iftotalfigures
+        \phantomsection
+        \addcontentsline{toc}{section}{\listfigurename}
+        \oldlistoffigures
+    \fi
+}
+
+% List of Tables
+\let\oldlistoftables\listoftables
+\renewcommand{\listoftables}
+{
+    \iftotaltables
+        \phantomsection
+        \addcontentsline{toc}{section}{\listtablename}
+        \oldlistoftables
+    \fi
+}
+
+% List of Listings
+\let\oldlstlistoflistings\listoflistings
+\renewcommand{\lstlistoflistings}
+{
+    \iftotallstlistings
+    \phantomsection
+    \addcontentsline{toc}{section}{\lstlistlistingname}
+    \oldlstlistoflistings
+    \fi
+}
+
+% List of Symbols
+\newcommand{\listofsymbols}
+{    
+    \iftotalcountnomens
+    \phantomsection
+    \addcontentsline{toc}{section}{\nomname}
+    \printnomenclature[2.5cm]    
+    \fi
+}
+
+\newcommand{\listofacronyms}
+{
+    % List of Acronyms
+    \newpage    
+    \setglossarystyle{super}
+    \printglossary[type=\acronymtype]
+}
+
+% Glossary
+\newcommand{\printfeifglossary}
+{
+    \iftotalcountglossarys
+        \setglossarystyle{altlist}
+        \printglossary
+    \fi
+}
+
+% Appendix
+\let\oldappendix\appendix
+\renewcommand{\appendix}
+{
+    \oldappendix
+    \renewcommand{\thesection}{A\arabic{section}}
 }
 
 \endinput

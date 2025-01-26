@@ -58,8 +58,6 @@
   \rowcolor{White}
 }
 
-
-
 \makeglossaries
 %\include{Verzeichnisse/Worttrennungen}
 \input{lists/acronyms}  
@@ -93,40 +91,13 @@
   }{}
   
   \tableofcontents
-
-  % List of Figures
-  \iftotalfigures    
-    \phantomsection
-    \addcontentsline{toc}{section}{\listfigurename}
-    \listoffigures
-  \fi
-
-  % List of Tables
-  \iftotaltables    
-    \phantomsection
-    \addcontentsline{toc}{section}{\listtablename}
-    \listoftables
-  \fi
-
-  % List of Codes
-  \iftotallstlistings
-    \phantomsection
-    \addcontentsline{toc}{section}{\lstlistlistingname}
-    \lstlistoflistings
-  \fi
   
-  % List of Symbols
-  \iftotalcountnomens    
-    \phantomsection
-    \addcontentsline{toc}{section}{\nomname}
-    \printnomenclature[2.5cm]
-  \fi
+  \listoffigures
+  \listoftables
+  \lstlistoflistings
+  \listofsymbols
+  \listofacronyms
   
-  % List of Acronyms
-    \newpage    
-    \setglossarystyle{super}
-    \printglossary[type=\acronymtype]
- 
   \mainmatter
 
   \input{secs/structure.tex}
@@ -135,27 +106,22 @@
   
   % Appendix
   \IfFileExists{./secs/D0appendix.tex}{    
-    \appendix
-    \renewcommand{\thesection}{A\arabic{section}}
+    \appendix    
     \input{secs/D0appendix}
   }{}
 
   % Bibliography
   \iftotalcountcitations    
     \phantomsection
-    \renewcommand*{\refname}{\hscrefname}               % Bibliography
+    \renewcommand*{\refname}{\hscrefname}
     \addcontentsline{toc}{section}{\refname}
   \else
-    \renewcommand*{\refname}{}                          % Bibliography
-  \fi    
+    \renewcommand*{\refname}{}
+  \fi
   \bibliographystyle{alphadin}
   \bibliography{common/bibliography}
-  
-  % Glossary
-  \iftotalcountglossarys
-    \setglossarystyle{altlist}
-    \printglossary
-  \fi
+    
+  \printfeifglossary
 
   \MakeDeclarationOfHonor
 
