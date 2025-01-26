@@ -80,9 +80,6 @@
 % Insert one space after a sentence, not 2
 \frenchspacing                                                 
 
-% Page break after every section
-\let\oldsection\section
-\renewcommand\section{\clearpage\oldsection}
 
 % Don't indent start of paragraph
 \setlength{\parindent}{0cm}
@@ -281,7 +278,7 @@
 % Declaration Of Honor
 \newcommand\MakeDeclarationOfHonor
 {  
-  \newpage
+  \clearpage
   \phantomsection
   \addcontentsline{toc}{section}{\declarationname}
   \lhead{\declarationname}
@@ -374,11 +371,12 @@
 % List of Listings
 \let\oldlstlistoflistings\listoflistings
 \renewcommand{\lstlistoflistings}
-{
+{  
     \iftotallstlistings
-    \phantomsection
-    \addcontentsline{toc}{section}{\lstlistlistingname}
-    \oldlstlistoflistings
+      \clearpage
+      \phantomsection
+      \addcontentsline{toc}{section}{\lstlistlistingname}
+      \oldlstlistoflistings
     \fi
 }
 
@@ -386,9 +384,10 @@
 \newcommand{\listofsymbols}
 {    
     \iftotalcountnomens
-        \phantomsection
-        \addcontentsline{toc}{section}{\nomname}
-        \printnomenclature[2.5cm]    
+      \clearpage
+      \phantomsection
+      \addcontentsline{toc}{section}{\nomname}
+      \printnomenclature[2.5cm]
     \fi
 }
 
@@ -413,6 +412,7 @@
 \let\oldappendix\appendix
 \renewcommand{\appendix}
 {
+    \clearpage
     \oldappendix
     \renewcommand{\thesection}{A\arabic{section}}
 }
