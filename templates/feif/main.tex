@@ -33,33 +33,6 @@
 
 \def\ThesisType{<MASTERARBEIT>}
 
-% ===========================================================================
-%                   Simplified centered & colored tables
-% ===========================================================================
-
-\newenvironment{colortable}[1]{
-  \begin{center}
-    \begin{tabular}{#1}
-    \hline
-    \rowcolor{Gray}
-}
-{
-    \hline
-    \end{tabular}
-  \end{center}
-}
-
-\newcommand{\tablecontent}{
-  \hline
-  \rowcolor{White}
-}
-
-% Fixed size table columns
-\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
-\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
-\newcolumntype{R}[1]{>{\raggedleft\arraybackslash}p{#1}}
-
-\renewcommand{\arraystretch}{1.2}                       % Distance between lines in tables
 
 % Unit-related setup for siunitx
 \sisetup{
