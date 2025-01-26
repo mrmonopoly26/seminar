@@ -9,6 +9,7 @@
 \ProcessOptions\relax
 
 \LoadClass[a4paper, 12pt]{article}
+\RequirePackage{fix-cm}                           % Fix sizes at which CM and EC fonts can be used
 \RequirePackage[ngerman]{babel, translator}       % German LaTeX-intern descriptors (Abbildungen, ...)
 \RequirePackage[T1]{fontenc}
 \RequirePackage[utf8]{inputenc}
@@ -66,6 +67,9 @@
 \lhead{\nouppercase{\leftmark}}
 \rfoot{\thepage}
 
+% New page after every section.
+\AddToHook{cmd/section/before}{\clearpage}
+
 % Insert one space after a sentence, not 2
 \frenchspacing                                                 
 
@@ -84,6 +88,7 @@
 
 % Don't display "a as ä etc.
 \shorthandoff{"}
+
 
 
 
@@ -179,7 +184,6 @@
 % -------------------------------------------------------------------
 % Commands
 % -------------------------------------------------------------------
-
 \renewcommand\maketitle
 {    
     \newgeometry{left=2.5cm, right=2.5cm, top=2.5cm, bottom=2.5cm}    
@@ -271,7 +275,7 @@
 }
 
 % Declaration Of Honor
-\newcommand\makedeclarationofhonor
+\newcommand\MakeDeclarationOfHonor
 {  
   \newpage
   \phantomsection
@@ -290,6 +294,30 @@
         \put(75,81.5){\large \Ort, den \today}
     }
     ]{template/_declaration_of_honor.pdf}
+}
+
+\newcommand\frontmatter
+{
+% Peripheral pages have to be numbered using roman numerals
+\pagenumbering{Roman}
+}
+
+\newcommand\mainmatter
+{
+  % Save page counter, used for consecutive numbering of peripherals following main content
+  \newcounter{HSCPeripheralNumbering}
+  \setcounter{HSCPeripheralNumbering}{\value{page}}  
+
+  % Set numbering of pages to arabic for main content
+  \pagenumbering{arabic}
+}
+
+\newcommand\backmatter
+{
+      % Reset numbering to use roman numerals for rest of peripheral files
+  \pagenumbering{Roman}
+  \setcounter{page}{\value{HSCPeripheralNumbering}}
+
 }
 
 \endinput

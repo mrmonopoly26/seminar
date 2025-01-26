@@ -8,7 +8,6 @@
 \input{template/settings}
 % Preload custom user settings & packages
 \IfFileExists{./Custom.tex}{\input{Custom}}{}
-\input{template/environments}
 
 \def\Titel{Vorlage für verschiedene Dokumente der HS Coburg}
 \def\Dozent{<DOZENT>}
@@ -38,6 +37,133 @@
 
 \def\ThesisType{<MASTERARBEIT>}
 
-\begin{HSCDocument}
-    \input{secs/structure.tex}
-\end{HSCDocument}
+% ===========================================================================
+%                   Simplified centered & colored tables
+% ===========================================================================
+
+\newenvironment{colortable}[1]{
+  \begin{center}
+    \begin{tabular}{#1}
+    \hline
+    \rowcolor{Gray}
+}
+{
+    \hline
+    \end{tabular}
+  \end{center}
+}
+
+\newcommand{\tablecontent}{
+  \hline
+  \rowcolor{White}
+}
+
+
+
+\makeglossaries
+%\include{Verzeichnisse/Worttrennungen}
+\input{lists/acronyms}  
+\makenomenclature
+\IfFileExists{./lists/symbols.tex} {\input{lists/symbols.tex}}{}
+\IfFileExists{./lists/glossary.tex}{\input{lists/glossary.tex}}{}
+\begin{document}
+
+\maketitle
+
+\frontmatter
+  
+% ===========================================================================
+%                              Page Ordering
+% ===========================================================================
+ 
+% Optional notice to the reader ("Vermerk")
+\IfFileExists{./secs/Z0vermerk.tex}{    
+  \thispagestyle{empty}
+  \input{secs/Z0vermerk}
+}{}
+
+\IfFileExists{./secs/A0abstract.tex}{    
+  \fancypagestyle{abstract}{
+    \fancyhead[L]{Zusammenfassung}
+  }
+  \phantomsection
+  \section*{Zusammenfassung}
+  \thispagestyle{abstract}
+   \input{./secs/A0abstract}
+  }{}
+  
+  \tableofcontents
+
+  % List of Figures
+  \iftotalfigures    
+    \phantomsection
+    \addcontentsline{toc}{section}{\listfigurename}
+    \listoffigures
+  \fi
+
+  % List of Tables
+  \iftotaltables    
+    \phantomsection
+    \addcontentsline{toc}{section}{\listtablename}
+    \listoftables
+  \fi
+
+  % List of Codes
+  \iftotallstlistings
+    \phantomsection
+    \addcontentsline{toc}{section}{\lstlistlistingname}
+    \lstlistoflistings
+  \fi
+  
+  % List of Symbols
+  \iftotalcountnomens    
+    \phantomsection
+    \addcontentsline{toc}{section}{\nomname}
+    \printnomenclature[2.5cm]
+  \fi
+  
+  % List of Acronyms
+    \newpage    
+    \setglossarystyle{super}
+    \printglossary[type=\acronymtype]
+ 
+  \mainmatter
+
+  \input{secs/structure.tex}
+
+  \backmatter
+  
+  % Appendix
+  \IfFileExists{./secs/D0appendix.tex}{    
+    \appendix
+    \renewcommand{\thesection}{A\arabic{section}}
+    \input{secs/D0appendix}
+  }{}
+
+  % Bibliography
+  \iftotalcountcitations    
+    \phantomsection
+    \renewcommand*{\refname}{\hscrefname}               % Bibliography
+    \addcontentsline{toc}{section}{\refname}
+  \else
+    \renewcommand*{\refname}{}                          % Bibliography
+  \fi    
+  \bibliographystyle{alphadin}
+  \bibliography{common/bibliography}
+  
+  % Glossary
+  \iftotalcountglossarys
+    \setglossarystyle{altlist}
+    \printglossary
+  \fi
+
+  \MakeDeclarationOfHonor
+
+  % TODO list
+  \iftotalcounttodos
+    \phantomsection
+    \addcontentsline{toc}{section}{TODOs}
+    \thispagestyle{empty}
+    \listoftodos[TODOs]
+  \fi    
+\end{document}
