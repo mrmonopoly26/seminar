@@ -1,6 +1,6 @@
 \def\fileversion{1.0}
-\def\filedate{2025/01/26}
-\def\docdate {2025/01/26}
+\def\filedate{2025/01/27}
+\def\docdate {2025/01/27}
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesClass{feif}[\filedate \space FEIF Document Class v\fileversion]
 
@@ -41,6 +41,10 @@
 % Needs to be imported because LaTeX resets these counter on a chapter basis
 \RequirePackage[figure,table,lstlisting,xspace]{totalcount}
 \RequirePackage{siunitx}
+\RequirePackage[toc, nogroupskip, nonumberlist, nopostdot, acronyms, shortcuts, translate=babel]{glossaries}
+\RequirePackage[inkscapepath=build/svg-inkscape]{svg}
+\RequirePackage{tabularray}
+\UseTblrLibrary{booktabs}
 
 \newcommand{\ifgerman}[2]{\ifthenelse{\equal{\lang}{ngerman}}{#1}{#2}}
 
