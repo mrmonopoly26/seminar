@@ -8,9 +8,14 @@
 \DeclareOption{praxis}{\renewcommand{\praxisbericht}[0]{true}}
 \ProcessOptions\relax
 
+\newcommand{\lang}{english}
+\DeclareOption{english}{\renewcommand{\lang}{english}}
+\DeclareOption{ngerman}{\renewcommand{\lang}{ngerman}}
+\ProcessOptions\relax
+
 \LoadClass[a4paper, 12pt]{article}
 \RequirePackage{fix-cm}                           % Fix sizes at which CM and EC fonts can be used
-\RequirePackage[ngerman]{babel, translator}       % German LaTeX-intern descriptors (Abbildungen, ...)
+\RequirePackage[english, ngerman]{babel, translator}       % German LaTeX-intern descriptors (Abbildungen, ...)
 \RequirePackage[T1]{fontenc}
 \RequirePackage[utf8]{inputenc}
 \RequirePackage{mathptmx}
@@ -35,7 +40,28 @@
 % Track the total count of different environments
 % Needs to be imported because LaTeX resets these counter on a chapter basis
 \RequirePackage[figure,table,lstlisting,xspace]{totalcount}
+\RequirePackage{siunitx}
 
+\newcommand{\ifgerman}[2]{\ifthenelse{\equal{\lang}{ngerman}}{#1}{#2}}
+
+\AtBeginDocument{\ifgerman{\selectlanguage{ngerman}}{\selectlanguage{english}}}
+
+% Unit-related setup for siunitx
+\ifgerman
+{
+  \sisetup{
+    locale=DE,                   % Use German notation (comma instead of point delimiter for floats)
+    per-mode=fraction,           % Switch display to use \frac instead of x^{-1}
+    fraction-function=\tfrac     % Use amsmath's tfrac macro for unit fractions
+  }
+}
+{
+  \sisetup{
+    locale=US,                   % Use German notation (comma instead of point delimiter for floats)
+    per-mode=fraction,           % Switch display to use \frac instead of x^{-1}
+    fraction-function=\tfrac     % Use amsmath's tfrac macro for unit fractions
+  }
+}
 
 % -------------------------------------------------------------------
 % Document Structure Settings
@@ -110,14 +136,34 @@
   \renewcommand*{\nomname}{Symbolverzeichnis}                  % Nomenclature
   \renewcommand*{\acronymname}{Abkürzungsverzeichnis}          % List of acronyms
   \renewcommand*{\refname}{\hscrefname}                        % Bibliography  
+  \renewcommand*{\abstractname}{Zusammenfassung}               % Abstract
   \providecommand{\declarationname}{}
   \renewcommand*{\declarationname}{Ehrenwörtliche Erklärung}   % Declaration of honor
+}
+
+\addto{\captionsenglish}{
+  \renewcommand*{\figurename}{Fig.}                            % Figures should be displayed as "Abb. x"
+  \renewcommand*{\tablename}{Tab.}                             % Tables  should be displayed as "Tab. x"
+  \renewcommand*{\lstlistingname}{Code}                        % Code    should be displayed as "Code x"  
+  \renewcommand*{\lstlistlistingname}{Listings}                % List of listings
+  \renewcommand*{\nomname}{List of Symbols}                    % Nomenclature
+  \renewcommand*{\acronymname}{Acronyms}                       % List of acronyms
+  \renewcommand*{\refname}{\hscrefname}                        % Bibliography  
+  \renewcommand*{\abstractname}{Abstract}               % Abstract
+  \providecommand{\declarationname}{}
+  \renewcommand*{\declarationname}{Declaration of Honor}   % Declaration of honor
 }
 
 \addto{\extrasngerman}{%
   \def\sectionautorefname{Kapitel}%                              1st level sections should be called "Kapitel"
   \def\subsectionautorefname{Abschnitt}%                         2nd level sections should be called "Abschnitt"
   \def\subsubsectionautorefname{Unterabschnitt}%                 3rd level sections should be called "Unterabschnitt"
+}
+
+\addto{\extrasenglish}{%
+  \def\sectionautorefname{Chapter}%                              1st level sections should be called "Kapitel"
+  \def\subsectionautorefname{Section}%                           2nd level sections should be called "Abschnitt"
+  \def\subsubsectionautorefname{Subsection}%                     3rd level sections should be called "Unterabschnitt"
 }
 
 % -------------------------------------------------------------------
@@ -176,10 +222,28 @@
 % -------------------------------------------------------------------
 % Larger clickable references to page items
 % -------------------------------------------------------------------
+\ifgerman
+{
 \newcommand{\imgref} [1]{\hyperref[#1]{Abbildung~\getrefnumber{#1}}}
+}
+{
+  \newcommand{\imgref} [1]{\hyperref[#1]{Figure~\getrefnumber{#1}}}  
+}
+\ifgerman
+{
 \newcommand{\tabref} [1]{\hyperref[#1]{Tabelle~\getrefnumber{#1}}}
+}
+{
+\newcommand{\tabref} [1]{\hyperref[#1]{Table~\getrefnumber{#1}}}
+}
 \newcommand{\coderef}[1]{\hyperref[#1]{Code~\getrefnumber{#1}}}
+\ifgerman
+{
 \newcommand{\mathref}[1]{\hyperref[#1]{Gleichung~\getrefnumber{#1}}}
+}
+{
+  \newcommand{\mathref}[1]{\hyperref[#1]{Equation~\getrefnumber{#1}}}  
+}
 \newcommand{\secref} [1]{\autoref{#1}}
 
 % -------------------------------------------------------------------
@@ -192,22 +256,33 @@
         \ifthenelse{\equal{\praxisbericht}{true}}
           {
             \centering
-            \includesvg[width=.8\textwidth]{template/logo_hscoburg_de_rot}
-
+            \ifgerman{
+              \includesvg[width=.8\textwidth]{template/logo_hscoburg_de_rot}%
+            }
+            {
+              \includesvg[width=.8\textwidth]{template/logo_hscoburg_en_rot}%
+            }
+            
             \begin{Large}
-            Hochschule für angewandte Wissenschaften Coburg\\
-            Fakultät Elektrotechnik und Informatik\par
+            \ifgerman{
+              Hochschule für angewandte Wissenschaften Coburg\\
+              Fakultät Elektrotechnik und Informatik\par
+            }
+            {
+              Coburg University of Applied Sciences\\
+              Faculty of Electrical Engineering and Computer Science\par
+            }
             \end{Large}
             \vspace{1.5cm}
 
-            \Large{Studiengang: \Studiengang}
+            \Large{\ifgerman{Studiengang: }{Degree Program: }\FEIFStudyProgram}
             \vspace{1.5cm}
 
-            \Large{Praxisbericht}
+            \Large{\ifgerman{Praxisbericht}{Internship Report}}
             
             \vspace{1cm}
             
-            \huge{\Autorenname}
+            \huge{\FEIFAuthorsName}
 
             \vspace{1.0cm}
             
@@ -215,59 +290,78 @@
             
             \begin{tblr}{colspec={|X[3]|X[11]|}}
             \hline
-            Unternehmen & \Unternehmen        \\
-                        & \Abteilung          \\
-                        & \Strasse            \\
-                        & \Ort                \\
+            \ifgerman{Unternehmen}{Company}      & \FEIFCompany        \\
+                                                 & \FEIFCompanyDepartment          \\
+                                                 & \FEIFCompanyStreetName            \\
+                                                 & \FEIFCompanyCity                \\
             \hline
-            Zeitraum    & \Beginn \ bis \Ende \\
+            % Use "through" because it includes the last date. If you use "until
+            \ifgerman{Zeitraum}{Intership Period} & \FEIFBeginDate\ifgerman{ bis }{--}\FEIFEndDate \\
             \hline
             \end{tblr}           
 
-            \large{Abgabe des Berichts: \Abgabe}
+            \large{\ifgerman{Abgabe des Berichts:}{Submission date:} \FEIFSubmissionDate}
             \normalsize            
-            \begin{flushleft}Freigabe zur Vorlage des Praxisberichts an der HS Coburg:\end{flushleft}%            
-            \begin{tblr}{|X[3]|X[6]|X[5]|}                
+            \begin{flushleft}
+              \ifgerman
+              {
+                Freigabe zur Vorlage des Praxisberichts an der HS Coburg:
+              }
+              {
+                Submission clearance of the internship report to Coburg University:
+              }
+            \end{flushleft}%            
+            \begin{tblr}{|X[2.7]|X[5.3]|X[5.5]|}                
                 \hline
-                Betreuer & \Betreuer & \\
+                \ifgerman{Betreuungsperson}{Advisor} & \FEIFCompanyAdvisor & \\
                 \hline
-                Funktion & \Funktion & \textbf{\textit{Ort, Datum}}\\
+                \ifgerman{Funktion}{Role} & \FEIFCompanyAdvisorRole & \textbf{\textit{\ifgerman{Ort, Datum}{Place, Date}}}\\
                 \hline
-                Telefon & \Telefon & \\
+                \ifgerman{Telefon}{Phone} & \FEIFCompanyAdvisorPhone & \\
                 \cline{1-2}
-                E-Mail & \Email & \\
+                E-Mail & \FEIFCompanyAdvisorEMail & \\
                 \hline
-                & & \textbf{\textit{Unterschrift Betreuer}}\\
+                & & \textbf{\textit{\ifgerman{Unterschrift d. Betreuungsperson}{Signature of Advisor}}}\\
                 \hline
             \end{tblr}            
           }
           {
             \centering
-            \includesvg[width=.8\textwidth]{template/logo_hscoburg_de_rot}%
-            
+            \ifgerman{
+              \includesvg[width=.8\textwidth]{template/logo_hscoburg_de_rot}%
+            }
+            {
+              \includesvg[width=.8\textwidth]{template/logo_hscoburg_en_rot}%
+            }
+
             \begin{Large}
+              \ifgerman{
                 Hochschule für angewandte Wissenschaften Coburg\\
                 Fakultät Elektrotechnik und Informatik\par
-            \end{Large}
+                }
+                {
+                Coburg University of Applied Sciences\\
+                Faculty of Electrical Engineering and Computer Science\par
+                }            \end{Large}
             \vspace{1.5cm}
 
-            \Large{Studiengang: \Studiengang}
+            \Large{\ifgerman{Studiengang: }{Degree program: }\FEIFStudyProgram}
             \vspace{1.5cm}
 
             \Large{\ThesisType}
             \vspace{1cm}
 
-            \Huge{\Titel}
+            \Huge{\FEIFTitle}
             \vspace{2cm}
 
-            \huge{\Autorenname}
+            \huge{\FEIFAuthorsName}
             \vspace{2cm}
+            
+            \Large{\ifgerman{Abgabe des Arbeit:}{Submission date:} \FEIFSubmissionDate}
 
-            \Large{Abgabe der Arbeit: \Abgabe}
+            \Large{\ifgerman{Betreut durch:}{Advisor: }}
 
-            \Large{Betreut durch:}
-
-            \Large{\Dozent, Hochschule Coburg}
+            \Large{\FEIFInstructor, \ifgerman{Hochschule Coburg}{Coburg University}}
           }
     \end{titlepage}    
     \restoregeometry    
@@ -288,11 +382,11 @@
     pages=-,
     pagecommand={},
     picturecommand*={
-        \put(75,714){\large \Autorenname}
-        \put(75,683){\large \Geburtsdatum}
-        \put(75,652){\large \Studiengang}
-        \put(75,622){\large \Matrikelnummer}
-        \put(75,81.5){\large \Ort, den \today}
+        \put(75,714){\large \FEIFAuthorsName}
+        \put(75,683){\large \FEIFDateOfBirth}
+        \put(75,652){\large \FEIFStudyProgram}
+        \put(75,622){\large \FEIFMatriculationNumber}
+        \put(75,81.5){\large \FEIFAuthorCity, den \today}
     }
     ]{template/_declaration_of_honor.pdf}
 }
@@ -319,10 +413,11 @@
 % Mainmatter
 \newcommand\mainmatter
 {
+  \clearpage 
   % Save page counter, used for consecutive numbering of peripherals following main content
   \newcounter{HSCPeripheralNumbering}
   \setcounter{HSCPeripheralNumbering}{\value{page}}  
-
+  
   % Set numbering of pages to arabic for main content
   \pagenumbering{arabic}
 }
@@ -330,6 +425,7 @@
 % Backmatter
 \newcommand\backmatter
 {
+  \clearpage 
   % Reset numbering to use roman numerals for rest of peripheral files
   \pagenumbering{Roman}
   \setcounter{page}{\value{HSCPeripheralNumbering}}
@@ -411,6 +507,7 @@
 \newcommand{\printfeifbibliography}
 {
   \iftoggle{anyCitations}{
+        \clearpage
         \phantomsection
         \renewcommand*{\refname}{\hscrefname}
         \addcontentsline{toc}{section}{\refname}
@@ -422,14 +519,15 @@
 }
 
 \renewenvironment{abstract}
-{
-  \fancypagestyle{abstract}{\fancyhead[L]{Zusammenfassung}}
-  \phantomsection
-  \section*{Zusammenfassung}
-  \thispagestyle{abstract}    
+{  
+  \pagestyle{fancy}
+  \fancypagestyle{abstract}{\fancyhead[L]{\abstractname}}
+  \thispagestyle{abstract}
+  \section*{\abstractname} 
+  \addcontentsline{toc}{section}{\abstractname}
 }
-{}
-
-
+{
+  \clearpage  
+}
 
 \endinput

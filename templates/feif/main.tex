@@ -1,45 +1,48 @@
 \makeatletter
 \def\input@path{{./template/}}
 \makeatother
-\documentclass[praxis]{template/feif}
+
+%\documentclass[ngerman, praxis]{template/feif}  % For a German Internship Report ("Praxisbericht").
+%\documentclass[praxis]{template/feif}           % For an English Internship Report ("Praxisbericht").
+%\documentclass[ngerman]{template/feif}          % For a German thesis (Bachelorarbeit, Masterarbeit, Seminararbeit, ...)
+\documentclass[praxis]{template/feif}                   % For an English thesis (Bachelorarbeit, Masterarbeit, Seminararbeit, ...)
+
 \input{common/packages.tex}
 \input{common/commands.tex}
 
-\def\Titel{Vorlage für verschiedene Dokumente der HS Coburg}
-\def\Dozent{<DOZENT>}
+% Data of your document (thesis, paper, or intership report)
+\def\FEIFTitle{Vorlage für FEIF Arbeiten}       % Title of your thesis or internship report
+\def\FEIFAuthorsName{<NACHNAME, VORNAME>}       % Author's, i.e., student's, name.
+\def\FEIFDateOfBirth{<GEBURTSDATUM>}            % Date of birth. Use the German DD.MM.YYYY format.
+\def\FEIFMatriculationNumber{<MATRIKELNUMMER>}  % Your Matriculation number
+\def\FEIFStudyProgram{<STUDIENGANG>}            % The German version of your degree Program, e.g. Visual Computing, B.Sc. or Informatik, M.Sc.
+\def\FEIFAuthorCity{<ORT>}                      % The place where you sign the Declaration of Honor.
+\def\FEIFBeginDate{<BEGINN>}                    % Beginning of your thesis or start of your internship
+\def\FEIFEndDate{<ENDE>}                        % Last day of your thesis or last day of your internship.
+\def\FEIFSubmissionDate{\today}                 % The submission date of your docuemtn
 
-% Infos zum Autor
-\def\Autorenname{<NACHNAME, VORNAME>}
-\def\Geburtsdatum{<GEBURTSDATUM>}
-\def\Matrikelnummer{<MATRIKELNUMMER>}
-\def\Studiengang{<STUDIENGANG>}
-
-% Infos zum Unternehmen
-\def\Unternehmen{<FIRMENNAME>}
-\def\Abteilung{<ABTEILUNG>}
-\def\Strasse{<STRASSE>}
-\def\Ort{<ORT>}
-
-% Infos zum Betreuer
-\def\Betreuer{<BETREUER>}
-\def\Funktion{<FUNKTION BETREUER>}
-\def\Telefon{<TEL. BETREUER>}
-\def\Email{<BETREUER EMAIL>}
-
-% Daten
-\def\Beginn{<BEGINN>}
-\def\Ende{<ENDE>}
-\def\Abgabe{\today}
-
-\def\ThesisType{<MASTERARBEIT>}
+% Data required for thesis and seminar papers
+\def\FEIFInstructor{<DOZIERENDER>}              % Name of your FEIF instructor (not required for an intership report)
+% Use one thesis type:
+%\def\ThesisType{Seminararbeit}
+%\def\ThesisType{Bachelorarbeit}
+\def\ThesisType{Masterarbeit}
+%\def\ThesisType{Bachelor Thesis}
+%\def\ThesisType{Master Thesis}
+%\def\ThesisType{Seminar Paper}
 
 
-% Unit-related setup for siunitx
-\sisetup{
-locale=DE,                   % Use German notation (comma instead of point delimiter for floats)
-  per-mode=fraction,           % Switch display to use \frac instead of x^{-1}
-  fraction-function=\tfrac,    % Use amsmath's tfrac macro for unit fractions
-}
+% Specific data for intership reports (Praxisberichte), ONLY
+\def\FEIFCompany{<FIRMENNAME>}                  % Company Name (Internships only)
+\def\FEIFCompanyDepartment{<ABTEILUNG>}         % Department(s) inside the compmany you mostly worked for (Internships only)
+\def\FEIFCompanyStreetName{<STRASSE>}           % Street name of the mailing address of your company (Internships only)
+\def\FEIFCompanyCity{<ORT>}                     % City/Village/Town of the mailing address of your company (Internships only)
+\def\FEIFCompanyAdvisor{<BETREUENDE PERON>}     % The advisor at your comany (Internships only). Not the advisor at HS Coburg.
+\def\FEIFCompanyAdvisorRole{<FUNKTION>}         % The advisor's role of function (Internships only).
+\def\FEIFCompanyAdvisorPhone{<TEL.>}            % The advisor's phone number (Internships only).
+\def\FEIFCompanyAdvisorEMail{<E-MAIL>}          % The advisor's e-mail address (Internships only).
+
+
 
 \makeglossaries
 %\include{Verzeichnisse/Worttrennungen}
@@ -57,6 +60,7 @@ locale=DE,                   % Use German notation (comma instead of point delim
   \input{secs/Z0vermerk}
 }{}
 
+
 \IfFileExists{./secs/A0abstract.tex}{
     \begin{abstract}
         \input{./secs/A0abstract}    
@@ -72,13 +76,15 @@ locale=DE,                   % Use German notation (comma instead of point delim
 \listofacronyms  
 \mainmatter
 \input{secs/structure.tex}
-\backmatter  
+
 % Appendix
 \IfFileExists{./secs/D0appendix.tex}{    
-    \appendix    
+    \appendix
     \input{secs/D0appendix}
 }{}
-  
+
+\backmatter  
+
 \printfeifbibliography
 \bibliography{common/bibliography}
 
