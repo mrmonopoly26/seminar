@@ -42,32 +42,26 @@
 \def\FEIFCompanyAdvisorPhone{<TEL.>}            % The advisor's phone number (Internships only).
 \def\FEIFCompanyAdvisorEMail{<E-MAIL>}          % The advisor's e-mail address (Internships only).
 
-
+\newcommand{\IfExists}[2]{\IfFileExists{#1}{#2}{}}
+\newcommand{\InputIfExists}[1]{\IfFileExists{#1} {\input{#1}}{}}
 
 \makeglossaries
 %\include{Verzeichnisse/Worttrennungen}
 \input{lists/acronyms}  
 \makenomenclature
-\IfFileExists{./lists/symbols.tex} {\input{./lists/symbols.tex}}{}
-\IfFileExists{./lists/glossary.tex}{\input{./lists/glossary.tex}}{}
+\InputIfExists{./lists/symbols.tex}
+\InputIfExists{./lists/glossary.tex}
+
 \begin{document}
 \maketitle
 \frontmatter
 
 % Optional notice to the reader ("Vermerk")
-\IfFileExists{./secs/Z0vermerk.tex}{    
-  \thispagestyle{empty}
-  \input{secs/Z0vermerk}
-}{}
+\IfExists{./secs/Z0vermerk.tex}{\thispagestyle{empty}\input{secs/Z0vermerk}}
 
-
-\IfFileExists{./secs/A0abstract.tex}{
-    \begin{abstract}
-        \input{./secs/A0abstract}    
-    \end{abstract}
-}
-{}  
-
+\begin{abstract}
+    \input{./secs/A0abstract}
+\end{abstract}
 \tableofcontents  
 \listoffigures
 \listoftables
@@ -76,19 +70,10 @@
 \listofacronyms  
 \mainmatter
 \input{secs/structure.tex}
-
-% Appendix
-\IfFileExists{./secs/D0appendix.tex}{    
-    \appendix
-    \input{secs/D0appendix}
-}{}
-
 \backmatter  
-
+\IfExists{./secs/C0ack}{\begin{acknowledgement}\input{./secs/C0ack}\end{acknowledgement}}
+\printfeifglossary   
 \printfeifbibliography
 \bibliography{common/bibliography}
-
-\printfeifglossary  
-  
 \MakeDeclarationOfHonor
 \end{document}

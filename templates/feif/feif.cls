@@ -123,6 +123,7 @@
 % Names
 % -------------------------------------------------------------------
 \newcommand*{\hscrefname}{Literaturverzeichnis}               % Bibliography
+\newcommand*{\acknowledgementname}{Acknowledgements}          % Acknowledgement
 
 \numberwithin{equation}{section}                               % Numbering of equations should be x.x (locally scoped to their respective section)
 \renewcommand{\UrlFont}{\color{blue}\rmfamily\itshape}         % URLs should be displayed in blue
@@ -137,6 +138,7 @@
   \renewcommand*{\acronymname}{Abkürzungsverzeichnis}          % List of acronyms
   \renewcommand*{\refname}{\hscrefname}                        % Bibliography  
   \renewcommand*{\abstractname}{Zusammenfassung}               % Abstract
+  \renewcommand*{\acknowledgementname}{Dankesagung}            % Acknowledgement
   \providecommand{\declarationname}{}
   \renewcommand*{\declarationname}{Ehrenwörtliche Erklärung}   % Declaration of honor
 }
@@ -149,7 +151,8 @@
   \renewcommand*{\nomname}{List of Symbols}                    % Nomenclature
   \renewcommand*{\acronymname}{Acronyms}                       % List of acronyms
   \renewcommand*{\refname}{\hscrefname}                        % Bibliography  
-  \renewcommand*{\abstractname}{Abstract}               % Abstract
+  \renewcommand*{\abstractname}{Abstract}                      % Abstract
+  \renewcommand*{\acknowledgementname}{Acknowledgements}       % Acknowledgement
   \providecommand{\declarationname}{}
   \renewcommand*{\declarationname}{Declaration of Honor}   % Declaration of honor
 }
@@ -371,14 +374,12 @@
 
 % Declaration Of Honor
 \newcommand\MakeDeclarationOfHonor
-{  
+{    
   \clearpage
   \phantomsection
-  \addcontentsline{toc}{section}{\declarationname}
-  \lhead{\declarationname}
   \thispagestyle{empty}
-
-    \includepdf[
+  \addcontentsline{toc}{section}{\declarationname}    
+  \includepdf[
     pages=-,
     pagecommand={},
     picturecommand*={
@@ -388,7 +389,7 @@
         \put(75,622){\large \FEIFMatriculationNumber}
         \put(75,81.5){\large \FEIFAuthorCity, den \today}
     }
-    ]{template/_declaration_of_honor.pdf}
+  ]{template/_declaration_of_honor.pdf}
 }
 
 \newtoggle{anySymbols}
@@ -489,24 +490,15 @@
 % Glossary
 \newcommand{\printfeifglossary}
 {
-    \clearpage
+    %\clearpage
     \setglossarystyle{altlist}
     \printglossary
-}
-
-% Appendix
-\let\oldappendix\appendix
-\renewcommand{\appendix}
-{
-    \clearpage
-    \oldappendix
-    \renewcommand{\thesection}{A\arabic{section}}
 }
 
 % Bibliography
 \newcommand{\printfeifbibliography}
 {
-  \iftoggle{anyCitations}{
+  \iftoggle{anyCitations}{        
         \clearpage
         \phantomsection
         \renewcommand*{\refname}{\hscrefname}
@@ -514,20 +506,33 @@
         \bibliographystyle{alphadin}
   }{
     \renewcommand*{\refname}{}
-  }            
-  
+  }  
 }
 
 \renewenvironment{abstract}
 {  
+  \markboth{\abstractname}{\abstractname}
   \pagestyle{fancy}
   \fancypagestyle{abstract}{\fancyhead[L]{\abstractname}}
   \thispagestyle{abstract}
   \section*{\abstractname} 
   \addcontentsline{toc}{section}{\abstractname}
 }
-{
-  \clearpage  
+{  
 }
+
+\newenvironment{acknowledgement}
+{  
+  \markboth{\acknowledgementname}{\acknowledgementname}
+  \pagestyle{fancy}
+  \clearpage
+  \fancypagestyle{acknowledgement}{\fancyhead[L]{\acknowledgementname}}
+  \thispagestyle{acknowledgement}  
+  \addcontentsline{toc}{section}{\acknowledgementname}
+}
+{  
+}
+
+
 
 \endinput
