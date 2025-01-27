@@ -437,7 +437,6 @@ While I maintain this template on a Windows machine, I anticipate that you can u
 # Open Issues
 
 - TODO Improve Hochschule Coburg Template?            
-    - TODO: Support both German and English.
     - TODO: Tab Preview
     - TODO: Fig Preview
     - TODO: Bib Preview
@@ -445,9 +444,7 @@ While I maintain this template on a Windows machine, I anticipate that you can u
     - TODO: Acronym Preview
     - TODO: List of Symobls Preview
     - TODO: Font Sample
-    - TODO: Create latex class and latex for FEIF    
     - TODO: Create FEIFTemplate.svg
-- TODO Should we add a template for lecture notes?
 - TODO Should we add a template for grant applications?
 - TODO Refine Tufte Template
 - TODO Packacking for tempaltes with download parts does not work

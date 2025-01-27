@@ -1,27 +1,22 @@
 \section{Results and Discussion}\label{Sec:Evaluation}
 
 We evaluate the performance of our methods on the meshes of Fig.~\ref{fig:meshes}.
-\begin{figure*}
-\input{codes/code.tex}%
-\caption{Example code.}\label{Code:Python}%
-\end{figure*}
     
-Hey kids here is Python code in Figure~\ref{Code:Python}.
-
 \begin{figure*}
     \centering%
     \def\svgwidth{\textwidth}%
     \fontsize{6pt}{5pt}\selectfont%
     \includesvg{figs/meshes}%
-    \caption{Test Meshes.
+    \caption[Test Meshes]{
     $V$ denotes the number of vertices of the input mesh, $T$ the number of triangles and $M$ the number of meshlets coming from Meshoptimizer.
     Meshlets are visualized with randomized colors.
     }\label{fig:meshes}%
 \end{figure*}%
 
 \begin{table}
-    \caption{    
-    comparison for the \textit{Rock} mesh.
+    \caption
+    [Comparison for the \textit{Rock} mesh.]
+    {    
     We compare the optimal Gurobi and SCIP solutions against the sub-optimal stuff.
     The CPU computation uses one thread per meshlet and was measured on an AMD Ryzen 9 7950X (16C/32T).    
     }\label{tab:StripifyTable}    
@@ -34,18 +29,18 @@ Hey kids here is Python code in Figure~\ref{Code:Python}.
 
 \begin{figure}
     \includesvg[inkscapelatex=true]{figs/PDFTexFigure}
-    \caption{Vector graphics with fonts rendered by latex.}\label{fig:latexfonts}
+    \caption[Vector graphics with fonts rendered by latex]{You can use Latex to render the fonts.}\label{fig:latexfonts}
 \end{figure}
 
 \begin{figure}
     \includesvg[inkscapelatex=false]{figs/SVGFigure}
-    \caption{Vector graphics with fonts directly taken from the file.}\label{fig:svgfonts}
+    \caption[Vector graphics with fonts directly taken from the file]{You can also use the fonts produced by the SVG file.}\label{fig:svgfonts}
 \end{figure}
 
 \begin{figure}
     \centering
     \includegraphics[width=\columnwidth]{imgs/img.png}
-    \caption{Pixel graphics.}\label{fig:pixel}
+    \caption[Pixel graphics]{You can also directly include pixel graphics.}\label{fig:pixel}
 \end{figure}
 
 Tab.~\ref{tab:StripifyTable} and Tab.~\ref{tab:ListOfSymbols} compare our optimal 
