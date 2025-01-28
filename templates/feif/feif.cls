@@ -1,6 +1,6 @@
 \def\fileversion{1.0}
-\def\filedate{2025/01/27}
-\def\docdate {2025/01/27}
+\def\filedate{2025/01/28}
+\def\docdate {2025/01/28}
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesClass{feif}[\filedate \space FEIF Document Class v\fileversion]
 
@@ -42,9 +42,14 @@
 \RequirePackage[figure,table,lstlisting,xspace]{totalcount}
 \RequirePackage{siunitx}
 \RequirePackage[toc, nogroupskip, nonumberlist, nopostdot, acronyms, shortcuts, translate=babel]{glossaries}
-\RequirePackage[inkscapepath=build/svg-inkscape]{svg}
+\RequirePackage{graphicx}
 \RequirePackage{tabularray}
 \UseTblrLibrary{booktabs}
+
+% Set the graphics path relative to the .cls file
+\makeatletter
+\def\input@path{{./}}
+\makeatother
 
 \newcommand{\ifgerman}[2]{\ifthenelse{\equal{\lang}{ngerman}}{#1}{#2}}
 
@@ -264,10 +269,10 @@
           {
             \centering
             \ifgerman{
-              \includesvg[width=.8\textwidth]{template/logo_hscoburg_de_rot}%
+              \includegraphics[width=.8\textwidth]{logo_hscoburg_de_rot.pdf}%
             }
             {
-              \includesvg[width=.8\textwidth]{template/logo_hscoburg_en_rot}%
+              \includegraphics[width=.8\textwidth]{logo_hscoburg_en_rot.pdf}%
             }
             
             \begin{Large}
@@ -335,10 +340,10 @@
           {
             \centering
             \ifgerman{
-              \includesvg[width=.8\textwidth]{template/logo_hscoburg_de_rot}%
+              \includegraphics[width=.8\textwidth]{logo_hscoburg_de_rot.pdfpages}%
             }
             {
-              \includesvg[width=.8\textwidth]{template/logo_hscoburg_en_rot}%
+              \includegraphics[width=.8\textwidth]{logo_hscoburg_en_rot.pdf}%
             }
 
             \begin{Large}
@@ -355,7 +360,7 @@
             \Large{\ifgerman{Studiengang: }{Degree program: }\FEIFStudyProgram}
             \vspace{1.5cm}
 
-            \Large{\ThesisType}
+            \Large{\FEIFThesisType}
             \vspace{1cm}
 
             \Huge{\FEIFTitle}
@@ -393,7 +398,7 @@
         \put(75,622){\large \FEIFMatriculationNumber}
         \put(75,81.5){\large \FEIFAuthorCity, den \today}
     }
-  ]{template/_declaration_of_honor.pdf}
+  ]{declaration_of_honor.pdf}
 }
 
 \newtoggle{anySymbols}
@@ -513,6 +518,7 @@
   }  
 }
 
+% Abstracts
 \renewenvironment{abstract}
 {  
   \markboth{\abstractname}{\abstractname}
@@ -525,6 +531,7 @@
 {  
 }
 
+% Acknowledgements
 \newenvironment{acknowledgement}
 {  
   \markboth{\acknowledgementname}{\acknowledgementname}
@@ -536,7 +543,4 @@
 }
 {  
 }
-
-
-
 \endinput
