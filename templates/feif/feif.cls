@@ -45,6 +45,7 @@
 \RequirePackage{graphicx}
 \RequirePackage{tabularray}
 \UseTblrLibrary{booktabs}
+\RequirePackage{glossaries-extra}
 
 % Set the graphics path relative to the .cls file
 \makeatletter
@@ -54,6 +55,34 @@
 \newcommand{\ifgerman}[2]{\ifthenelse{\equal{\lang}{ngerman}}{#1}{#2}}
 
 \AtBeginDocument{\ifgerman{\selectlanguage{ngerman}}{\selectlanguage{english}}}
+\AtEndDocument
+{
+  % Check if any glossary entry has been used
+  \newwrite\myfile
+  \newread\myfile
+  \immediate\openout\myfile=CountEntries.aux        
+  \newif\ifanyglsused
+  \anyglsusedfalse
+  \forglsentries{\thisentry}{\ifglsused{\thisentry}{\anyglsusedtrue}{}}
+  
+  \ifanyglsused
+    \immediate\write\myfile{\string\gdef\string\GlossaryEntriesUsed{1}}%
+  \else
+    \immediate\write\myfile{\string\gdef\string\GlossaryEntriesUsed{0}}%
+  \fi
+
+  % Check if any acronyms are entry has been used
+  \newif\ifanyacronymsused
+  \anyacronymsusedfalse    
+  \forglsentries[\acronymtype]{\thislabel}{\ifglsused{\thislabel}{\anyacronymsusedtrue}{}}  
+  
+  \ifanyacronymsused
+    \immediate\write\myfile{\string\gdef\string\AcronymsUsed{1}}%
+  \else
+    \immediate\write\myfile{\string\gdef\string\AcronymsUsed{0}}%          
+  \fi      
+  \immediate\closeout\myfile    
+}
 
 % Unit-related setup for siunitx
 \ifgerman
@@ -415,9 +444,9 @@
 % -------------------------------------------------------------------
 % Frontmatter
 \newcommand\frontmatter
-{
-% Peripheral pages have to be numbered using roman numerals
-\pagenumbering{Roman}
+{  
+  % Peripheral pages have to be numbered using roman numerals
+  \pagenumbering{Roman}
 }
 
 % Mainmatter
@@ -489,19 +518,29 @@
 
 % List of Acronyms
 \newcommand{\listofacronyms}
-{
-    % List of Acronyms
-    \clearpage
-    \setglossarystyle{super}
-    \printglossary[type=\acronymtype]
+{    
+  \IfFileExists{CountEntries.aux}{\input{CountEntries.aux}}{}
+  \ifdefined\AcronymsUsed
+      \ifnum\AcronymsUsed=1    
+        \clearpage
+        \setglossarystyle{super}
+        \printglossary[type=\acronymtype]
+  
+      \fi 
+  \fi
 }
 
 % Glossary
 \newcommand{\printfeifglossary}
-{
-    %\clearpage
-    \setglossarystyle{altlist}
-    \printglossary
+{       
+  \IfFileExists{CountEntries.aux}{\input{CountEntries.aux}}{}  
+  \ifdefined\GlossaryEntriesUsed
+    \ifnum\GlossaryEntriesUsed=1
+        \clearpage
+        \setglossarystyle{altlist}
+        \printglossary
+    \fi
+  \fi
 }
 
 % Bibliography
