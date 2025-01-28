@@ -53,14 +53,14 @@
 \makeatother
 
 \newcommand{\ifgerman}[2]{\ifthenelse{\equal{\lang}{ngerman}}{#1}{#2}}
-
+\newcommand{\FEIFCountEntriesFileName}{\jobname.feif}
 \AtBeginDocument{\ifgerman{\selectlanguage{ngerman}}{\selectlanguage{english}}}
 \AtEndDocument
 {
   % Check if any glossary entry has been used
   \newwrite\myfile
   \newread\myfile
-  \immediate\openout\myfile=CountEntries.aux        
+  \immediate\openout\myfile=\FEIFCountEntriesFileName
   \newif\ifanyglsused
   \anyglsusedfalse
   \forglsentries{\thisentry}{\ifglsused{\thisentry}{\anyglsusedtrue}{}}
@@ -519,7 +519,7 @@
 % List of Acronyms
 \newcommand{\listofacronyms}
 {    
-  \IfFileExists{CountEntries.aux}{\input{CountEntries.aux}}{}
+  \IfFileExists{\FEIFCountEntriesFileName}{\input{\FEIFCountEntriesFileName}}{}
   \ifdefined\AcronymsUsed
       \ifnum\AcronymsUsed=1    
         \clearpage
@@ -533,7 +533,7 @@
 % Glossary
 \newcommand{\printfeifglossary}
 {       
-  \IfFileExists{CountEntries.aux}{\input{CountEntries.aux}}{}  
+  \IfFileExists{\FEIFCountEntriesFileName}{\input{\FEIFCountEntriesFileName}}{}  
   \ifdefined\GlossaryEntriesUsed
     \ifnum\GlossaryEntriesUsed=1
         \clearpage
