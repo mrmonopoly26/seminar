@@ -20,4 +20,8 @@
 \usepackage[inkscapepath=build/svg-inkscape]{svg}
 \usepackage[toc, nogroupskip, nonumberlist, nopostdot, acronyms, shortcuts, translate=babel]{glossaries}
 \usepackage{tabularray}
-\UseTblrLibrary{booktabs}
+\makeatletter
+\@ifpackageloaded{booktabs}{}{
+  \UseTblrLibrary{booktabs}
+}
+\makeatother
