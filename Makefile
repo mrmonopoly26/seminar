@@ -1,5 +1,5 @@
 # Configure your paper
-TEMPLATE_PATH				:= templates/feif
+TEMPLATE_PATH				:= templates/eg
 
 # Configure programs to use
 PDF_VIEWER 					:= evince
