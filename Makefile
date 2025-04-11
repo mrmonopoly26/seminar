@@ -10,7 +10,7 @@ BIBLIOGRAPHY				:= common/bibliography.bib
 
 # Configure output files
 OUTPUT_DIR					:= build
-OUTPUT_FILE					:= Paper1024
+OUTPUT_FILE					:= Master_Seminar
 
 PACKAGE_DIR					:= $(OUTPUT_DIR)/package
 
