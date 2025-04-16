@@ -1,25 +1,43 @@
 \section{Introduction}
+\Acp{ANN} are the core of many modern applications, for example computer vision or natural language processing.
+They try to mimic the neural behavior inside the brain.
+Traditionally, a \ac{ANN} is based on the multi layer perceptron model, where neurons are grouped in layers.
+Each neuron computes a real-valued numeric value based on its weighted input values.
+% TODO search for source
+The value is transformed by an activation function and then passed as output to the next layer.
 
-Here we test some text.
+\Acp{SNN} offer an alternative paradigm to traditional \acp{ANN}.
+In contrast to \acp{ANN}, \Acp{SNN} process discrete, time-dependent signals, referred to as \textit{spikes}.
+A neuron in an \Acp{SNN} does not respond to a single input but instead integrates multiple spikes over time~\cite{pietrzak_overview_2023}.
+Once the so-called \textit{membrane potential} exceeds a certain threshold, the neuron emits an outgoing spike.
+This mechanisms mimics the behavior of the brain in a more biologically plausible way compared to the perceptron model~\cite{maass_networks_1997}.
+As a result, \acp{SNN} become event-driven: information is only transmitted when spikes are emitted.
+This leads to asynchronous computations, unlike synchronous computations in \acp{ANN}~\cite{pietrzak_overview_2023}.
 
-\noindent Waltz, bad nymph, for quick jigs vex.
+Beside more plausibility from the biological point of view, \acp{SNN} are considered potentially more energy-efficient than \acp{ANN}~\cite{pietrzak_overview_2023}.
+However, their practical adoption remains limited.
+One major reason is that their computational model aligns best with neuromorphic hardware, which is designed specifically to handle time-dependent and sparse activity patterns.
+Unfortunately, such hardware is not yet widely available~\cite{li_towards_2024}.
 
-\noindent{\rm{Waltz, bad nymph, for quick jigs vex.}}
+In contrast, \acp{GPU} are widespread and there are a several optimizations for \acp{ANN} running on \acp{GPU} (e.g., ~\cite{alevi_brian2cuda_2022, vieth_accelerating_2024}).
+However, the asynchronous and event-driven nature of \acp{SNN} is fundamentally different from the dense, synchronous computation pattern \acp{GPU} are designed for.
+This raises the question of whether \acp{GPU} can serve as an effective platform for training and executing \acp{SNN} — despite this mismatch.
 
-\noindent{\sf{Waltz, bad nymph, for quick jigs vex.}}
+This paper investigates this question by focusing on three main aspects:
+\begin{enumerate}
+    \item What are the architectural differences between \acp{SNN} and traditional \acp{ANN}?
+    \item Which methodologies can be used to train SNNs on \acp{GPU}?
+    \item How do \acp{SNN} perform on \acp{GPU} compared to \acp{ANN}?
+\end{enumerate}
 
-\noindent{\tt{Waltz, bad nymph, for quick jigs vex.}}
+The paper is based on a literature review.
+The main focus is set on papers which contain information about running \acp{SNN} on \acp{GPU} and corresponding frameworks like Brian or PymoNNtorch.
 
-\noindent{\bf{Waltz, bad nymph, for quick jigs vex.}}
-
-\noindent{\it{Waltz, bad nymph, for quick jigs vex.}}
-
-\noindent{\sl{Waltz, bad nymph, for quick jigs vex.}}
-
-\noindent{\sc{Waltz, bad nymph, for quick jigs vex.}}
-
-%\newpage
-
-%\layout
+The paper is structured as follows:
+% TODO rewrite structure section with refs
+In the following section, the fundamentals of \acp{SNN} architecture will be presented and compared to \acp{ANN}, with a particular focus on neuron models, activation mechanisms, and signal propagation.
+Next, the paper will discuss methodologies for training and running \acp{SNN} on \acp{GPU}, including their advantages and limitations.
+After that, a comparison of \acp{SNN} and traditional \acp{ANN} will be conducted with a focus on performance aspects when executed on \acp{GPU}.
+Finally, the paper will be summarized.
 
 \newpage
