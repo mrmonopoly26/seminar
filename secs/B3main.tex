@@ -1,7 +1,74 @@
 \section{Architectural comparison of \acp{SNN} and \acp{ANN}}\label{Sec:ArchitecturalComparisonOfSNNsAndANNs}
+In this section, \acp{SNN} and traditional \acp{ANN} are compared regarding its fundamentals.
+This encompasses the underlying neural models and the associated signal propagation with their activation mechanisms.
 \subsection{Neural models}\label{Subsec:NeuralModels}
-\subsection{Activation mechanisms}\label{Subsec:ActivationMechanisms}
-\subsection{Signal propagation}\label{Subsec:SignalPropagation}
+\subsubsection{Biological neuron}
+\acp{SNN} and \acp{ANN} both are inspired by biological neurons.
+Fig.~\ref{fig:bioneuron} illustrates the basic anatomy of a biological neuron, which is composed of four principal components: \textit{dendrites}, \textit{soma}, \textit{axon}, and \textit{synapse}.  
+Dendrites function as the input interface of the neuron by converting chemical signals from neurotransmitters into electrical signals.  
+These signals are then integrated in the soma, the cell body, where the accumulation of membrane potentials determines whether an action potential is generated.  
+This outcome of this process, known as neural integration, decides whether the neuron will fire.  
+If the threshold is reached, the axon transmits the action potential to other neurons.  
+Synapses are the structural junctions that enable communication between neurons and are typically located on dendrites, facilitating the transformation and relay of signals within the network~\cite{yamazaki_spiking_2022, pietrzak_overview_2023}.  
+\acp{SNN} and \acp{ANN} model this structure in similar ways.
+\begin{figure}
+    \centering
+    \includesvg[inkscapelatex=false]{figs/bio_neuron}
+    \caption[The structure of a biological neuron.]{The structure of a biological neuron.
+    Dendrites receive incoming signals and transmit them to the soma for integration.
+    If triggered, an action potential travels along the axon to the synapses, where it is relayed to other neurons (figure inspired by ~\cite{yamazaki_spiking_2022}).}
+    \label{fig:bioneuron}
+\end{figure}
+%A neuron in an \ac{ANN} can be considered as a function, which applies an \textit{activation function}, for example a \textit{sigmoid function} TODO insert function, to a weighted sum of input values.
+%The output of the neuron is a continuous value.
+%Multiple connected neurons build neural networks, for example \textit{feedforward networks}~\cite{maass_networks_1997}.
+% TODO add figures
+%A neuron of this type is shown in TODO FIGURE A. A simple feedforward network is shown in TODO FIGURE B.
+%Compared to a biological neuron, the electric signal is modeled as the input value.
+%The activation function corresponds to the membrane potential.
+%The output value, which serves as the input for the next neuron, is analogous to the axon and its synapses.
+\subsubsection{Neurons in traditional \acp{ANN}}
+A traditional artificial neuron, also known as a perceptron, is the fundamental computational unit in a \ac{ANN}.
+Each artificial neuron mimics basic biological mechanisms such as input integration and threshold activation.
+In a perceptron, input features \( x_1, x_2, \ldots, x_n \) (and a bias term) are received and weighted by coefficients \( w_1, w_2, \ldots, w_n \), aggregated, and transformed by an activation function to produce a numeric output.
+The activation function introduces non-linearity into the model, which is crucial for learning complex patterns; common activation functions include sigmoid, tanh, ReLU, and SoftMax.
+A single neuron is insufficient to solve complex tasks; therefore, multiple neurons are organized into layers to form a network, where each neuron processes part of the input and contributes to the overall output.
+Networks that include more than one hidden layer are referred to as deep neural networks and are particularly suited to capturing high-level data abstractions~\cite{taye_understanding_2023}.
+
+In feedforward neural networks, a special type of \acp{ANN}, information flows in one direction from input to output, without cycles, and such networks can be understood as compositions of multiple functions \( f^{(1)}, f^{(2)}, \ldots, f^{(n)} \) forming a computation graph.
+Each layer in a feedforward network consists of vector-valued computations, where each component can be viewed as a neuron-like unit that transforms its inputs into an output activation~\cite{goodfellow_deep_2016}.
+Goodfellow et. al. claim that the field of \acp{ANN} is nowadays driven by engineering and mathematical disciplines rather than neuroscientific disciplines.
+Although the original design of \acp{ANN} was inspired by the brain, modern \acp{ANN} primarily serve as statistical function approximators, optimized for generalization rather than for emulating biological processes~\cite{goodfellow_deep_2016}.
+
+\subsubsection{Spiking neurons}
+%%%% TODO rewrite section with more detail and mathematical background
+\acp{SNN} constitute a distinct class of artificial neural networks in which information is transmitted via sequences of discrete events known as spikes, contrasting the scalar activations found in \acp{ANN}.
+% TODO explain excitatory and inhibitatory effects
+A spiking neuron integrates incoming spikes over time and emits an output spike when its internal state crosses a defined threshold, a behavior which is modulated by excitatory and inhibitory synaptic inputs.
+Mathematically, the spike train of a neuron is represented as \( S(t) = \sum_f \delta(t - t_f) \), where \( \delta(\cdot) \) denotes the Dirac delta function and \( t_f \) are the firing times~\cite{ponulak2_introduction_2011}.
+The defining feature of SNNs is that information is encoded in the timing of spikes rather than in their shape, allowing them to more closely mimic biological neurons~\cite{ponulak2_introduction_2011, maass_networks_1997}.
+
+Spiking neuron models such as Integrate-and-Fire, Leaky Integrate-and-Fire, Izhikevich, and Hodgkin–Huxley vary in their level of biological realism and computational complexity~\cite{pietrzak_overview_2023}.
+The Integrate-and-Fire model abstracts the neuron as a system that integrates input until a threshold is reached, whereas the Leaky-Integrate-and-Fire model includes a leak term that causes the membrane potential to decay over time, making it a better fit for biological more realistic~\cite{pietrzak_overview_2023, nunes_spiking_2022}.
+The Izhikevich model increases biological plausibility by capturing a broader range of spiking behaviors while remaining computationally efficient.
+In contrast, the Hodgkin–Huxley model, derived from detailed experiments on squid axons, offers the highest fidelity to biological neurons but incurs significant computational cost~\cite{pietrzak_overview_2023}.
+Despite being abstractions, spiking neuron models more accurately reflect the temporal dynamics and event-driven communication observed in biological systems compared to \acp{ANN}.
+Typically, the neuron's membrane potential results from a weighted sum of excitatory and inhibitory postsynaptic potentials, with the neuron firing when this potential surpasses a predefined threshold~\cite{maass_networks_1997}.
+Maas formalized the \ac{SNN}:
+An \ac{SNN} consists of a finite set of spiking neurons \( V \), synaptic connections \( E \subseteq V \times V \), synaptic weights \( w_{u,v} \), response functions \( s_{u,v}(t) \), and threshold functions \( \Theta_v \) for each neuron \( v \in V \)~\cite{maass_networks_1997}.
+Overall, the spiking neuron model provides a time-sensitive, biologically inspired framework that supports event-driven computation, making it fundamentally different from traditional artificial neurons where neurons processed continuous values.
+However, the models (e.g., Integrate-and-Fire or Hodgkin-Huxley) differ regarding their biological plausibility, which leads to computationally differences.
+
+
+
+
+
+
+
+
+\subsection{Signal propagation and activation mechanisms}\label{Subsec:SignalPropagationAndActivationMechanisms}
+
+\subsection{Learning}
 
 \section{Main Part}\label{Sec:MainPart}
 
