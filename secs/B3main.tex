@@ -1,15 +1,14 @@
 \section{Architectural comparison of \acp{SNN} and \acp{ANN}}\label{Sec:ArchitecturalComparisonOfSNNsAndANNs}
-In this section, \acp{SNN} and traditional \acp{ANN} are compared regarding its fundamentals.
+In this section, \acp{SNN} and \acp{ANN} are compared regarding its fundamentals.
 This encompasses the underlying neural models and the associated signal propagation with their activation mechanisms.
 \subsection{Neural models}\label{Subsec:NeuralModels}
-\subsubsection{Biological neuron}
 \acp{SNN} and \acp{ANN} both are inspired by biological neurons.
 Fig.~\ref{fig:bioneuron} illustrates the basic anatomy of a biological neuron, which is composed of four principal components: \textit{dendrites}, \textit{soma}, \textit{axon}, and \textit{synapse}.  
 Dendrites function as the input interface of the neuron by converting chemical signals from neurotransmitters into electrical signals.  
 These signals are then integrated in the soma, the cell body, where the accumulation of membrane potentials determines whether an action potential is generated.  
 This outcome of this process, known as neural integration, decides whether the neuron will fire.  
-If the threshold is reached, the axon transmits the action potential to other neurons.  
-Synapses are the structural junctions that enable communication between neurons and are typically located on dendrites, facilitating the transformation and relay of signals within the network~\cite{yamazaki_spiking_2022, pietrzak_overview_2023}.  
+If the threshold is reached, the neuron emits a spike and the spike is transmitted via the axon to other neurons.  
+The synapses are the structural junctions that enable the communication between neurons and are typically located on dendrites, facilitating the transformation and relay of signals within the neural network~\cite{yamazaki_spiking_2022, pietrzak_overview_2023}.  
 \acp{SNN} and \acp{ANN} model this structure in similar ways.
 \begin{figure}
     \centering
@@ -27,49 +26,153 @@ Synapses are the structural junctions that enable communication between neurons 
 %Compared to a biological neuron, the electric signal is modeled as the input value.
 %The activation function corresponds to the membrane potential.
 %The output value, which serves as the input for the next neuron, is analogous to the axon and its synapses.
-\subsubsection{Neurons in traditional \acp{ANN}}
-A traditional artificial neuron, also known as a perceptron, is the fundamental computational unit in a \ac{ANN}.
-Each artificial neuron mimics basic biological mechanisms such as input integration and threshold activation.
-In a perceptron, input features \( x_1, x_2, \ldots, x_n \) (and a bias term) are received and weighted by coefficients \( w_1, w_2, \ldots, w_n \), aggregated, and transformed by an activation function to produce a numeric output.
-The activation function introduces non-linearity into the model, which is crucial for learning complex patterns; common activation functions include sigmoid, tanh, ReLU, and SoftMax.
+A neuron in an \ac{ANN}, also known as a perceptron, can be considered as a mathematical function.
+The function multiplies input features \( x_1, x_2, \ldots, x_n \) with weights \( w_1, w_2, \ldots, w_n \).
+The results are aggregated (with a bias term) and transformed by an activation function to produce a numeric output.
+The activation function introduces non-linearity into the model, which is crucial for learning complex patterns~\cite{taye_understanding_2023}.
+A neuron can be formalized as:
+\begin{equation}
+    \hat{y} = \sigma(w_0 + \sum_{i=1}^{n}w_ix_i)
+\end{equation}
+\(\hat{y}\) is the output of the neuron, \(\sigma\) is the activation function and \(w_0\) is the bias term.
+
 A single neuron is insufficient to solve complex tasks; therefore, multiple neurons are organized into layers to form a network, where each neuron processes part of the input and contributes to the overall output.
-Networks that include more than one hidden layer are referred to as deep neural networks and are particularly suited to capturing high-level data abstractions~\cite{taye_understanding_2023}.
+Networks typically consist of an input layer, hidden layers and an output layer.
+Networks with many hidden layers are referred to as deep neural networks and are particularly suited to capturing high-level data abstractions~\cite{taye_understanding_2023}.
+The term \textit{network} is derived from the structure of these computations.
+For example in feedforward neural networks, a special type of \acp{ANN}, information flows in one direction from input to output without any cycles.
+Such networks can be understood as compositions of multiple functions \( f^{(1)}, f^{(2)}, \ldots, f^{(n)} \) forming an acyclic graph~\cite[p.~164]{goodfellow_deep_2016}, which is similar to a network.
+Goodfellow et. al. claim that the field of \acp{ANN} is nowadays driven by engineering and mathematical disciplines rather than neuroscience.
+Although the original design of \acp{ANN} was inspired by the brain, modern \acp{ANN} primarily serve as statistical function approximators, optimized for generalization rather than for emulating biological processes~\cite[p.~165]{goodfellow_deep_2016}.
+Nevertheless, the components can be meaningfully compared.
+The input features correspond to the incoming electrical signals of a biological neuron.
+Aggregation and activation resemble the processes taking place within the soma.
+The numerical output represents the outgoing signal.
 
-In feedforward neural networks, a special type of \acp{ANN}, information flows in one direction from input to output, without cycles, and such networks can be understood as compositions of multiple functions \( f^{(1)}, f^{(2)}, \ldots, f^{(n)} \) forming a computation graph.
-Each layer in a feedforward network consists of vector-valued computations, where each component can be viewed as a neuron-like unit that transforms its inputs into an output activation~\cite{goodfellow_deep_2016}.
-Goodfellow et. al. claim that the field of \acp{ANN} is nowadays driven by engineering and mathematical disciplines rather than neuroscientific disciplines.
-Although the original design of \acp{ANN} was inspired by the brain, modern \acp{ANN} primarily serve as statistical function approximators, optimized for generalization rather than for emulating biological processes~\cite{goodfellow_deep_2016}.
-
-\subsubsection{Spiking neurons}
-%%%% TODO rewrite section with more detail and mathematical background
-\acp{SNN} constitute a distinct class of artificial neural networks in which information is transmitted via sequences of discrete events known as spikes, contrasting the scalar activations found in \acp{ANN}.
-% TODO explain excitatory and inhibitatory effects
+\acp{SNN}, as more plausible and realistic models of biological neurons, were introduced by Maass.
+They constitute a distinct class of artificial neural networks in which information is transmitted via sequences of discrete events known as spikes, in contrast to the numeric real-valued activations found in \acp{ANN}~\cite{maass_networks_1997}.
 A spiking neuron integrates incoming spikes over time and emits an output spike when its internal state crosses a defined threshold, a behavior which is modulated by excitatory and inhibitory synaptic inputs.
+% TODO refine whole section
+% TODO explain excitatory / incitatory
 Mathematically, the spike train of a neuron is represented as \( S(t) = \sum_f \delta(t - t_f) \), where \( \delta(\cdot) \) denotes the Dirac delta function and \( t_f \) are the firing times~\cite{ponulak2_introduction_2011}.
-The defining feature of SNNs is that information is encoded in the timing of spikes rather than in their shape, allowing them to more closely mimic biological neurons~\cite{ponulak2_introduction_2011, maass_networks_1997}.
+A difference between \acp{ANN} and \acp{SNN} is, that in \acp{SNN} information is encoded in the timing of spikes rather than in their shape, allowing them to more closely mimic biological neurons~\cite{ponulak2_introduction_2011, maass_networks_1997}.
 
+There are several \acp{SNN}, varying in biological realism and computational complexity.
+Pietrzak et. al. summarized the most common: 
 Spiking neuron models such as Integrate-and-Fire, Leaky Integrate-and-Fire, Izhikevich, and Hodgkin–Huxley vary in their level of biological realism and computational complexity~\cite{pietrzak_overview_2023}.
 The Integrate-and-Fire model abstracts the neuron as a system that integrates input until a threshold is reached, whereas the Leaky-Integrate-and-Fire model includes a leak term that causes the membrane potential to decay over time, making it a better fit for biological more realistic~\cite{pietrzak_overview_2023, nunes_spiking_2022}.
+% TODO add figure where we compare Integrate-and-Fire vs Leaky Integrate-and-Fire plots
 The Izhikevich model increases biological plausibility by capturing a broader range of spiking behaviors while remaining computationally efficient.
-In contrast, the Hodgkin–Huxley model, derived from detailed experiments on squid axons, offers the highest fidelity to biological neurons but incurs significant computational cost~\cite{pietrzak_overview_2023}.
+In contrast, the Hodgkin–Huxley model, derived from experiments on squid axons in the 1950s, offers the highest fidelity to biological neurons but incurs significant computational cost~\cite{pietrzak_overview_2023}.
 Despite being abstractions, spiking neuron models more accurately reflect the temporal dynamics and event-driven communication observed in biological systems compared to \acp{ANN}.
-Typically, the neuron's membrane potential results from a weighted sum of excitatory and inhibitory postsynaptic potentials, with the neuron firing when this potential surpasses a predefined threshold~\cite{maass_networks_1997}.
+
 Maas formalized the \ac{SNN}:
 An \ac{SNN} consists of a finite set of spiking neurons \( V \), synaptic connections \( E \subseteq V \times V \), synaptic weights \( w_{u,v} \), response functions \( s_{u,v}(t) \), and threshold functions \( \Theta_v \) for each neuron \( v \in V \)~\cite{maass_networks_1997}.
-Overall, the spiking neuron model provides a time-sensitive, biologically inspired framework that supports event-driven computation, making it fundamentally different from traditional artificial neurons where neurons processed continuous values.
-However, the models (e.g., Integrate-and-Fire or Hodgkin-Huxley) differ regarding their biological plausibility, which leads to computationally differences.
-
-
-
-
-
-
-
+Overall, the spiking neuron provides a time-sensitive, biologically inspired model that supports event-driven computation, making it different from \acp{ANN} where neurons processed continuous values.
+However, the spiking neuron models(e.g., Integrate-and-Fire or Hodgkin-Huxley) differ regarding their biological plausibility, which leads to computationally differences.
 
 \subsection{Signal propagation and activation mechanisms}\label{Subsec:SignalPropagationAndActivationMechanisms}
+This section explains and compares signal propagation (how information is transmitted through the network) and activation mechanisms (when a neuron fires).
+In \acp{ANN}, information is propagated as continuous real-valued signals.
+Each neuron receives an input vector and produces a single output value. 
+Neurons in the hidden or output layers take the outputs of other neurons as their inputs.
+In recurrent neural networks — a special class of neural networks — feedback connections are allowed, meaning that an output can be fed back into the same neuron as input~\cite[p.~164]{goodfellow_deep_2016}.
+
+The inputs to a neuron are multiplied by associated weights, summed, and then transformed by an activation function. 
+Common activation functions include the sigmoid, hyperbolic tangent (tanh), Rectified Linear Unit (ReLU), and SoftMax functions~\cite{taye_understanding_2023}. 
+For instance, ReLU is defined as \( \text{ReLU}(x) = \max(0, x) \)~\cite[p.~170f.]{goodfellow_deep_2016}.
+Consider a simple example: a neuron with two input features \( \mathbf{x} = (1, 1) \), weights \( \mathbf{w} = (-1, 1) \), a bias term \( w_0 = 1 \), and ReLU as activation function \( \sigma \).
+The neuron's output signal \( \hat{y} \) is computed as follows:
+\begin{equation}
+    \hat{y} = \text{ReLU}\left(1 + (-1 \cdot 1 + 1 \cdot 1)\right) 
+    = \max(0, 1) = 1.
+\end{equation}
+
+Signal propagation and activation are more complex in \acp{SNN}.
+At the core of \acp{SNN} lies the concept of \textit{spike trains}, which are sequences of discrete events~\cite{ponulak2_introduction_2011}.
+In the literature a spike train is often defined as follows:
+\begin{equation}
+    S(t) = \sum_f \delta(t - t_f).
+\end{equation}
+\( \delta(\cdot) \) denotes the Dirac delta function and \( t_f \) are the firing times with the labels \( f = 1, 2, ... \).
+% tODO cite gernster
+The Dirac delta function resembles a distribution with \( \delta(0) \neq 0\) for \( t = 0 \) with \(\int_{-\infty  }^{\infty}\delta(t)dt = 1\)~\cite{ponulak2_introduction_2011, Gerstner}.
+This indicates a spike exclusively at \( t = 0 \) and the signal being zero for \( t \neq 0\).
+% TODO  cite Spatio-Temporal Backpropagation for Training High-Performance Spiking Neural Networks  Yujie Wu 1
+Since the Dirac delta function is not differentiable ~\cite{tavanaei_deep_2019} and impossible to inject in applications ~\cite{Gerstner}, it is approximated in practice.
+Different functions are available to approximate the Dirac delta function, for example a gaussian function:
+\begin{equation}
+      h(u)=\frac{1}{\sqrt{2 \pi a}} e^{\frac{(u - V_{th})^2}{2a}} 
+\end{equation} 
+\(u(t)\) denotes the membrane potential at time \(t\), a coefficient \(a\) and a firing threshold \(V_{th}\)~\cite{Wu}.
+Fig.~\ref{fig:spiketrain} shows such an example spike train created with a gaussian function.
+\begin{figure}
+    \centering
+    \includesvg[scale=0.7, inkscapelatex=false]{figs/spike_train}
+    \caption[A spike train.]{A spike train. The spikes are modelled by a gaussian function. The spikes are emitted at time \( t=3,7,8 \).}
+    \label{fig:spiketrain}
+\end{figure}
+
+The information in \acp{SNN} is propagated by spike trains over time.
+Due to the temporal dependency, input signals have to be encoded as spikes to retain relations between data points~\cite{pietrzak_overview_2023}.
+Pietrzak et. al. outlined the two main encoding schemas:
+\begin{itemize}
+    \item Rate encoding
+    \item Temporal encoding
+\end{itemize}
+\textit{Rate encoding} represents information using the average number of spikes within a specific time interval.
+These spikes can either be distributed evenly across the time axis or follow a Poisson process, the latter being more biologically plausible.
+Rate encoding has been applied effectively in practical scenarios.
+Nevertheless, focusing solely on average firing rates is not ideal~\cite{pietrzak_overview_2023}.
+
+\textit{Temporal encoding} is based on timing of certain spikes rather than the firing rate over an interval.
+For this case, one-spike-per-neuron networks are often used. 
+This means, that the time delay of a spike encodes information sent by a neuron.
+Considering a pixel value of 55 in a range of 0 until 255 and a time interval of 512 milliseconds:
+the pixel value can be encoded as a spike emitted after \(\frac{(range-pixel)*{interval}}{range}=\frac{(256-55)*512}{256}=402\) milliseconds.
+Temporal encoding is very efficient~\cite{pietrzak_overview_2023} and is similar to biological processes~\cite{maass_networks_1997}.
+
+All spiking models have in common, that these spike trains are integrated similar to the processes inside the soma. 
+However, the activation mechanisms differ depending on the model.
+% TODO look up if this is really the IF model
+% TODO add IF to 
+Maass described the activation of a neuron \(v\), for the \ac{IF} as simplest model, as firing whenever the neuron potential \(P_v\) reaches a threshold \(\theta_v\).
+The potential is the sum of postsynaptic potentials from firing events of other neurons which are connected to this neuron.
+The contribution to the potential of a neuron \(v\) at time \(t\) of a firing event of a neuron \(u\) at time \(s\) can be modelled by a term \(w_{u,v}*\varepsilon_{u,v}(t-s)\).
+\(w_{u,v} >= 0\) denotes the weight between the neurons and \(\varepsilon_{u,v}\) denotes a response function~\cite{maass_networks_1997}.
+The weight is similar to the weights in \acp{ANN} describing the impact of a certain neuron \(u\) on neuron \(v\). 
+The response function models the impact of a spike event from neuron \(u\) at time \(s\) on neuron \(v\) at time \(t\).
+Due to the excitatory and inhibitory effects, the response function is either \(\varepsilon_{u,v}\ge0\) or \(\varepsilon_{u,v}\le0\).
+Fig.~\ref{fig:responsefunctions} shows two biological plausible shapes for response functions.
+\begin{figure}
+    \centering
+    \includesvg[scale=0.43, inkscapelatex=false]{figs/response_functions}
+    \caption[Inhibitory and excitatory response functions.]{Inhibitory and excitatory response functions.
+    The functions follow a spike at time \(s=20\).
+    The top plot shows an excitatory potential, which causes a brief increase in the postsynaptic membrane potential.
+    The bottom plot shows an inhibitory potential, leading to a temporary decrease in membrane potential. 
+    The figure is adapted from~\cite{maass_networks_1997}.}
+    \label{fig:responsefunctions}
+\end{figure}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 \subsection{Learning}
 
+\newpage
 \section{Main Part}\label{Sec:MainPart}
 
 \subsection{Testing some math}

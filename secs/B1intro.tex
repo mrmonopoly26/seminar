@@ -6,7 +6,7 @@ Each neuron computes a real-valued numeric value based on its weighted input val
 % TODO search for source
 The value is transformed by an activation function and then passed as output to the next layer.
 
-\Acp{SNN} offer an alternative paradigm to traditional \acp{ANN}.
+\Acp{SNN} offer an alternative paradigm to traditional \acp{ANN} (the short term \acp{ANN} is used for neural networks based on multi layer perceptrons in this work).
 In contrast to \acp{ANN}, \Acp{SNN} process discrete, time-dependent signals, referred to as \textit{spikes}.
 A neuron in an \Acp{SNN} does not respond to a single input but instead integrates multiple spikes over time~\cite{pietrzak_overview_2023}.
 Once the so-called \textit{membrane potential} exceeds a certain threshold, the neuron emits an outgoing spike.
@@ -25,7 +25,7 @@ This raises the question of whether \acp{GPU} can serve as an effective platform
 
 This paper investigates this question by focusing on three main aspects:
 \begin{enumerate}
-    \item What are the architectural differences between \acp{SNN} and traditional \acp{ANN}?
+    \item What are the architectural differences between \acp{SNN} and \acp{ANN}?
     \item Which methodologies can be used to train SNNs on \acp{GPU}?
     \item How do \acp{SNN} perform on \acp{GPU} compared to \acp{ANN}?
 \end{enumerate}
@@ -37,5 +37,5 @@ The paper is structured as follows:
 % TODO rewrite structure section with refs
 In the following section, the fundamentals of \acp{SNN} architecture will be presented and compared to \acp{ANN}, with a particular focus on neuron models, activation mechanisms, and signal propagation.
 Next, the paper will discuss methodologies for training and running \acp{SNN} on \acp{GPU}, including their advantages and limitations.
-After that, a comparison of \acp{SNN} and traditional \acp{ANN} will be conducted with a focus on performance aspects when executed on \acp{GPU}.
+After that, a comparison of \acp{SNN} and \acp{ANN} will be conducted with a focus on performance aspects when executed on \acp{GPU}.
 Finally, the paper will be summarized.
