@@ -1,6 +1,7 @@
 \section{Architectural comparison of \acp{SNN} and \acp{ANN}}\label{Sec:ArchitecturalComparisonOfSNNsAndANNs}
-In this section, \acp{SNN} and \acp{ANN} are compared regarding its fundamentals.
-This encompasses the underlying neural models and the associated signal propagation with their activation mechanisms.
+In this section, \acp{SNN} and \acp{ANN} are compared regarding their fundamental components.
+This encompasses the underlying neural models, the associated signal propagation and activation mechanisms and the learning strategies.
+
 \subsection{Neural models}\label{Subsec:NeuralModels}
 \acp{SNN} and \acp{ANN} both are inspired by biological neurons.
 Fig.~\ref{fig:bioneuron} illustrates the basic anatomy of a biological neuron, which is composed of four principal components: \textit{dendrites}, \textit{soma}, \textit{axon}, and \textit{synapse}.  
@@ -12,7 +13,7 @@ The synapses are the structural junctions that enable the communication between 
 \acp{SNN} and \acp{ANN} model this structure in similar ways.
 \begin{figure}
     \centering
-    \includesvg[inkscapelatex=false]{figs/bio_neuron}
+    \includesvg[inkscapelatex=false, width=0.45\textwidth]{figs/bio_neuron}
     \caption[The structure of a biological neuron.]{The structure of a biological neuron.
     Dendrites receive incoming signals and transmit them to the soma for integration.
     If triggered, an action potential travels along the axon to the synapses, where it is relayed to other neurons (figure inspired by ~\cite{yamazaki_spiking_2022}).}
@@ -32,7 +33,7 @@ The results are aggregated (with a bias term) and transformed by an activation f
 The activation function introduces non-linearity into the model, which is crucial for learning complex patterns~\cite{taye_understanding_2023}.
 A neuron can be formalized as:
 \begin{equation}
-    \hat{y} = \sigma(w_0 + \sum_{i=1}^{n}w_ix_i)
+    \hat{y} = \sigma(w_0 + \sum_{i=1}^{n}w_i*x_i)
 \end{equation}
 \(\hat{y}\) is the output of the neuron, \(\sigma\) is the activation function and \(w_0\) is the bias term.
 
@@ -69,7 +70,7 @@ Despite being abstractions, spiking neuron models more accurately reflect the te
 Maas formalized the \ac{SNN}:
 An \ac{SNN} consists of a finite set of spiking neurons \( V \), synaptic connections \( E \subseteq V \times V \), synaptic weights \( w_{u,v} \), response functions \( s_{u,v}(t) \), and threshold functions \( \Theta_v \) for each neuron \( v \in V \)~\cite{maass_networks_1997}.
 Overall, the spiking neuron provides a time-sensitive, biologically inspired model that supports event-driven computation, making it different from \acp{ANN} where neurons processed continuous values.
-However, the spiking neuron models(e.g., Integrate-and-Fire or Hodgkin-Huxley) differ regarding their biological plausibility, which leads to computationally differences.
+However, the spiking neuron models(e.g., Integrate-and-Fire or Hodgkin-Huxley) differ regarding their biological plausibility, which leads to computationally and complexity differences.
 
 \subsection{Signal propagation and activation mechanisms}\label{Subsec:SignalPropagationAndActivationMechanisms}
 This section explains and compares signal propagation (how information is transmitted through the network) and activation mechanisms (when a neuron fires).
@@ -84,7 +85,7 @@ For instance, ReLU is defined as \( \text{ReLU}(x) = \max(0, x) \)~\cite[p.~170f
 Consider a simple example: a neuron with two input features \( \mathbf{x} = (1, 1) \), weights \( \mathbf{w} = (-1, 1) \), a bias term \( w_0 = 1 \), and ReLU as activation function \( \sigma \).
 The neuron's output signal \( \hat{y} \) is computed as follows:
 \begin{equation}
-    \hat{y} = \text{ReLU}\left(1 + (-1 \cdot 1 + 1 \cdot 1)\right) 
+    \hat{y} = \text{ReLU}\left(1 + (-1*1 + 1*1)\right) 
     = \max(0, 1) = 1.
 \end{equation}
 
@@ -99,10 +100,10 @@ In the literature a spike train is often defined as follows:
 The Dirac delta function resembles a distribution with \( \delta(0) \neq 0\) for \( t = 0 \) with \(\int_{-\infty  }^{\infty}\delta(t)dt = 1\)~\cite{ponulak2_introduction_2011, Gerstner}.
 This indicates a spike exclusively at \( t = 0 \) and the signal being zero for \( t \neq 0\).
 % TODO  cite Spatio-Temporal Backpropagation for Training High-Performance Spiking Neural Networks  Yujie Wu 1
-Since the Dirac delta function is not differentiable ~\cite{tavanaei_deep_2019} and impossible to inject in applications ~\cite{Gerstner}, it is approximated in practice.
-Different functions are available to approximate the Dirac delta function, for example a gaussian function:
+Since the Dirac delta function is not differentiable ~\cite{tavanaei_deep_2019} and impossible to use in applications ~\cite{Gerstner}, it is approximated in practice.
+Different functions are used to approximate the Dirac delta function, for example gaussian functions:
 \begin{equation}
-      h(u)=\frac{1}{\sqrt{2 \pi a}} e^{\frac{(u - V_{th})^2}{2a}} 
+      h(u)=\frac{1}{\sqrt{2 \pi a}} e^{\frac{(u - V_{th})^2}{2a}}.
 \end{equation} 
 \(u(t)\) denotes the membrane potential at time \(t\), a coefficient \(a\) and a firing threshold \(V_{th}\)~\cite{Wu}.
 Fig.~\ref{fig:spiketrain} shows such an example spike train created with a gaussian function.
@@ -115,7 +116,7 @@ Fig.~\ref{fig:spiketrain} shows such an example spike train created with a gauss
 
 The information in \acp{SNN} is propagated by spike trains over time.
 Due to the temporal dependency, input signals have to be encoded as spikes to retain relations between data points~\cite{pietrzak_overview_2023}.
-Pietrzak et. al. outlined the two main encoding schemas:
+Pietrzak et. al. and Nunes et. al. outlined the two main encoding schemas:
 \begin{itemize}
     \item Rate encoding
     \item Temporal encoding
@@ -123,7 +124,7 @@ Pietrzak et. al. outlined the two main encoding schemas:
 \textit{Rate encoding} represents information using the average number of spikes within a specific time interval.
 These spikes can either be distributed evenly across the time axis or follow a Poisson process, the latter being more biologically plausible.
 Rate encoding has been applied effectively in practical scenarios.
-Nevertheless, focusing solely on average firing rates is not ideal~\cite{pietrzak_overview_2023}.
+Nevertheless, focusing solely on average firing rates is not ideal~\cite{pietrzak_overview_2023,nunes}.
 
 \textit{Temporal encoding} is based on timing of certain spikes rather than the firing rate over an interval.
 For this case, one-spike-per-neuron networks are often used. 
@@ -139,7 +140,7 @@ However, the activation mechanisms differ depending on the model.
 Maass described the activation of a neuron \(v\), for the \ac{IF} as simplest model, as firing whenever the neuron potential \(P_v\) reaches a threshold \(\theta_v\).
 The potential is the sum of postsynaptic potentials from firing events of other neurons which are connected to this neuron.
 The contribution to the potential of a neuron \(v\) at time \(t\) of a firing event of a neuron \(u\) at time \(s\) can be modelled by a term \(w_{u,v}*\varepsilon_{u,v}(t-s)\).
-\(w_{u,v} >= 0\) denotes the weight between the neurons and \(\varepsilon_{u,v}\) denotes a response function~\cite{maass_networks_1997}.
+The parameter \(w_{u,v} \ge 0\) denotes the weight between the neurons, \(\varepsilon_{u,v}\) denotes a response function~\cite{maass_networks_1997}.
 The weight is similar to the weights in \acp{ANN} describing the impact of a certain neuron \(u\) on neuron \(v\). 
 The response function models the impact of a spike event from neuron \(u\) at time \(s\) on neuron \(v\) at time \(t\).
 Due to the excitatory and inhibitory effects, the response function is either \(\varepsilon_{u,v}\ge0\) or \(\varepsilon_{u,v}\le0\).
@@ -150,27 +151,90 @@ Fig.~\ref{fig:responsefunctions} shows two biological plausible shapes for respo
     \caption[Inhibitory and excitatory response functions.]{Inhibitory and excitatory response functions.
     The functions follow a spike at time \(s=20\).
     The top plot shows an excitatory potential, which causes a brief increase in the postsynaptic membrane potential.
-    The bottom plot shows an inhibitory potential, leading to a temporary decrease in membrane potential. 
+    The bottom plot shows an inhibitory potential, leading to a decrease in membrane potential. 
     The figure is adapted from~\cite{maass_networks_1997}.}
     \label{fig:responsefunctions}
 \end{figure}
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 \subsection{Learning}
+In simple terms, learning refers to a change of the weights in the context of neural networks, which is reflected both in \acp{ANN} and in \acp{SNN}.
+
+Learning in \acp{ANN} is based on gradient descent algorithms~\cite{maass_networks_1997}.
+The goal is to reduce a loss function by iteratively tweaking the weights in a network~\cite{taye_understanding_2023}.
+To determine the loss, the network maps an input to an output in a forward pass.
+A desired output is then compared to the output of the network~\cite{esser_backpropagation_2015}.
+Using gradient descent, a weight parameter \(w\) can updated by the following rule (adapted from~\cite[p.83]{goodfellow_deep_2016}):
+\begin{equation}
+      w' = w - \epsilon\nabla_xf(x),
+\end{equation}
+where \(w'\) denotes the updated weight parameter, \(\epsilon\) is the learning rate and \(\nabla_xf(x)\) represents the gradient of \(f(x)\).
+In this context, the \textit{backpropagation} algorithm is commonly used.
+Goodfellow et. al. argue that backpropagation is often misunderstood, because it does not refer to the entire learning algorithm.
+Instead, it specifically describes the method for efficiently computing the gradient of a cost function.
+Learning algorithms, such as stochastic gradient descent, use the computed gradients to change the weights in a network~\cite[p.200ff.]{goodfellow_deep_2016}.
+
+%SNN learning P_learning_snn: 
+% explain different ideas: STDP, Backprop using surrogate gradients, ANN-SNN conversion -> explain unsupervised and supervised learning in short (see Tavanei, see Ponulak, see Nunes)
+% STDP: see Tavanei, see Ponulak, see Pietrzak, see Nunes
+% Backprop: see Tavanei, see Pietrzak, see Nunes, see Knight
+% ANN-SNN conversion: see Tavanei, see Pietrzak, see Nunes
+The learning approaches for \acp{SNN} can be categorized in one of the following~\cite{yamazaki_spiking_2022, pietrzak_overview_2023, nunes_spiking_2022}: 
+\begin{itemize}
+    \item \ac{ANN}-\ac{SNN} conversion
+    \item Backpropagation
+    \item \ac{STDP}.
+\end{itemize}
+
+\textit{\ac{ANN}-\ac{SNN} conversion} is an indirect learning approach, which means that learning does not take place in the target \ac{SNN}.
+The \ac{SNN} weights and other parameters are determined by training an \ac{ANN}.
+The main idea is to map analogous values of the activation functions of the \ac{ANN} to firing rates or the average postsynaptic potentials of the spiking neurons.
+The \ac{SNN} should achieve the same input-output mappings as the \ac{ANN}~\cite{pietrzak_overview_2023}.
+Pietrzak et. al. divide the specific methods in two groups: \textit{regular conversion} and \textit{constrain-then-train conversion}.
+For regular conversion an \ac{ANN} is trained once and can be converted into different \acp{SNN} with different parameters (neuron types, activation thresholds, etc.) afterwards.
+Constrain-then-train conversion aims to use the \ac{SNN} on specific hardware and set of parameters~\cite{pietrzak_overview_2023}.
+
+Esser et. al. demonstrate how a \textit{constrain-then-train} approach can be used to deploy a neural network on IBM's TrueNorth neuromorphic chip.  
+In this method, an \ac{ANN} is trained using backpropagation and gradient descent, using the same network topology as the target \ac{SNN}.   
+Inputs, neuron activations, and synaptic connection (the weights) in the training network are represented as continuous values in the range of \([0, 1]\).
+They are interpreted as probabilities of spike occurrence or synapse activation.  
+To convert the trained \ac{ANN} into the \ac{SNN}, the authors use a probabilistic sampling procedure in which each parameter is converted into a binary variable based on its probability.  
+Multiple independently sampled networks are combined into an ensemble to improve the accuracy~\cite{esser_backpropagation_2015}.
+
+\textit{\ac{STDP}} refers to a class of learning rules inspired by biological neurons, in which synaptic weights are adjusted directly based on the timing of spike events.  
+The core idea is that the synaptic weight connecting a pre- and postsynaptic neuron is modified according to the relative timing of their spikes~\cite{tavanaei_deep_2019}.  
+\ac{STDP} is grounded in Donald Hebb’s 1949 neurobiological findings, which is why it is often referred to as a form of \textit{Hebbian learning}~\cite{nunes_spiking_2022}.  
+It can be summarized as follows~\cite{ponulak2_introduction_2011, nunes_spiking_2022}:
+\begin{enumerate}
+    \item If a postsynaptic spike follows a presynaptic spike, the synaptic weight is strengthened (potentiation).
+    \item If a presynaptic spike follows a postsynaptic spike, the synaptic weight is weakened (depression).
+\end{enumerate}
+These rules are called \textit{Hebbian}.  
+Learning methods that reverse this temporal relationship—weakening the weight when the presynaptic spike precedes the postsynaptic one—are known as \textit{anti-Hebbian}~\cite{pietrzak_overview_2023}.  
+
+Various equations exist to model weight updates in STDP.  
+Nunes et al. propose the following form for Hebbian learning:
+
+\begin{equation}
+    \Delta w = \begin{cases}
+        A e^{-\frac{t_{pre} - t_{post}}{\tau}}, & t_{pre} - t_{post} \le 0 \\
+        B e^{-\frac{t_{pre} - t_{post}}{\tau}}, & t_{pre} - t_{post} > 0
+    \end{cases}.
+\end{equation}
+
+\(\Delta w\) represents the weight change, \(A\) and \(B\) are learning rate parameters, and \(\tau\) is a time constant defining a temporal learning window.  
+\(t_{pre}\) and \(t_{post}\) are point of times of the presynaptic and postsynaptic spikes.  
+The upper case of the equation corresponds to weight strengthening and the lower case corresponds to weight weakening~\cite{nunes_spiking_2022}.
+
+
+
+
+
+
+
+
+
+
 
 \newpage
 \section{Main Part}\label{Sec:MainPart}
