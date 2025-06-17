@@ -1,0 +1,25 @@
+\begin{tblr}{
+        colspec={X[2,l] X[5,l] X[5,l]}, % Wider, left-aligned, auto-wrapping columns
+        rowsep=2pt,
+        column{1} = {font=\bfseries}, % Bold left column
+    }
+    \toprule
+    & \textbf{\ac{SNN}} & \textbf{\ac{ANN}} \\
+    \midrule
+    \textbf{Neural model} &
+    \ac{IF}, \ac{LIF}, Hodgkin-Huxley, etc. &
+    Weighted sum with activation function \\
+    
+    \textbf{Encoding schema} &
+    Rate / Temporal encoding &
+    Real values \\
+    
+    \textbf{Signal propagation / activation} &
+    Spikes as signals; Spikes are emitted when the membrane potential exceeds threshold &
+    Real values as signals; Real values are transformed by non-linear activation functions \\
+    
+    \textbf{Learning paradigms} &
+    \ac{STDP}, Backpropagation / gradient-based, \ac{ANN}-\ac{SNN} conversion &
+    Backpropagation / gradient-based \\
+    \bottomrule
+\end{tblr}
