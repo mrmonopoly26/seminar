@@ -1,1 +1,6 @@
-Here is an abstract. 
+\acp{SNN} represent an alternative type of neural networks that model neuronal behavior more closely to biological systems by processing time-dependent, spike-based signals.
+In contrast, traditional \acp{ANN} operate on real-valued, continuous signals and follow a synchronous computation model.
+This paper compares the architectural principles of \acp{SNN} and \acp{ANN}, focusing on neuron models, encoding strategies, signal propagation and activation mechanisms and learning paradigms.
+It further investigates the suitability of \acp{GPU} for executing \acp{SNN}, despite their inherent mismatch with the event-driven and sparse activity of \acp{SNN}.
+Several optimization techniques and \ac{GPU}-based frameworks, such as Temporal Fusion, Brian2CUDA, and Norse are presented based on findings from the literature.
+The results suggest that while neuromorphic hardware remains the most suitable execution platform for \acp{SNN}, modern \acp{GPU} methodologies can serve as a viable alternative for both simulation and training.

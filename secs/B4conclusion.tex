@@ -1,1 +1,16 @@
 \section{Conclusion}\label{Sec:ConclusionAndFutureWork}
+
+This work compared the architecture of \acp{SNN} to traditional \acp{ANN} and investigated execution methodologies on \acp{GPU}.
+The first part focused on the architectural differences between both neural network types.
+\acp{SNN} use spike-based, time-dependent signals and are therefore more biologically plausible.
+Their neuron models, signal encoding and activation mechanisms differ fundamentally from the real-valued, synchronous processing of \acp{ANN}.
+
+These differences affect not only the network behavior but also the computational characteristics, especially with regard to hardware compatibility, which was examined in the second part.
+While \acp{GPU} are well-suited for dense and synchronous computations as used in \acp{ANN}, the asynchronous and sparse activity patterns in \acp{SNN} require alternative strategies.
+This work presented several approaches for addressing this mismatch.
+These include low-level \ac{GPU} optimizations such as Temporal Fusion as well as framework-based implementations like Brian2CUDA and Norse.
+Benchmarks from the literature showed significant speedups particularly for large-scale networks compared to execution on \acp{CPU}.
+
+Although neuromorphic hardware remains more suitable for \acp{SNN} in terms of energy efficiency, the findings indicate that \acp{GPU} can serve as a practical platform for their simulation and training.
+
+
