@@ -33,14 +33,7 @@ The synapses are the structural junctions that enable the communication between 
     If triggered, an action potential travels along the axon to the synapses, where it is relayed to other neurons (figure inspired by ~\cite{yamazaki_spiking_2022}).}
     \label{fig:bioneuron}
 \end{figure}
-%A neuron in an \ac{ANN} can be considered as a function, which applies an \textit{activation function}, for example a \textit{sigmoid function} TODO insert function, to a weighted sum of input values.
-%The output of the neuron is a continuous value.
-%Multiple connected neurons build neural networks, for example \textit{feedforward networks}~\cite{maass_networks_1997}.
-% TODO add figures
-%A neuron of this type is shown in TODO FIGURE A. A simple feedforward network is shown in TODO FIGURE B.
-%Compared to a biological neuron, the electric signal is modeled as the input value.
-%The activation function corresponds to the membrane potential.
-%The output value, which serves as the input for the next neuron, is analogous to the axon and its synapses.
+
 A neuron in an \ac{ANN} can be considered as a mathematical function.
 The function multiplies input features \( x_1, x_2, \ldots, x_n \) with corresponding weights \( w_1, w_2, \ldots, w_n \).
 The results are aggregated (with a bias term) and transformed by an activation function to produce a numeric output.
@@ -67,7 +60,7 @@ Aggregation and activation resemble the processes taking place within the soma.
 The numerical output represents the outgoing signal.
 
 \acp{SNN} as more plausible and realistic models of biological neurons, were introduced by Maass.
-They constitute a distinct class of artificial neural networks in which information is transmitted via sequences of discrete time-dependent events known as \textit{spikes} or \textit{spike trains} in contrast to the numeric real-valued activations found in \acp{ANN}~\cite{maass_networks_1997}.
+They constitute a distinct class of artificial neural networks in which information is transmitted via sequences of discrete time-dependent events known as \textit{spikes} or \textit{spike trains} in contrast to the numeric real-valued activations used in \acp{ANN}~\cite{maass_networks_1997}.
 This implies that in \acp{SNN} information is encoded in the timing of spikes rather than in their shape or intensity, allowing them to more closely mimic biological neurons~\cite{ponulak2_introduction_2011, maass_networks_1997}.
 In the literature a spike train is often defined as follows:
 \begin{equation}
@@ -85,23 +78,67 @@ Different functions are used for this approximation, for example gaussian functi
       \label{gaussianapprox}
 \end{equation}
 % TODO cite wu
-\(u(t)\) denotes the membrane potential at time \(t\), a coefficient \(a\) and a firing threshold \(V_{th}\)~\cite{Wu}.
+Here, \(u(t)\) denotes the membrane potential at time \(t\), a is a coefficient \(a\) and \(V_{th}\) is the firing threshold~\cite{Wu}.
 Fig.~\ref{fig:spiketrain} shows such an example spike train created with a gaussian function.
 \begin{figure}
     \centering
-    \includesvg[scale=0.7, inkscapelatex=false]{figs/spike_train}
-    \caption[A spike train.]{A spike train. The spikes are modelled by the gaussian function from Eq.~\ref{gaussianapprox} with coefficient \(a=0.1\). The spikes are emitted at time \( t=3,7,8 \).}
+    \includesvg[width=0.475\textwidth, inkscapelatex=false]{figs/spike_train}
+    \caption[A spike train.]{A spike train. The spikes are modeled by the gaussian function from Eq.~\ref{gaussianapprox} with coefficient \(a=0.1\). The spikes are emitted at time \( t=3,7,8 \).}
     \label{fig:spiketrain}
 \end{figure}
 
 There are several \ac{SNN} neuron models, varying in biological realism and computational complexity using spike trains as core components.
-Pietrzak et al. summarized the most common: 
-Spiking neuron models such as \ac{IF}, \ac{LIF}, Izhikevich, and Hodgkin–Huxley vary in their level of biological realism and computational complexity~\cite{pietrzak_overview_2023}.
-The \ac{IF} model abstracts the neuron as a system that integrates input until a threshold is reached, whereas the \ac{LIF} model includes a leak term that causes the membrane potential to decay over time, making it a better fit for biological more realistic~\cite{pietrzak_overview_2023, nunes_spiking_2022}.
+The \ac{IF} model is the most basic \ac{SNN} model.
+It abstracts the neuron as a system that integrates incoming spikes over time.
+If the membrane potential reaches the firing threshold, it emits spike ~\cite{pietrzak_overview_2023, nunes_spiking_2022}.
 % TODO add formulas for IF and LIF
-The Izhikevich model increases biological plausibility by capturing a broader range of spiking behaviors while remaining computationally efficient.
-In contrast, the Hodgkin–Huxley model, derived from experiments on squid axons in the 1950s, offers the highest fidelity to biological neurons but incurs significant computational cost~\cite{pietrzak_overview_2023}.
-Despite being abstractions, spiking neuron models reflect the characteristics of biological systems more accurately compared to those in \acp{ANN}.
+The \ac{IF} model can be described as first-order differential equation (following the convention of ~\cite{pietrzak_overview_2023}):
+\begin{equation}
+    C_m\frac{dV}{dt}=I(t).
+    \label{equ:if}
+\end{equation}
+\(C_m\) denotes to the membrane capacitance, \(\frac{dV}{dt}\) describes the rate of change of the membrane potential over time and \(I(t)\) is the integrated input current of other neurons at time \(t\).
+
+The \ac{LIF} model extends the \ac{IF} model by including a leak term that causes the membrane potential to decay over time.
+This makes the model biologically more realistic~\cite{pietrzak_overview_2023, nunes_spiking_2022}:
+\begin{equation}
+    C_m\frac{dV}{dt}=I(t)-g_L(V(t)-E_L).
+    \label{equ:lif}
+\end{equation}
+The only difference compared to Eq.~\ref{equ:if} is the leakage term \(-g_L(V(t)-E_L)\).
+Here, \(g_L\) is the leak conductance, \(V(t)\) is the current membrane potential and \(E_L\) is the resting potential~\cite{pietrzak_overview_2023}.
+The leakage term models a leakage of membrane potential over time.
+This means that the membrane potential is set back to a resting potential in the absence of incoming spikes.
+
+Suppose the following: 
+A neuron receives no input current \(V(t)=0\).
+Therefore Eq.~\ref{equ:lif} simplifies to \(C_m\frac{dV}{dt}=-g_L(V(t)-E_L)\):
+\begin{itemize}
+    \item If \(V(t) > E_L\), the leakage term is \(-g_L(V(t)-E_L) < 0\), which implies that \(V(t)\) decreases.
+    \item If \(V(t) = E_L\), the leakate term is \(-g_L(V(t)-E_L) = 0\), which implies no change of \(V(t)\).
+\end{itemize}
+An example for the change of the membrane potential of a \ac{LIF} neuron is plotted in Fig.~\ref{fig:membranepotentiallif}.
+Due to the simplicity and low computational costs compared to other neuron models, the \ac{LIF} model and its variants are widely used~\cite{yamazaki_spiking_2022}.
+
+\begin{figure} 
+    \centering
+    \includesvg[width=0.475\textwidth, inkscapelatex=false]{figs/membrane_potential_lif}
+    \caption[Membrane potential of a \ac{LIF} neuron]{Membrane potential of a \ac{LIF} neuron. The plot shows the change of the membrane potential in millivolt of an example \ac{LIF} neuron in interval of 1000 milliseconds.
+    The activation threshold is set to 20 millivolt and the resting potential is set to 0 millivolt.
+    The plot was created using the Brian simulator (Sec.~\ref{sec:brian}).
+    The code example is attached in the appendix.}
+    \label{fig:membranepotentiallif}
+\end{figure}
+
+A biologically more plausible model is the Izhikevich model.
+It captures a broader range of spiking behaviors (for example bursting or chattering) compared to the \ac{LIF} model, while remaining computationally efficient~\cite{pietrzak_overview_2023}.
+The most realistic neuron model is the Hodgkin-Huxley model.
+It has been developed due to findings from an experiment with a squid axon.
+Since it has been directly derived from biological processes, it has the highest fidelity of all neuron models.
+However, it is computational expensive, making it infeasible for large-scale simulations~\cite{pietrzak_overview_2023}.
+There are several other neuron models which differ in terms of complexity and biological plausibility. 
+Therefore, choosing an appropriate model for a specific application often leads to trade-off between these two criteria~\cite{yamazaki_spiking_2022}.
+
 
 \subsection{Signal propagation and activation mechanisms} \label{Subsec:SignalPropagationAndActivationMechanisms}
 This section explains and compares signal propagation and activation mechanisms.
@@ -113,14 +150,12 @@ Each neuron receives an input vector and produces a single output value.
 In Feed Forward Networks for example, neurons in the hidden or output layers take the outputs of other neurons in previous layers as their inputs~\cite[p.~164]{goodfellow_deep_2016}.
 The inputs are multiplied by associated weights, summed, and then transformed by an activation function according to Eq.~\ref{annneuronequation}. 
 Common activation functions include the sigmoid, tanh, \ac{ReLU} and SoftMax functions (especially for output layers)~\cite{taye_understanding_2023}. 
-% TODO rewrite section
+
 Signal propagation and activation are more complex in \acp{SNN}.
-% TODO fix the svg - maybe repaint in inkscape
-Fig.~\ref{fig:simplifiedactivation} shows a simplified example of a postsynaptic neuron emitting a spike.
-
-
 The information in \acp{SNN} is propagated by spike trains over time.
 Due to the temporal dependency, input signals have to be encoded as spikes to retain relations between data points~\cite{pietrzak_overview_2023}.
+Before explaining the signal propagation and activation mechanisms, encoding schemas are introduced.
+
 Pietrzak et al. and Nunes et al. outlined the two main encoding schemas:
 \begin{itemize}
     \item Rate encoding
@@ -138,36 +173,46 @@ Considering a pixel value of 55 in a range of 0 until 255 and a time interval of
 the pixel value can be encoded as a spike emitted after \(\frac{(range-pixel)*{interval}}{range}=\frac{(256-55)*512}{256}=402\) milliseconds.
 Temporal encoding is very efficient~\cite{pietrzak_overview_2023} and is similar to biological processes~\cite{maass_networks_1997}.
 
-All spiking models have in common, that these spike trains are integrated similar to the processes inside the soma. 
-However, the activation mechanisms differ depending on the model.
-% TODO look up if this is really the IF model
-% TODO add IF to 
-Maass described the activation of a neuron \(v\), for the \ac{IF} as simplest model, as firing whenever the neuron potential \(P_v\) reaches a threshold \(\theta_v\).
-The potential is the sum of postsynaptic potentials from firing events of other neurons which are connected to this neuron.
-The contribution to the potential of a neuron \(v\) at time \(t\) of a firing event of a neuron \(u\) at time \(s\) can be modelled by a term \(w_{u,v}*\varepsilon_{u,v}(t-s)\).
-The parameter \(w_{u,v} \ge 0\) denotes the weight between the neurons, \(\varepsilon_{u,v}\) denotes a response function~\cite{maass_networks_1997}.
-The weight is similar to the weights in \acp{ANN} describing the impact of a certain neuron \(u\) on neuron \(v\). 
-The response function models the impact of a spike event from neuron \(u\) at time \(s\) on neuron \(v\) at time \(t\).
-Due to the excitatory and inhibitory effects, the response function is either \(\varepsilon_{u,v}\ge0\) or \(\varepsilon_{u,v}\le0\).
-Fig.~\ref{fig:responsefunctions} shows two biological plausible shapes for response functions.
+All spiking models have in common, that the spike trains are integrated similar to the processes inside the soma. 
+Fig.~\ref{fig:simplifiedactivation} illustrates a simplified example of a postsynaptic neuron emitting spike as a result of the integration of incoming spikes sent by presynaptic neurons.
+In simple terms, \textit{presynaptic} neurons are the neurons which trigger the spikes.
+The \textit{postsynaptic} neurons are the receivers of the spikes. 
 
 \begin{figure}
     \centering
-    \includesvg[scale=0.43, inkscapelatex=false]{figs/response_functions}
+    \includesvg[width=0.475\textwidth, inkscapelatex=false]{figs/simplified_activation}
+    \caption[Simplified process of a postsynaptic emitting a spike]
+    {Simplified process of a postsynaptic neuron emitting a spike. The plot shows the change of the membrane potential of the postsynaptic neuron over time, which is influenced by spike events emitted by two presynaptic neurons.
+    When presynaptic neurons emit spikes, the membrane potential increases (excitatory synapse). 
+    If the membrane potential reaches a threshold, the postsynaptic neuron emits a spike.
+    After this, the membrane potential is set to a resting potential.
+    The integration and decaying processes are modeled by a linear function which is not biologically plausible.
+    More realistic models use response functions, for example Fig.~\ref{fig:responsefunctions}.
+    }
+   \label{fig:simplifiedactivation}
+\end{figure}
+
+Similar to the variety of neural models, there are several possible activation mechanisms.
+Maass described the activation of a neuron \(v\) for the \ac{IF} model as firing whenever the neuron's membrane potential \(P_v\) reaches a threshold \(\theta_v\).
+The membrane potential is the sum of postsynaptic potentials from firing events of other neurons which are connected to this neuron.
+The contribution to the potential of a neuron \(v\) at time \(t\) of a firing event of a neuron \(u\) at time \(s\) can be modeled by a term \(w_{u,v}*\varepsilon_{u,v}(t-s)\).
+The parameter \(w_{u,v} \ge 0\) denotes the weight between the neurons, \(\varepsilon_{u,v}\) denotes a response function~\cite{maass_networks_1997}.
+The weight is similar to the weights in \acp{ANN} describing the impact of a certain neuron \(u\) on neuron \(v\). 
+The response function models the impact of a spike event from neuron \(u\) at time \(s\) on neuron \(v\) at time \(t\).
+Depending on whether a synapse is excitatory (increasing the potential) or inhibitory (decreasing the potential), the response function is either \(\varepsilon_{u,v}\ge0\) or \(\varepsilon_{u,v}\le0\)~\cite{maass_networks_1997}.
+Fig.~\ref{fig:responsefunctions} illustrates two biological plausible shapes for these response functions.
+
+\begin{figure}
+    \centering
+    \includesvg[width=0.475\textwidth, inkscapelatex=false]{figs/response_functions}
     \caption[Inhibitory and excitatory response functions.]{Inhibitory and excitatory response functions.
     The functions follow a spike at time \(s=20\).
     The top plot shows an excitatory potential, which causes a brief increase in the postsynaptic membrane potential.
     The bottom plot shows an inhibitory potential, leading to a decrease in membrane potential. 
-    The figure is adapted from~\cite{maass_networks_1997}.}
+    The figure is adopted from~\cite{maass_networks_1997}.}
     \label{fig:responsefunctions}
 \end{figure}
-%\begin{figure}
-%    \centering
-%    \includesvg{figs/simplified_activation}
-%    \caption[Simplified process of a postsynaptic emitting a spike]
-%    {Simplified process of a postsynaptic emitting a spike.}
-%    \label{fig:simplifiedactivation}
-%\end{figure}
+
 
 \subsection{Learning}
 In simple terms, learning refers to weight changes in the context of neural networks, which is reflected both in \acp{ANN} and in \acp{SNN}.
@@ -245,7 +290,7 @@ Nunes et al. propose the following form for hebbian learning:
 The upper case of the equation corresponds to weight strengthening and the lower case corresponds to weight weakening~\cite{nunes_spiking_2022}.
 
 For example, Diehl and Cook successfully applied \ac{STDP} for unsupervised learning of the MNIST dataset.
-They use a two-layered network architecture with \ac{LIF} neuron models, rate encoding and four different \ac{STDP} weight update rules.
+They used a two-layered network architecture with \ac{LIF} neuron models, rate encoding and tested four different \ac{STDP} weight update rules.
 The network with the best accuracy (ca. 95\%) consists of an input layer with 28x28 neurons and 6400 excitatory and 6400 inhibitory neurons~\cite{diehl_unsupervised_2015}.
 
 In this section, \acp{SNN} and \acp{ANN} were compared in terms of their architectures and core functionalities.  
@@ -292,7 +337,7 @@ Fig.~\ref{fig:overheadreduction} presents the reduction of computational overhea
 
 \begin{figure}
     \centering
-    \includesvg[inkscapelatex=false, scale=0.8]{figs/temporal_fusion}
+    \includesvg[inkscapelatex=false, width=0.475\textwidth]{figs/temporal_fusion}
     \caption[Temporal Fusion method]
     {Temporal Fusion method by~\cite{li_towards_2024}.
     The figure illustrates two neurons in fused layers in a \ac{SNN}.
@@ -306,12 +351,12 @@ Fig.~\ref{fig:overheadreduction} presents the reduction of computational overhea
 This section presents methods for running and training of \acp{SNN} on \acp{GPU} coupled to a certain framework.
 The frameworks are categorized according to their primary focus: neuroscience or data science.  
 This distinction is based on the observations of Garcia-Vico and Herrera.  
-They note that most \ac{SNN} frameworks have traditionally been developed by neuroscientists interested in studying the behavior of biological neurons.  
+They note that most \ac{SNN} frameworks have traditionally been developed by neuroscientist interested in studying the behavior of biological neurons.  
 As a result, the majority of existing frameworks emphasize the simulation of \acp{SNN}.  
 In recent years, however, a growing demand for machine learning applications has led to the development of frameworks focusing on data science-related tasks~\cite{garcia-vico_preliminary_2021}.
 In the following, a framework of each category is investigated.
 
-\subsubsection{Brian: a neuroscience-focused framework}
+\subsubsection{Brian: a neuroscience-focused framework} \label{sec:brian}
 \textit{Brian/Brian2} is an open-source framework~\footnote{\url{https://briansimulator.org/}} for simulating \acp{SNN} with focus on neuroscience in Python.
 First introduced by Goodman and Brette in 2008~\cite{goodman_brette}, it has been constantly maintained and was rewritten in 2019~\cite{stimberg_brette_goodman}.
 At the core, Brian is equation based, which means, that neuron models are defined by writing their behavior as equations.
@@ -366,7 +411,7 @@ Atomic operations are CUDA operations which can be safely called by multiple thr
 This introduces some serialization but remains efficient due to a typically low number of spikes per timestep~\cite{alevi_brian2cuda_2022}.  
  
 Benchmarks demonstrate that Brian2CUDA outperforms Brian running on \ac{CPU} by up to three orders of magnitude for large-scale simulations.
-It also surpasses Brian2GeNN but only for for larger networks~\cite{alevi_brian2cuda_2022}. 
+It also surpasses Brian2GeNN but only for larger networks~\cite{alevi_brian2cuda_2022}. 
 
 \subsubsection{Norse: a data science-focused framework}
 \textit{Norse}\footnote{\url{https://norse.github.io/norse/}} is an open-source framework developed by Pehle and Pedersen~\cite{norse2021}, designed to facilitate machine learning tasks using \acp{SNN}~\cite{manna_frameworks_2023}.  

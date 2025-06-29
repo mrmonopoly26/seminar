@@ -1,4 +1,12 @@
- \def\svgwidth{\textwidth}%
-\includesvg[inkscapelatex=false, width=0.45\textwidth]{figs/bio_neuron}
- \centering
- \label{fig:teaser}
+\def\svgwidth{\textwidth}%
+\begin{subfigure}[b]{0.5\textwidth}
+  \centering
+  \includesvg[inkscapelatex=false, width=\textwidth]{figs/bio_neuron}
+  \caption[Biological neuron]{Biological neuron.}
+\end{subfigure}
+\hfill
+\begin{subfigure}[b]{0.5\textwidth}
+  \centering
+  \includesvg[inkscapelatex=false, width=\textwidth]{figs/membrane_potential_lif}
+  \caption[Membrane potential of a spiking neuron]{Membrane potential of a spiking neuron.}
+\end{subfigure}
