@@ -6,12 +6,12 @@ Each neuron computes a real-valued numeric value based on its weighted input val
 The value is transformed by an activation function and then passed as output to the next layer.
 
 \Acp{SNN} offer an alternative paradigm to traditional \acp{ANN} (the short term \acp{ANN} is used for neural networks based on multi layer perceptrons in this work).
-In contrast to \acp{ANN}, \Acp{SNN} process discrete, time-dependent signals, referred to as \textit{spikes}.
-A neuron in an \Acp{SNN} does not respond to a single input but instead integrates multiple spikes over time~\cite{pietrzak_overview_2023}.
+In contrast to \acp{ANN}, \acp{SNN} process discrete, time-dependent signals, referred to as \textit{spikes}.
+A neuron in a \ac{SNN} does not respond to a single input but instead integrates multiple spikes over time~\cite{pietrzak_overview_2023}.
 Once the so-called \textit{membrane potential} exceeds a certain threshold, the neuron emits an outgoing spike.
 This mechanisms mimics the behavior of the brain in a more biologically plausible way compared to the perceptron model~\cite{maass_networks_1997}.
 As a result, \acp{SNN} become event-driven: information is only transmitted when spikes are emitted.
-This leads to asynchronous computations, unlike synchronous computations in \acp{ANN}~\cite{pietrzak_overview_2023}.
+This leads to asynchronous computations, unlike the synchronous computations in \acp{ANN}~\cite{pietrzak_overview_2023}.
 
 Beside more plausibility from the biological point of view, \acp{SNN} are considered potentially more energy-efficient than \acp{ANN}~\cite{pietrzak_overview_2023}.
 However, their practical adoption remains limited.
@@ -19,21 +19,19 @@ One major reason is that their computational model aligns best with neuromorphic
 Unfortunately, such hardware is not yet widely available~\cite{li_towards_2024}.
 
 In contrast, \acp{GPU} are widespread and there are a several optimizations for \acp{ANN} running on \acp{GPU} (e.g., ~\cite{alevi_brian2cuda_2022, vieth_accelerating_2024}).
-However, the asynchronous and event-driven nature of \acp{SNN} is fundamentally different from the dense, synchronous computation pattern \acp{GPU} are designed for.
-This raises the question of whether \acp{GPU} can serve as an effective platform for training and executing \acp{SNN} — despite this mismatch.
+However, the asynchronous and event-driven nature of \acp{SNN} is fundamentally different from the synchronous computation pattern \acp{GPU} are designed for.
+This raises the question of whether \acp{GPU} can serve as an effective platform for training and executing \acp{SNN}.
 
-This paper investigates this question by focusing on three main aspects:
+This paper investigates this question by focusing on two main aspects:
 \begin{enumerate}
-    \item What are the architectural differences between \acp{SNN} and \acp{ANN}?
-    \item Which methodologies can be used to train SNNs on \acp{GPU}?
+    \item Which are the core differences between \acp{SNN} and \acp{ANN}?
+    \item Which methodologies and frameworks can be used to train and run SNNs on \acp{GPU}?
 \end{enumerate}
 
 The paper is based on a literature review.
-The main focus is set on papers which contain information about running \acp{SNN} on \acp{GPU} and corresponding frameworks like Brian or PymoNNtorch.
+The main focus is set on papers which compare \acp{SNN} and \acp{ANN} and papers which contain information about running \acp{SNN} on \acp{GPU}.
 
 The paper is structured as follows:
-% TODO rewrite structure section with refs
-In the following section, the fundamentals of \acp{SNN} architecture will be presented and compared to \acp{ANN}, with a particular focus on neuron models, activation mechanisms, and signal propagation.
-Next, the paper will discuss methodologies for training and running \acp{SNN} on \acp{GPU}, including their advantages and limitations.
-After that, a comparison of \acp{SNN} and \acp{ANN} will be conducted with a focus on performance aspects when executed on \acp{GPU}.
-Finally, the paper will be summarized.
+Sec.~\ref{Sec:SNNsVsANNs} compares the core components of \acp{SNN} to those of \acp{ANN}, with a particular focus on neuron models, activation mechanisms and signal propagation, encoding and learning rules.
+Sec.~\ref{Sec:SNNsOnGPUs} will discuss methodologies and frameworks for training and running \acp{SNN} on \acp{GPU}.
+Finally in Sec.~\ref{sec:Conclusion}, the paper will be summarized.

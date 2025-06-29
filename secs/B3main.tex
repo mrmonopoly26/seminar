@@ -12,7 +12,7 @@
 \end{table*}
 
 
-\section{Architectural comparison of \acp{SNN} and \acp{ANN}}\label{Sec:ArchitecturalComparisonOfSNNsAndANNs}
+\section{Architectural comparison of \acp{SNN} and \acp{ANN}} \label{Sec:SNNsVsANNs}
 In this section, \acp{SNN} and \acp{ANN} are compared regarding their core components.
 This encompasses the underlying neural models, the associated signal propagation and activation mechanisms and the learning strategies.
 
@@ -77,7 +77,6 @@ Different functions are used for this approximation, for example gaussian functi
       h(u)=\frac{1}{\sqrt{2 \pi a}} e^{\frac{(u - V_{th})^2}{2a}}.
       \label{gaussianapprox}
 \end{equation}
-% TODO cite wu
 Here, \(u(t)\) denotes the membrane potential at time \(t\), a is a coefficient \(a\) and \(V_{th}\) is the firing threshold~\cite{Wu}.
 Fig.~\ref{fig:spiketrain} shows such an example spike train created with a gaussian function.
 \begin{figure}
@@ -91,7 +90,7 @@ There are several \ac{SNN} neuron models, varying in biological realism and comp
 The \ac{IF} model is the most basic \ac{SNN} model.
 It abstracts the neuron as a system that integrates incoming spikes over time.
 If the membrane potential reaches the firing threshold, it emits spike ~\cite{pietrzak_overview_2023, nunes_spiking_2022}.
-% TODO add formulas for IF and LIF
+
 The \ac{IF} model can be described as first-order differential equation (following the convention of ~\cite{pietrzak_overview_2023}):
 \begin{equation}
     C_m\frac{dV}{dt}=I(t).
@@ -125,20 +124,20 @@ Due to the simplicity and low computational costs compared to other neuron model
     \includesvg[width=0.475\textwidth, inkscapelatex=false]{figs/membrane_potential_lif}
     \caption[Membrane potential of a \ac{LIF} neuron]{Membrane potential of a \ac{LIF} neuron. The plot shows the change of the membrane potential in millivolt of an example \ac{LIF} neuron in interval of 1000 milliseconds.
     The activation threshold is set to 20 millivolt and the resting potential is set to 0 millivolt.
+    After the neuron spikes, it is set into a refractory period, where it cannot spike again.
     The plot was created using the Brian simulator (Sec.~\ref{sec:brian}).
-    The code example is attached in the appendix.}
+    The code example is attached in the appendix ~\ref{appendix:brian}.}
     \label{fig:membranepotentiallif}
 \end{figure}
 
 A biologically more plausible model is the Izhikevich model.
 It captures a broader range of spiking behaviors (for example bursting or chattering) compared to the \ac{LIF} model, while remaining computationally efficient~\cite{pietrzak_overview_2023}.
-The most realistic neuron model is the Hodgkin-Huxley model.
+The neuron model with highest degree of realism is the Hodgkin-Huxley model.
 It has been developed due to findings from an experiment with a squid axon.
 Since it has been directly derived from biological processes, it has the highest fidelity of all neuron models.
 However, it is computational expensive, making it infeasible for large-scale simulations~\cite{pietrzak_overview_2023}.
 There are several other neuron models which differ in terms of complexity and biological plausibility. 
-Therefore, choosing an appropriate model for a specific application often leads to trade-off between these two criteria~\cite{yamazaki_spiking_2022}.
-
+Therefore, choosing an appropriate model for a specific application often leads to a trade-off between these two criteria~\cite{yamazaki_spiking_2022}.
 
 \subsection{Signal propagation and activation mechanisms} \label{Subsec:SignalPropagationAndActivationMechanisms}
 This section explains and compares signal propagation and activation mechanisms.
@@ -181,18 +180,17 @@ The \textit{postsynaptic} neurons are the receivers of the spikes.
 \begin{figure}
     \centering
     \includesvg[width=0.475\textwidth, inkscapelatex=false]{figs/simplified_activation}
-    \caption[Simplified process of a postsynaptic emitting a spike]
-    {Simplified process of a postsynaptic neuron emitting a spike. The plot shows the change of the membrane potential of the postsynaptic neuron over time, which is influenced by spike events emitted by two presynaptic neurons.
+    \caption[Simplified process of a postsynaptic \ac{LIF} emitting a spike]
+    {Simplified process of a postsynaptic \ac{LIF} neuron emitting a spike. The plot shows the change of the membrane potential of the postsynaptic neuron over time, which is influenced by spike events emitted by two presynaptic neurons.
     When presynaptic neurons emit spikes, the membrane potential increases (excitatory synapse). 
     If the membrane potential reaches a threshold, the postsynaptic neuron emits a spike.
-    After this, the membrane potential is set to a resting potential.
-    The integration and decaying processes are modeled by a linear function which is not biologically plausible.
+    The integration (and decaying) processes are modeled by a linear function which is not biologically plausible.
     More realistic models use response functions, for example Fig.~\ref{fig:responsefunctions}.
     }
    \label{fig:simplifiedactivation}
 \end{figure}
 
-Similar to the variety of neural models, there are several possible activation mechanisms.
+Similar to neural models, activation and signal propagation varies in detail.
 Maass described the activation of a neuron \(v\) for the \ac{IF} model as firing whenever the neuron's membrane potential \(P_v\) reaches a threshold \(\theta_v\).
 The membrane potential is the sum of postsynaptic potentials from firing events of other neurons which are connected to this neuron.
 The contribution to the potential of a neuron \(v\) at time \(t\) of a firing event of a neuron \(u\) at time \(s\) can be modeled by a term \(w_{u,v}*\varepsilon_{u,v}(t-s)\).
@@ -201,6 +199,22 @@ The weight is similar to the weights in \acp{ANN} describing the impact of a cer
 The response function models the impact of a spike event from neuron \(u\) at time \(s\) on neuron \(v\) at time \(t\).
 Depending on whether a synapse is excitatory (increasing the potential) or inhibitory (decreasing the potential), the response function is either \(\varepsilon_{u,v}\ge0\) or \(\varepsilon_{u,v}\le0\)~\cite{maass_networks_1997}.
 Fig.~\ref{fig:responsefunctions} illustrates two biological plausible shapes for these response functions.
+
+A neuron emits a spike, whenever its membrane potential reaches a threshold.
+The activation can be formalized by the following equation (adopted from ~\cite{nunes_spiking_2022}):
+\begin{equation}
+    A(t)= \begin{cases}
+        0, & V(t) <  V_{threshold} \\
+        1, & V(t) \ge  V_{threshold}
+    \end{cases}.
+\end{equation}
+
+When a neuron emits a spike, it enters a refractory period during which it is temporarily unable to fire again, even if the membrane potential reaches the threshold.
+This behavior is similar to biological processes~\cite{maass_networks_1997, nunes_spiking_2022}.
+To model this mechanism in spiking neural models, a dynamic threshold function is used instead of a fixed threshold.
+After a spike, the function increases the threshold value to prevent subsequent spikes for a short duration.
+The threshold then returns to its baseline level after the refractory period~\cite{maass_networks_1997}.
+
 
 \begin{figure}
     \centering
@@ -221,7 +235,7 @@ Learning in \acp{ANN} is based on gradient descent algorithms~\cite{maass_networ
 The goal is to reduce a loss function by iteratively tweaking the weights in a network~\cite{taye_understanding_2023}.
 To determine the loss, the network maps an input to an output in a forward pass.
 A desired output is then compared to the output of the network~\cite{esser_backpropagation_2015}.
-Using gradient descent, a weight parameter \(w\) can be updated by the following rule (adapted from~\cite[p.83]{goodfellow_deep_2016}):
+Using gradient descent, a weight parameter \(w\) can be updated by the following rule (adopted from~\cite[p.83]{goodfellow_deep_2016}):
 \begin{equation}
       w' = w - \epsilon\nabla_xf(x),
 \end{equation}
@@ -267,7 +281,7 @@ However, the method is limited to small learning rates, as the approximation err
 
 
 \textit{\ac{STDP}} refers to a class of learning rules inspired by biological neurons, in which synaptic weights are adjusted based on the timing of spike events.  
-The core idea is that the synaptic weight connecting a pre- and postsynaptic neuron is modified according to the relative timing of their spikes~\cite{tavanaei_deep_2019}.  
+The core idea is, that the synaptic weight connecting a pre- and postsynaptic neuron is modified according to the relative timing of their spikes~\cite{tavanaei_deep_2019}.  
 \ac{STDP} is grounded in Donald Hebb’s 1949 neurobiological findings, which is why it is often referred to as a form of \textit{hebbian learning}~\cite{nunes_spiking_2022}.  
 It can be summarized as follows~\cite{ponulak2_introduction_2011, nunes_spiking_2022}:
 \begin{enumerate}
@@ -298,11 +312,10 @@ In this section, \acp{SNN} and \acp{ANN} were compared in terms of their archite
 However, this increased biological realism comes with higher complexity.  
 The key differences between \acp{SNN} and \acp{ANN} are summarized in Tab.~\ref{tab:archcomparison}.
 
-\section{\acp{SNN} on \acp{GPU}}
-
+\section{\acp{SNN} on \acp{GPU}} \label{Sec:SNNsOnGPUs}
 One major advantage of \acp{SNN} is their power efficiency when running on neuromorphic chips~\cite{tavanaei_deep_2019, Qu, pietrzak_overview_2023}.  
 Neuromorphic chips use spikes to perform event-based computations that are aligned with the architecture of \acp{SNN}, consuming energy only when necessary~\cite{esser_backpropagation_2015}.  
-For instance, Tang et al. demonstrated in the context of the \textit{simultaneous localization and mapping} problem (crucial task in robotics) that a \ac{SNN} running on Intel's neuromorphic Loihi chip achieved up to 100 times greater power efficiency than the widely used GMapping algorithm executed on a \ac{CPU}~\cite{Tang}.  
+For instance, Tang et al. demonstrated in the context of the \textit{simultaneous localization and mapping} problem (crucial task in robotics), that a \ac{SNN} running on Intel's neuromorphic Loihi chip achieved up to 100 times greater power efficiency than the widely used GMapping algorithm executed on a \ac{CPU}~\cite{Tang}.  
 
 Despite these benefits, neuromorphic chips remain rare and not widely accessible~\cite{Qu}.  
 This circumstance emphasizes the importance of developing efficient \ac{SNN} implementations on conventional hardware.  
@@ -315,8 +328,8 @@ The further section is divided into two subcategories in which \ac{GPU} optimiza
 \end{itemize}
 
 \subsection{Low-level optimizations for \ac{GPU} usage}
-\textit{Low-level optimizations} refer to optimizations that exploit either the architecture of the \ac{GPU} or the structure of a \ac{SNN}, which leads to performance improvements or tackling hurdles independently from certain frameworks.
-There are several examples in the literature, e.g. ~\cite{nageswaran_efficient_2009},~\cite{knight_efficient_2022}. 
+\textit{Low-level optimizations} refer to optimizations that exploit either the architecture of the \ac{GPU} or the structure of \acp{SNN}, which leads to performance improvements or tackling hurdles independently from certain frameworks.
+There are several examples in the literature, e.g., ~\cite{nageswaran_efficient_2009},~\cite{knight_efficient_2022}. 
 This work focuses on the \textit{Temporal Fusion} method proposed by Li et al., which is a recent approach for optimizing the performance of \ac{LIF} neurons on single and multiple \acp{GPU}.
 The authors base their method on the following iterative update rule for the \ac{LIF} neuron model:
 \begin{equation}
@@ -332,15 +345,13 @@ In practice, each neuron's computations are mapped to individual \ac{GPU} thread
 This method can be applied to single and multiple \acp{GPU} environments.
 The authors show performance improvements (using CUDA and temporal fusion) up to 40 times regarding inference speed compared to snnTorch (a PyTorch-based \ac{SNN} framework) and 1.54 times compared to serial execution using CUDA without temporal fusion~\cite{li_towards_2024}.
 Fig.~\ref{fig:temporalfusion} illustrates the Temporal Fusion approach.
-% TODO paint overhead
-Fig.~\ref{fig:overheadreduction} presents the reduction of computational overhead.
 
 \begin{figure}
     \centering
     \includesvg[inkscapelatex=false, width=0.475\textwidth]{figs/temporal_fusion}
     \caption[Temporal Fusion method]
     {Temporal Fusion method by~\cite{li_towards_2024}.
-    The figure illustrates two neurons in fused layers in a \ac{SNN}.
+    The figure illustrates two neuron groups in fused layers in a \ac{SNN}.
      The horizontal axis depicts the time axis. 
      The membrane voltage \(v_i^{(t)}\) only depends on its previous state \((t-1)\), which allows parallelization across different neurons and layers.} 
     \label{fig:temporalfusion}
@@ -359,11 +370,11 @@ In the following, a framework of each category is investigated.
 \subsubsection{Brian: a neuroscience-focused framework} \label{sec:brian}
 \textit{Brian/Brian2} is an open-source framework~\footnote{\url{https://briansimulator.org/}} for simulating \acp{SNN} with focus on neuroscience in Python.
 First introduced by Goodman and Brette in 2008~\cite{goodman_brette}, it has been constantly maintained and was rewritten in 2019~\cite{stimberg_brette_goodman}.
-At the core, Brian is equation based, which means, that neuron models are defined by writing their behavior as equations.
+At the core, Brian is equation-based, which means that neuron models are defined by writing their behavior as equations.
 Brian focuses on flexibility regarding different synapses and neuron models making it highly suitable for neuroscientific experiments.
 Although Brian's implementation was guided by efficiency on \ac{CPU}~\cite{stimberg_brette_goodman}, there are certain optimizations especially for \ac{GPU} usage.
 This work explains Brian2GeNN~\cite{stimberg_brian2genn_2020} and on Brian2CUDA~\cite{alevi_brian2cuda_2022} more detailed, which are recent approaches for optimizing Brian's capabilities on \ac{GPU}.
-% TODO: Code~\ref{code:brian} shows an example Brian script.
+A code example for a simulation with Brian is attached in the appendix~\ref{appendix:brian}.
 
 \textit{Brian2GeNN} by Stimberg et al. connects the modeling capabilities of the Python-based Brian simulator with the GeNN framework, enabling \ac{GPU} acceleration without requiring users to write C++ or deeply understand \ac{GPU} architectures. 
 GeNN is hereby a meta-compiler for generating C++ code for running \acp{SNN} on \acp{GPU}.
@@ -379,7 +390,6 @@ Initialization, code generation steps and the main simulation loop are executed 
 The core simulation is delegated to \ac{GPU}, where the generated code is executed.
 After a simulation step, the data is copied back to the \ac{CPU} and converted.
 This enables using Brian's monitoring capabilities~\cite{stimberg_brian2genn_2020}. 
-The pipeline is illustrated in Fig.TODO.
 
 The authors benchmarked two networks with different neuron models.
 For instance, a model with Hodgkin-Huxley neurons was tested, which reached speedups up to 26 times for over one million neurons using Tesla V100 compared to \ac{CPU} environment with 24 threads.
@@ -417,7 +427,7 @@ It also surpasses Brian2GeNN but only for larger networks~\cite{alevi_brian2cuda
 \textit{Norse}\footnote{\url{https://norse.github.io/norse/}} is an open-source framework developed by Pehle and Pedersen~\cite{norse2021}, designed to facilitate machine learning tasks using \acp{SNN}~\cite{manna_frameworks_2023}.  
 This is contrary to  traditional simulators such as Brian, which are optimized for neuroscientific modeling,
 The framework is built on top of PyTorch, inheriting its native support for \ac{GPU} acceleration~\cite{manna_frameworks_2023, garcia-vico_preliminary_2021}.  
-Users can activate CUDA support by adding \textit{.to('cuda')} to declared PyTorch models~\cite{norse2021}, which simplifies \ac{GPU} usage.
+Users can activate CUDA support by adding \textit{.to('cuda')} to defined PyTorch models~\cite{norse2021}, which simplifies the \ac{GPU} usage.
 Supervised learning in Norse is implemented via the SuperSpike algorithm~\cite{manna_frameworks_2023, garcia-vico_preliminary_2021}
 This is a surrogate gradient method that enables gradient-based learning in \acp{SNN}~\cite{zenke_superspike_2018}.  
 In addition to SuperSpike, Manna et al. mention support for \ac{STDP} ~\cite{manna_frameworks_2023}.

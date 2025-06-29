@@ -1,31 +1,83 @@
-\begin{lstlisting}[language=Python,label="CodeRef",caption={[Some Code]Here is a longer description}]
-import numpy as np
-        
-def incmatrix(genl1,genl2):
-    m = len(genl1)
-    n = len(genl2)
-    M = None #to become the incidence matrix
-    VT = np.zeros((n*m,1), int)  #dummy variable
-        
-    #compute the bitwise xor matrix
-    M1 = bitxormatrix(genl1)
-    M2 = np.triu(bitxormatrix(genl2),1) 
-    
-    for i in range(m-1):
-        for j in range(i+1, m):
-            [r,c] = np.where(M2 == M1[i,j])
-            for k in range(len(r)):
-                VT[(i)*n + r[k]] = 1;
-                VT[(i)*n + c[k]] = 1;
-                VT[(j)*n + r[k]] = 1;
-                VT[(j)*n + c[k]] = 1;
-                    
-                if M is None:
-                    M = np.copy(VT)
-                else:
-                    M = np.concatenate((M, VT), 1)
-                
-                VT = np.zeros((n*m,1), int)
-        
-    return M
+\begin{lstlisting}[
+language=Python,
+caption={Simulation of a spiking neuron group using Brian2.},
+label={lst:brian_neuron_sim},
+basicstyle=\ttfamily\footnotesize,
+breaklines=true,
+breakatwhitespace=false,
+columns=fullflexible,
+frame=single,
+captionpos=b,
+numbers=left,
+numberstyle=\tiny\color{gray},
+keywordstyle=\color{blue},
+commentstyle=\color{gray},
+stringstyle=\color{orange},
+showstringspaces=false
+]
+from brian2 import *
+
+# Simulation duration
+duration = 1*second
+
+# Input: Poisson spike train with constant firing rate
+rate_input = 100*Hz
+
+# Leaky Integrate-and-Fire (LIF) neuron parameters
+tau = 10*ms              # Membrane time constant
+u_rest = 0*mV            # Resting potential
+u_reset = u_rest         # Reset potential after spike
+u_threshold = 20*mV      # Spike threshold
+
+# Neuron model equation
+eqs = '''
+du/dt = (u_rest - u) / tau : volt (unless refractory)
+'''
+
+# Create a group of N neurons
+N = 10
+neurons = NeuronGroup(
+    N, model=eqs,
+    threshold='u > u_threshold',
+    reset='u = u_reset',
+    refractory=100*ms,
+    method='exact'
+)
+
+# Initialize membrane potentials randomly
+neurons.u = 'u_rest + rand() * (u_threshold - u_rest)'
+
+# Poisson input group for rate encoding
+input_group = PoissonGroup(N, rates=rate_input)
+
+# Synaptic connections: one-to-one, with fixed PSP
+synapses = Synapses(input_group, neurons, on_pre='u += 10*mV')
+synapses.connect(j='i')
+
+# Record spikes and membrane potentials
+spike_monitor = SpikeMonitor(neurons)
+voltage_monitor = StateMonitor(neurons, 'u', record=True)
+
+# Run simulation
+run(duration)
+
+# Plotting results
+plt.figure(figsize=(10, 4))
+
+# Spike raster plot
+plt.subplot(121)
+plt.title("Spike Raster")
+plt.plot(spike_monitor.t/ms, spike_monitor.i, '.k')
+plt.xlabel('Time (ms)')
+plt.ylabel('Neuron index')
+
+# Membrane potential trace of first neuron
+plt.subplot(122)
+plt.title("Voltage Trace (Neuron 0)")
+plt.plot(voltage_monitor.t/ms, voltage_monitor.u[0]/mV)
+plt.xlabel('Time (ms)')
+plt.ylabel('Membrane potential (mV)')
+
+plt.tight_layout()
+plt.show()
 \end{lstlisting}
